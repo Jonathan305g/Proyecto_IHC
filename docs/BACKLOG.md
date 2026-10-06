@@ -8,21 +8,23 @@ equipo agrega encima de la matriz (se hace con la holgura del S3). Reglas `RN-xx
 
 ## Resumen
 
-| Orden | Código | Historia | SP | Sprint | Depende de |
-|---|---|---|---|---|---|
-| 1 | HU-01 | Configurar plan de prueba (asistente de 3 pasos) | 8 | S2 | DI-04, DI-05 |
-| 2 | HU-02 | Ejecutar sesión: cronómetro, resultado, errores, observaciones | 8 | S2 | DI-04 (esquema y seed); se integra con la API de HU-01 al final |
-| 3 | HU-03 | Consultar planes y sesiones; adjuntar evidencias | 5 | S2 | HU-01, HU-02 (API de sesiones) |
-| 4 | HU-04 | Formularios accesibles y sin pérdida de datos | 5 | S2 | DI-05; revisa HU-01..03 |
-| 5 | HU-05 | Dashboard de métricas filtrable | 8 | S3 | HU-02, seed |
-| 6 | HU-06 | IA resume y clasifica observaciones | 8 | S3 | HU-02 |
-| 7 | HU-07 | Revisar, editar y aprobar propuestas de IA | 5 | S3 | HU-06 |
-| 8 | HU-08 | Backlog de mejoras MX priorizado y vinculado | 5 | S3 | HU-07 |
-| 9 | HU-13 (extra) | Cuestionario SUS al cerrar la sesión | 2 | S3 | HU-02 |
-| 10 | HU-09 | Sprints de mejora y tablero Kanban | 8 | S4 | HU-08 |
-| 11 | HU-10 | Sprint Review y Retrospectiva de mejoras | 3 | S4 | HU-09 |
-| 12 | HU-11 | Exportar informe en PDF y Markdown | 5 | S4 | HU-05, HU-07, HU-08 |
-| 13 | HU-12 | Comparar dos evaluaciones (tareas equivalentes) | 5 | S4 | HU-01 (`equivalenceKey`), HU-05 |
+| Orden | Código | Historia | Valor (1–10) | SP | Sprint | Depende de |
+|---|---|---|---|---|---|---|
+| 1 | HU-01 | Configurar plan de prueba (asistente de 3 pasos) | 10 | 8 | S2 | DI-04, DI-05 |
+| 2 | HU-02 | Ejecutar sesión: cronómetro, resultado, errores, observaciones | 10 | 8 | S2 | DI-04 (esquema y seed); se integra con la API de HU-01 al final |
+| 3 | HU-03 | Consultar planes y sesiones; adjuntar evidencias | 8 | 5 | S2 | HU-01, HU-02 (API de sesiones) |
+| 4 | HU-04 | Formularios accesibles y sin pérdida de datos | 8 | 5 | S2 | DI-05; revisa HU-01..03 |
+| 5 | HU-05 | Dashboard de métricas filtrable | 10 | 8 | S3 | HU-02, seed |
+| 6 | HU-06 | IA resume y clasifica observaciones | 9 | 8 | S3 | HU-02 |
+| 7 | HU-07 | Revisar, editar y aprobar propuestas de IA | 9 | 5 | S3 | HU-06 |
+| 8 | HU-08 | Backlog de mejoras MX priorizado y vinculado | 8 | 5 | S3 | HU-07 |
+| 9 | HU-13 (extra) | Cuestionario SUS al cerrar la sesión | — | 2 | S3 | HU-02 |
+| 10 | HU-09 | Sprints de mejora y tablero Kanban | 9 | 8 | S4 | HU-08 |
+| 11 | HU-10 | Sprint Review y Retrospectiva de mejoras | 7 | 3 | S4 | HU-09 |
+| 12 | HU-11 | Exportar informe en PDF y Markdown | 7 | 5 | S4 | HU-05, HU-07, HU-08 |
+| 13 | HU-12 | Comparar dos evaluaciones (tareas equivalentes) | 8 | 5 | S4 | HU-01 (`equivalenceKey`), HU-05 |
+
+El valor (1–10) viene de la hoja *Backlog* de la matriz oficial; el equipo la usa para priorizar.
 
 **Totales (matriz):** S2 = 26 SP · S3 = 26 SP · S4 = 21 SP · **Total = 73 SP**. Con el extra HU-13: S3 = 28 y total 75.
 **Ruta crítica:** DI-04 → HU-01 → HU-02 → HU-06 → HU-07 → HU-08 → HU-09 → HU-10.

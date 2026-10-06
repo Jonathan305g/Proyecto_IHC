@@ -67,6 +67,9 @@ fusionarse) lleva `Closes #n`; los demás usan `Refs #n`. Las líneas se ordenan
 
 ### Sprint 2 — Núcleo de pruebas (1–15 oct) · 86 h
 
+> **Objetivo (matriz):** Entregar el flujo funcional de planificación y ejecución de pruebas.  
+> **Criterio de terminado (matriz):** Planes y sesiones se guardan y consultan; formularios y errores están verificados.
+
 | HU | Persona | Tarea (matriz) | Horas | Incluye / depende de |
 |---|---|---|---|---|
 | HU-01 | Manuel | Preparar NestJS, contratos de datos y validación de entrada | 8 | **Va primero.** Incluye la raíz del monorepo, `packages/shared`, `apps/api` base y Docker (DI-04, ver BACKLOG) |
@@ -89,6 +92,9 @@ no estén en `develop`, el resto escribe contratos, casos de aceptación y panta
 
 ### Sprint 3 — Métricas e IA (16–30 oct) · 84 h
 
+> **Objetivo (matriz):** Entregar análisis de resultados, asistencia de IA y backlog dentro del sistema.  
+> **Criterio de terminado (matriz):** Métricas verificadas; IA maneja errores y permite revisión humana; backlog funciona.
+
 | HU | Persona | Tarea (matriz) | Horas | Depende de |
 |---|---|---|---|---|
 | HU-06 | William | Definir prompt, esquema JSON y validación de respuestas (`docs/AI_MODULE.md`) | 8 | — **(contrato de IA primero)** |
@@ -104,6 +110,9 @@ no estén en `develop`, el resto escribe contratos, casos de aceptación y panta
 | HU-13 (extra) | William, Pablo | Cuestionario SUS al cerrar la sesión (no está en la matriz; usa la holgura: William 4 h, Pablo 4 h) | 8 | HU-02 |
 
 ### Sprint 4 — Scrum de mejoras, comparativa, exportación (2–16 nov) · 84 h
+
+> **Objetivo (matriz):** Completar la gestión de sprints, exportación y evaluación del sistema.  
+> **Criterio de terminado (matriz):** Sprints, tablero y retrospectiva funcionan; exportación y evaluación están documentadas.
 
 | HU | Persona | Tarea (matriz) | Horas | Depende de |
 |---|---|---|---|---|
