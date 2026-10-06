@@ -87,6 +87,8 @@ Jonathan, como admin del repo, también deja listo `develop`, las protecciones, 
 GitHub Project antes del primer PR (no suma horas de la matriz). Si Manuel se retrasa con la raíz, Emilio
 apoya (tiene 2 h de holgura).
 
+**Estado al 6 oct:** la raíz, la BD y la estructura web ya están construidas por Emilio (apoyo) en tres PR; a Manuel, Pablo y William les queda revisar su PR y completar su línea. Detalle por línea en [`BACKLOG.md`](BACKLOG.md) (sección DI-04).
+
 Ruta crítica del S2: raíz → BD (Pablo) → endpoints (Manuel) → ejecución (Emilio). Mientras la raíz y la BD
 no estén en `develop`, el resto escribe contratos, casos de aceptación y pantallas sin datos.
 

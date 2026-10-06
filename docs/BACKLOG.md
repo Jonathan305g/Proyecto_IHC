@@ -53,6 +53,24 @@ primero la raíz, después lo demás en paralelo.
 
 Si la parte de Manuel se retrasa, Emilio (que no tiene línea de base) apoya con la raíz.
 
+### Estado de la base técnica (6 oct 2026)
+
+Emilio, como apoyo, **ya construyó la base técnica** y la entregó en tres PR apilados, uno por línea de la
+matriz (se fusionan en este orden: A → B → C). Eso **no cierra las líneas**: cada dueño revisa su PR,
+completa lo que falta y registra sus horas reales en la matriz. Las horas que Emilio dedicó van en la hoja
+*Tareas no Planificadas*.
+
+| PR (rama) | Línea de la matriz | Ya está hecho | Falta (lo hace el dueño de la línea) |
+|---|---|---|---|
+| **A** `chore/DI-04-raiz` | HU-01 · **Manuel** — Preparar NestJS, contratos de datos y validación de entrada (8 h) | Monorepo pnpm, `tsconfig` estricto, ESLint/Prettier/Husky/commitlint, `packages/shared` (con el esquema y los códigos de error de la API), `apps/api` base (`/health`, Swagger, filtro de errores, `ZodValidationPipe`, configuración validada), Docker de la BD, `.env.example`, scripts raíz | **Contratos de datos de HU-01** (esquemas Zod del plan y de las tareas en `packages/shared/src/schemas`), **validación de entrada** con esos esquemas y el módulo `plans` de la API. Revisar el PR A |
+| **B** `feature/HU-03-bd` | HU-03 · **Pablo** — Diseñar base de datos para planes, sesiones y evidencias (10 h) | Esquema Prisma completo de `DATA_MODEL.md`, migración inicial con `CHECK`, `PrismaService`, seed idempotente del caso demo, scripts `db:*` | **Revisar y validar el esquema** contra planes, sesiones y evidencias; cambios nuevos solo con una migración nueva; comprobar con un clon limpio que `db:migrate` y `db:seed` funcionan. Revisar el PR B |
+| **C** `feature/HU-01-estructura-web` | HU-01 · **William** — Preparar estructura React, rutas y componentes del flujo (8 h) | `apps/web` base (Vite, Tailwind, shadcn inicializado, Router, TanStack Query, `api-client`, Vitest + axe, Playwright), perfil Docker `demo`, `ci.yml`, README | **Todo DI-05**: layout, navegación lateral de 5 áreas, tokens del Figma con contraste AA calculado, componentes base, página `/design` y rutas vacías de `HCI_DESIGN.md` §3; además `docs/testing/a11y-checklist.md`. Revisar el PR C |
+| GitHub | **Jonathan** (admin del repo, sin horas de la matriz) | La rama `develop` ya existe | Dejarla como rama por defecto, proteger `main` y `develop`, etiquetas, GitHub Project y un Issue por HU |
+
+Los PR llevan `Refs #n`: el Issue de HU-01 y el de HU-03 los cierra el dueño de cada HU (Jonathan y Pablo)
+al fusionar su última línea (ver [`TEAM.md`](TEAM.md) §4).
+
+
 Checklist (cada punto es un commit `chore`/`ci`/`build` o `feat(db)`):
 - [ ] Monorepo pnpm: `apps/web` (`@utd/web`), `apps/api` (`@utd/api`), `packages/shared` (`@utd/shared`);
       `pnpm-workspace.yaml`; `package.json`
