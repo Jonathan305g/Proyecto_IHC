@@ -1,15 +1,15 @@
 # Product Backlog — Usability Test Dashboard
 
-Fuente: Informe del Sprint 1 (HU-01..HU-12, estimaciones del equipo) + decisiones de planificación
-(DI-04, DI-05, HU-13). Responsables y apoyos en [`TEAM.md`](TEAM.md). Reglas `RN-xx` en
+Fuente: matriz oficial de planificación del grupo (HU-01..HU-12, puntos y sprints). Quién hace cada tarea
+y cuántas horas: [`TEAM.md`](TEAM.md). El trabajo técnico base (**DI-04** y **DI-05**, abajo) no es un ítem
+de la matriz: se cumple dentro de las líneas de HU-01, HU-03 y HU-04. **HU-13 (SUS)** es un **extra** que el
+equipo agrega encima de la matriz (se hace con la holgura del S3). Reglas `RN-xx` en
 [`BUSINESS_RULES.md`](BUSINESS_RULES.md).
 
 ## Resumen
 
 | Orden | Código | Historia | SP | Sprint | Depende de |
 |---|---|---|---|---|---|
-| 0 | DI-04 | Configuración técnica del monorepo, BD, Docker y CI | — | S2 | — |
-| 0 | DI-05 | Estructura de UI, navegación y design system | — | S2 | DI-04 |
 | 1 | HU-01 | Configurar plan de prueba (asistente de 3 pasos) | 8 | S2 | DI-04, DI-05 |
 | 2 | HU-02 | Ejecutar sesión: cronómetro, resultado, errores, observaciones | 8 | S2 | DI-04 (esquema y seed); se integra con la API de HU-01 al final |
 | 3 | HU-03 | Consultar planes y sesiones; adjuntar evidencias | 5 | S2 | HU-01, HU-02 (API de sesiones) |
@@ -18,13 +18,13 @@ Fuente: Informe del Sprint 1 (HU-01..HU-12, estimaciones del equipo) + decisione
 | 6 | HU-06 | IA resume y clasifica observaciones | 8 | S3 | HU-02 |
 | 7 | HU-07 | Revisar, editar y aprobar propuestas de IA | 5 | S3 | HU-06 |
 | 8 | HU-08 | Backlog de mejoras MX priorizado y vinculado | 5 | S3 | HU-07 |
-| 9 | HU-13 | Cuestionario SUS al cerrar la sesión | 2 | S3 | HU-02 |
+| 9 | HU-13 (extra) | Cuestionario SUS al cerrar la sesión | 2 | S3 | HU-02 |
 | 10 | HU-09 | Sprints de mejora y tablero Kanban | 8 | S4 | HU-08 |
 | 11 | HU-10 | Sprint Review y Retrospectiva de mejoras | 3 | S4 | HU-09 |
 | 12 | HU-11 | Exportar informe en PDF y Markdown | 5 | S4 | HU-05, HU-07, HU-08 |
 | 13 | HU-12 | Comparar dos evaluaciones (tareas equivalentes) | 5 | S4 | HU-01 (`equivalenceKey`), HU-05 |
 
-**Totales:** S2 = 26 SP · S3 = 28 SP · S4 = 21 SP · **Total = 75 SP**.
+**Totales (matriz):** S2 = 26 SP · S3 = 26 SP · S4 = 21 SP · **Total = 73 SP**. Con el extra HU-13: S3 = 28 y total 75.
 **Ruta crítica:** DI-04 → HU-01 → HU-02 → HU-06 → HU-07 → HU-08 → HU-09 → HU-10.
 
 Diagrama de dependencias y cronograma: [`diagrams/05-cronograma.md`](diagrams/05-cronograma.md).
@@ -34,10 +34,22 @@ técnicas** sugeridas (cada una ≈ 1–3 commits) · **Pruebas mínimas** · **
 
 ---
 
-## DI-04 — Configuración técnica (Emilio, con Jonathan en GitHub)
+## DI-04 — Configuración técnica (dentro de las líneas de HU-01 y HU-03; sin horas ni puntos propios)
 
 **Objetivo:** que cualquier integrante clone el repo y, con los comandos de `AGENTS.md` §6, tenga la
 API, la web, la BD y las pruebas funcionando en menos de 15 minutos.
+
+**Dónde se cumple** (cada parte vive dentro de una línea de la matriz, ver [`TEAM.md`](TEAM.md) §4). Orden:
+primero la raíz, después lo demás en paralelo.
+
+| Línea de la matriz | Persona | Parte del checklist que incluye |
+|---|---|---|
+| HU-01 "Preparar NestJS, contratos de datos y validación de entrada" | Manuel | Raíz del monorepo, `tsconfig`, ESLint/Prettier, Husky/commitlint, `packages/shared`, `apps/api` base, `docker-compose.yml`, `.env.example`, scripts raíz |
+| HU-01 "Preparar estructura React, rutas y componentes del flujo" | William | `apps/web` base (Vite, Tailwind, shadcn, Router, Query, Vitest/axe, Playwright), `ci.yml` y todo **DI-05** |
+| HU-03 "Diseñar base de datos para planes, sesiones y evidencias" | Pablo | Esquema Prisma completo, migración inicial y seed |
+| Responsabilidad de admin del repo (sin horas de la matriz) | Jonathan | Último punto de GitHub: `develop`, protecciones, etiquetas, Project |
+
+Si la parte de Manuel se retrasa, Emilio (que no tiene línea de base) apoya con la raíz.
 
 Checklist (cada punto es un commit `chore`/`ci`/`build` o `feat(db)`):
 - [ ] Monorepo pnpm: `apps/web` (`@utd/web`), `apps/api` (`@utd/api`), `packages/shared` (`@utd/shared`);
@@ -86,7 +98,7 @@ El seed es **idempotente** (`db:reset` + `db:seed` siempre deja el mismo estado)
 
 ---
 
-## DI-05 — Estructura de UI y design system (William)
+## DI-05 — Estructura de UI y design system (dentro de la línea de HU-01 de William)
 
 - [ ] Layout: barra superior (nombre del producto, proyecto activo), navegación lateral persistente con
       5 áreas — **Planes de prueba, Sesiones, Resultados, Hallazgos e IA, Gestión Scrum** — con la
@@ -107,7 +119,7 @@ Esc; los estados (activo, error, deshabilitado, cargando) se comunican con texto
 
 ---
 
-## HU-01 — Configurar plan de prueba (8 SP · S2 · Jonathan)
+## HU-01 — Configurar plan de prueba (8 SP · S2)
 
 **Historia:** Como investigador, quiero configurar un plan de prueba con objetivos, participantes y
 tareas para organizar la evaluación.
@@ -152,7 +164,7 @@ consentimiento → `READY` pero `canStartSessions=false`; modificar tareas con s
 
 ---
 
-## HU-02 — Ejecutar sesión de prueba (8 SP · S2 · Pablo)
+## HU-02 — Ejecutar sesión de prueba (8 SP · S2)
 
 **Historia:** Como evaluador, quiero registrar éxito, tiempo, errores y observaciones por tarea para
 documentar cada sesión.
@@ -196,7 +208,7 @@ vieja → 409; componente de ejecución con axe y recorrido por teclado.
 
 ---
 
-## HU-03 — Consultar planes y sesiones; adjuntar evidencias (5 SP · S2 · Manuel)
+## HU-03 — Consultar planes y sesiones; adjuntar evidencias (5 SP · S2)
 
 **Historia:** Como investigador, quiero consultar mis planes y sesiones y adjuntar evidencias para
 conservar el contexto del test.
@@ -228,7 +240,7 @@ listado con filtros; componentes con axe.
 
 ---
 
-## HU-04 — Formularios accesibles (5 SP · S2 · William)
+## HU-04 — Formularios accesibles (5 SP · S2)
 
 **Historia:** Como evaluador, quiero formularios accesibles con mensajes claros para completar registros
 sin confusión.
@@ -252,7 +264,7 @@ sin confusión.
 
 ---
 
-## HU-05 — Dashboard de métricas (8 SP · S3 · Emilio + William)
+## HU-05 — Dashboard de métricas (8 SP · S3)
 
 **Historia:** Como investigador, quiero filtrar un dashboard de métricas para encontrar problemas
 frecuentes y comparar tareas.
@@ -281,7 +293,7 @@ tiempos atípicos); e2e API contra el seed con valores esperados escritos a mano
 
 ---
 
-## HU-06 — Motor de IA para observaciones (8 SP · S3 · Pablo)
+## HU-06 — Motor de IA para observaciones (8 SP · S3)
 
 **Historia:** Como investigador, quiero que la IA resuma y clasifique observaciones para reconocer
 hallazgos de usabilidad.
@@ -311,7 +323,7 @@ hallazgos de usabilidad.
 
 ---
 
-## HU-07 — Curaduría humana de propuestas de IA (5 SP · S3 · Jonathan)
+## HU-07 — Curaduría humana de propuestas de IA (5 SP · S3)
 
 **Historia:** Como investigador, quiero editar y aprobar sugerencias de IA para convertir hallazgos en
 mejoras e historias revisadas.
@@ -338,7 +350,7 @@ aprobar severidad 0 → 409 `SEVERITY_ZERO_NO_STORY`; componente de revisión co
 
 ---
 
-## HU-08 — Backlog de mejoras MX (5 SP · S3 · Manuel)
+## HU-08 — Backlog de mejoras MX (5 SP · S3)
 
 **Historia:** Como responsable de mejoras UX, quiero crear y priorizar historias ligadas a hallazgos
 dentro del sistema.
@@ -359,13 +371,14 @@ dentro del sistema.
 
 ---
 
-## HU-13 — Cuestionario SUS (2 SP · S3 · William)
+## HU-13 — Cuestionario SUS (extra · 2 SP · S3)
 
 **Historia:** Como evaluador, quiero aplicar el cuestionario SUS al cerrar cada sesión para medir la
 satisfacción del participante con la interfaz evaluada.
 
-> Estado: aprobada por el equipo; **pendiente de confirmación del PO** ([ADR-0004](adr/0004-sus.md)). Si
-> el PO la rechaza, se elimina sin afectar a otras historias.
+> Estado: **extra del equipo, no está en la matriz oficial** ([ADR-0004](adr/0004-sus.md)). Se hace con
+> la holgura del S3 (William y Pablo), después de las líneas de la matriz. Si el PO no la acepta, se elimina
+> sin afectar a otras historias.
 
 **CA:**
 1. Al pasar a revisión de cierre se ofrece el cuestionario de 10 ítems (escala 1–5, ver
@@ -378,7 +391,7 @@ satisfacción del participante con la interfaz evaluada.
 
 ---
 
-## HU-09 — Sprints de mejora y tablero Kanban (8 SP · S4 · Jonathan)
+## HU-09 — Sprints de mejora y tablero Kanban (8 SP · S4)
 
 **Historia:** Como responsable de proyecto UX, quiero crear sprints y asignar tareas en el módulo SCRUM
 para seguir su avance.
@@ -400,7 +413,7 @@ segundo sprint activo → 409; Playwright: mover tarjeta con teclado.
 
 ---
 
-## HU-10 — Sprint Review y Retrospectiva (3 SP · S4 · Manuel)
+## HU-10 — Sprint Review y Retrospectiva (3 SP · S4)
 
 **Historia:** Como responsable de proyecto UX, quiero registrar review y retrospectiva en el sistema
 para conservar acuerdos.
@@ -419,7 +432,7 @@ cerrado → 409 `SPRINT_NOT_CLOSED` si no.
 
 ---
 
-## HU-11 — Exportar informe (5 SP · S4 · Pablo)
+## HU-11 — Exportar informe (5 SP · S4)
 
 **Historia:** Como investigador, quiero exportar hallazgos e historias aprobados en PDF y Markdown para
 compartir resultados.
@@ -443,7 +456,7 @@ sin error y contiene "Diseño" con tilde (extraer texto en la prueba).
 
 ---
 
-## HU-12 — Comparar evaluaciones (5 SP · S4 · Emilio)
+## HU-12 — Comparar evaluaciones (5 SP · S4)
 
 **Historia:** Como investigador, quiero comparar resultados de evaluaciones registradas para medir si una
 interfaz mejoró.

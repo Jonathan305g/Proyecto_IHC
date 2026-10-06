@@ -9,7 +9,7 @@ de negocio, el alcance o el flujo de trabajo.
 | [0001](0001-stack.md) | Stack: TypeScript, React, NestJS, PostgreSQL, Prisma, Gemini | Aceptada |
 | [0002](0002-sin-login.md) | Sin login ni roles en la aplicación | Aceptada (a confirmar con el PO) |
 | [0003](0003-escala-severidad.md) | Escala de severidad 0–4 y equivalencia con Alta/Media/Baja | Aceptada |
-| [0004](0004-sus.md) | Cuestionario SUS como HU-13 | Propuesta (a confirmar con el PO) |
+| [0004](0004-sus.md) | Cuestionario SUS como HU-13 (extra a la matriz) | Aceptada por el equipo |
 | [0005](0005-zod-contrato-compartido.md) | Zod como contrato compartido (en lugar de class-validator) | Aceptada |
 | [0006](0006-metricas-descriptivas.md) | Métricas y comparación descriptivas | Aceptada |
 

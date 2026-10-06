@@ -48,18 +48,18 @@ Si la persona solo dice su nombre y el sprint (por ejemplo: "Soy Pablo, estamos 
 que me corresponde"):
 
 1. Si no dijo su nombre, **pregúntalo** antes de nada: la asignación depende de la persona.
-2. En `docs/TEAM.md` §4 lista **todos** los ítems del sprint donde esa persona es **responsable**
-   (historias, DI y tareas sin código como casos de aceptación o pruebas de usabilidad), y aparte
-   aquellos donde es **apoyo**.
+2. En `docs/TEAM.md` §4 lista **todas las líneas** del sprint donde aparece esa persona. Cada línea es
+   una tarea de la matriz oficial con sus horas (una historia reparte sus líneas entre 2–3 personas).
 3. Revisa qué ya está hecho: `git fetch origin && git log origin/develop --oneline`, ramas remotas
    `feature/HU-xx-*` existentes y, si tienes acceso, los Issues y PR abiertos. No repitas trabajo hecho
    ni empieces una HU que otra persona ya tiene en curso.
 4. Ordena los ítems según las dependencias de `docs/BACKLOG.md` y presenta un **plan del sprint**: orden,
-   rama de cada ítem, qué depende de otra persona (y si ya está en `develop`) y un estimado en horas
-   (capacidad: 16 h por persona por sprint). Espera la aprobación.
-5. Ejecuta **una historia a la vez** con el procedimiento de §3: una rama y un PR por historia. Al abrir
-   el PR de una, pasa a la siguiente solo si no depende de la anterior; si depende, avisa que hay que
-   esperar la revisión y fusión.
+   rama de cada ítem, qué depende de otra persona (y si ya está en `develop`) y las horas de la matriz
+   (capacidad: 20 h por persona por sprint; avisa si la suma supera 20 h). Espera la aprobación.
+5. Ejecuta **una línea a la vez** con el procedimiento de §3: una rama y un PR por línea
+   (`feature/HU-xx-<capa>`, p. ej. `feature/HU-01-asistente-web`). Solo el dueño de la HU (TEAM.md §4)
+   pone `Closes #n`; los demás `Refs #n`. Al abrir el PR de una, pasa a la siguiente solo si no depende
+   de la anterior; si depende, avisa que hay que esperar la revisión y fusión.
 6. Para ítems sin código (casos de aceptación, guion de prueba con usuarios, actas), produce el
    documento en la carpeta indicada en `docs/TESTING.md` o `docs/sprints/` y deja claro qué parte
    requiere personas reales (no inventes resultados de pruebas con usuarios).
@@ -69,6 +69,10 @@ que me corresponde"):
 
 - **No** hagas push a `main` ni a `develop`; todo entra por PR.
 - **No** implementes funciones que no estén en `docs/BACKLOG.md`. Si algo falta, propón una HU nueva.
+- **HU-13 (SUS)** es un **extra** fuera de la matriz: se hace al final del S3, con la holgura, después de las
+  líneas de la matriz de esa persona. Si el PO la rechaza, se elimina.
+- La planificación oficial es la **matriz del grupo** (reproducida en `TEAM.md` §4). Si la persona te pide
+  algo que cambia sus tareas u horas, díselo: hay que actualizar la matriz y `TEAM.md`.
 - **No** edites una migración de Prisma ya fusionada en `develop`; crea una nueva.
 - **No** cambies esquemas de `packages/shared/src/schemas` sin decirlo explícitamente en el PR
   (rompe a otros módulos). Cambios de contrato → avisa al dueño del módulo afectado (`TEAM.md` §3).
@@ -92,9 +96,10 @@ que me corresponde"):
 
 ## 6. Comandos del proyecto
 
-Estos scripts los crea la tarea habilitadora **DI-04** (ver `BACKLOG.md`). Hasta que DI-04 esté en
-`develop`, el repositorio solo contiene documentación y quien haga DI-04 debe crear la estructura
-exactamente como dice `ARCHITECTURE.md`.
+Estos scripts los crea el trabajo técnico base **DI-04** (ver `BACKLOG.md`), que se cumple dentro de las
+líneas de HU-01 (Manuel y William) y HU-03 (Pablo). Hasta que esté en `develop`, el repositorio solo
+contiene documentación; quien haga su parte debe crear la estructura exactamente como dice
+`ARCHITECTURE.md`.
 
 ```bash
 corepack enable                 # activa pnpm según package.json

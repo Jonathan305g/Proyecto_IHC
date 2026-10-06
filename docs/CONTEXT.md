@@ -7,7 +7,7 @@
 | Equipo | Grupo 6: Emilio Abril, Jonathan Gamboa, Pablo Lozada, Manuel Cusme, William Martínez |
 | Product Owner | Ing. José Caiza, Mg. |
 | Scrum Master | Manuel Cusme |
-| Período | Julio – Diciembre 2026 (Sprints 1–4: 16 sep – 17 nov 2026) |
+| Período | Julio – Diciembre 2026 (Sprints 1–4: 16 sep – 16 nov 2026, según la matriz del grupo) |
 | Repositorio | https://github.com/Jonathan305g/Proyecto_IHC |
 | Prototipo (Figma) | [Usability Test Dashboard con IA y Scrum — Prototipo navegable](https://www.figma.com/design/ivPHjdwRsm1rR2fL8mYDmQ/Usability-Test-Dashboard-con-IA-y-Scrum-%E2%80%94-Prototipo-navegable?node-id=0-1) |
 
@@ -22,9 +22,9 @@ El sistema acompaña el ciclo completo de una evaluación de usabilidad:
    consignas neutrales y criterios de éxito. El consentimiento informado es obligatorio para iniciar sesiones.
 2. **Registrar sesiones** — por participante anónimo (`P-001`), tarea por tarea: cronómetro
    (iniciar/pausar/reiniciar), resultado (sin ayuda / con ayuda / no completó), errores, observaciones y
-   evidencias. Cuestionario SUS al cerrar (HU-13).
+   evidencias. Cuestionario SUS al cerrar (HU-13, extra).
 3. **Consolidar métricas** — tasa de completitud, éxito sin ayuda, tiempo (mediana y media), errores,
-   satisfacción (SUS) y hallazgos recurrentes, con filtros por plan y período.
+   satisfacción (SUS, extra) y hallazgos recurrentes, con filtros por plan y período.
 4. **Analizar con IA** — la IA agrupa y resume observaciones seleccionadas, las relaciona con las
    **10 heurísticas de Nielsen** y los **principios POUR (WCAG 2.2)**, asigna **severidad 0–4** con
    justificación y propone una historia de mejora. **La IA asiste, la persona decide.**
@@ -40,7 +40,8 @@ El sistema acompaña el ciclo completo de una evaluación de usabilidad:
 |---|---|
 | **HU-xx** | Historia de usuario **del producto académico** (lo que el Grupo 6 programa). Ver `BACKLOG.md`. |
 | **MX-xxx** | Historia de mejora **dentro de la app**: la crean los usuarios del Dashboard a partir de hallazgos sobre la interfaz que están evaluando. No son tareas del Grupo 6. |
-| **DI-xx** | Ítem habilitador (diseño o infraestructura) sin puntos de historia. DI-01..03 fueron del Sprint 1; DI-04 y DI-05 abren el Sprint 2. |
+| **DI-xx** | Ítem de diseño del Sprint 1 (DI-01..03), como figura en la matriz. |
+| **DI-04 / DI-05** | Listas de verificación técnicas (monorepo, BD, Docker, CI; layout y componentes base) que se cumplen **dentro** de las líneas de HU-01, HU-03 y HU-04 de la matriz. No son ítems de la matriz ni suman horas o puntos. |
 | **Evaluación** | Un plan de prueba (`TestPlan`) con sus sesiones cerradas. Comparar = comparar dos planes. |
 | **Tarea equivalente** | Tarea de dos planes distintos con la misma `equivalenceKey`; solo estas se comparan. |
 | **Observación** | Texto registrado por quien modera durante una sesión, ligado a una tarea. |
@@ -68,9 +69,9 @@ El sistema acompaña el ciclo completo de una evaluación de usabilidad:
 ### Sprints 2–4 — desarrollo
 | Sprint | Fechas | Meta | Historias |
 |---|---|---|---|
-| S2 | 7 – 20 oct 2026 | Núcleo de pruebas: planes, sesiones, evidencias, formularios accesibles | DI-04, DI-05, HU-01..HU-04 (26 SP) |
-| S3 | 21 oct – 3 nov 2026 | Métricas, motor de IA, curaduría humana y backlog de mejoras | HU-05..HU-08, HU-13 (28 SP) |
-| S4 | 4 – 17 nov 2026 | Módulo Scrum de mejoras, comparativa, exportación, evaluación final | HU-09..HU-12 (21 SP) |
+| S2 | 1 – 15 oct 2026 | Núcleo de pruebas: planes, sesiones, evidencias, formularios accesibles | HU-01..HU-04 (26 SP) |
+| S3 | 16 – 30 oct 2026 | Métricas, motor de IA, curaduría humana y backlog de mejoras | HU-05..HU-08 (26 SP) + HU-13 extra (2 SP) |
+| S4 | 2 – 16 nov 2026 | Módulo Scrum de mejoras, comparativa, exportación, evaluación final | HU-09..HU-12 (21 SP) |
 
 Detalle completo en [`BACKLOG.md`](BACKLOG.md) y asignaciones en [`TEAM.md`](TEAM.md).
 
@@ -96,7 +97,7 @@ Evidencias mínimas que el proyecto debe producir:
 - Pantallas funcionales del sistema.
 - Demostración del módulo IA con ejemplos de recomendaciones generadas.
 - Demostración del módulo SCRUM con backlog, tablero y retrospectiva.
-- Evaluación final y **comparación antes/después** (prototipo en S2 vs sistema implementado en S4,
+- Evaluación final y **comparación antes/después** (prototipo del Sprint 1 vs sistema implementado en S4,
   mismas tareas T1–T5, matriz + SUS).
 - Presentación final con sustento técnico y UX.
 
@@ -132,8 +133,8 @@ revisión de accesibilidad y comparativa antes/después.
 | 4 | Catastrófico | Impide completar la tarea o pierde datos | CRITICAL | Alta (crítica) |
 
 ### Métricas ISO 9241-11
-Efectividad (completitud, errores) · Eficiencia (tiempo) · Satisfacción (SUS). Definiciones exactas en
-`BUSINESS_RULES.md` RN-06.
+Efectividad (completitud, errores) · Eficiencia (tiempo) · Satisfacción (SUS, extra). Definiciones exactas en
+`BUSINESS_RULES.md` RN-06 y RN-20.
 
 ## 7. Fuentes de este contexto
 

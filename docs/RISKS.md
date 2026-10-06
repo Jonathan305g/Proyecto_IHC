@@ -67,12 +67,15 @@ Si aparece un riesgo nuevo durante el desarrollo, se agrega aquí.
 
 | # | Qué puede fallar | P | I | Prevención |
 |---|---|---|---|---|
-| P1 | DI-04 se retrasa y bloquea a todos | M | A | Es lo primero (días 1–2); mientras tanto los testers escriben casos de aceptación y los demás preparan esquemas y pruebas de dominio |
-| P2 | HU-02 (ruta crítica) se atrasa y arrastra S3 y S4 | M | A | Pareja Pablo + Emilio; dividir en 3 PR; seed con sesiones cerradas para que HU-05/06 no esperen |
+| P1 | La raíz del monorepo y la BD (DI-04) se retrasan y bloquean a todos | A | A | Es lo primero y está en las líneas de Manuel (raíz, API, Docker), William (web, CI) y Pablo (BD); mientras tanto cada quien escribe contratos, casos de aceptación y pantallas sin datos. Emilio apoya. El S2 ya empezó el 1 oct: quedan 8 días hábiles y la matriz supone 2 h/día |
+| P2 | HU-02 (ruta crítica) se atrasa y arrastra S3 y S4 | M | A | Línea de endpoints (Manuel) primero y pantalla (Emilio) después; un PR por línea; seed con sesiones cerradas para que HU-05/06 no esperen |
 | P3 | Crece el alcance (login, Jira, gráficos extra) | A | A | Todo lo nuevo entra al backlog con SP y lo decide el PO; nada a mitad de sprint |
-| P4 | El SUS (HU-13) no lo aprueba el PO | M | B | Historia independiente de 2 SP; se elimina sin afectar a otras |
+| P4 | El SUS (HU-13, extra fuera de la matriz) no lo acepta el PO o no cabe en la holgura | M | B | Historia independiente de 2 SP; se hace al final del S3 y se elimina sin afectar a otras |
 | P5 | Accesibilidad se deja para el final | A | A | Componentes accesibles desde DI-05; axe en CI desde el S2 |
 | P6 | Falta la evidencia de prototipo de fidelidad media que pide la guía | M | M | Documentar versión en grises del Figma en el S2 |
-| P7 | No hay medición "antes" para el antes/después | A | A | Test del prototipo con personas en la semana 1 del S2 (TESTING §7) |
+| P7 | No hay medición "antes" para el antes/después | A | A | Usar el recorrido del prototipo de DI-03 (Sprint 1) con la plantilla del docente; si faltan datos, completarlos con 3–5 personas (TESTING §7) |
 | P8 | Review o retro del Sprint 1 nunca se registran | M | M | Se hacen el 7 oct junto con el planning del S2 |
-| P9 | El S4 dura 2 semanas pero coincide con exámenes | M | M | HU-11 y HU-12 son independientes entre sí; congelamiento el 15 nov |
+| P9 | El S4 dura 2 semanas pero coincide con exámenes | M | M | HU-11 y HU-12 son independientes entre sí; congelamiento el 13 nov |
+| P10 | Los documentos y la matriz oficial divergen (horas, tareas, fechas) | M | A | La matriz manda; `TEAM.md` §4 la reproduce línea por línea y se cambia en el mismo PR que la matriz |
+| P11 | La base técnica (DI-04, DI-05) no cabe en las líneas de HU-01 y HU-03 y se desbordan las horas | M | M | Registrar el exceso en "Tareas no Planificadas"; priorizar lo mínimo: raíz, BD y esqueleto de la API; Emilio apoya |
+| P12 | 2 y 3 nov (inicio del S4) pueden ser feriado | M | B | Confirmar con el equipo; si lo son, HU-09 arranca el 4 nov y la holgura del S4 absorbe el día |

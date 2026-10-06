@@ -14,7 +14,7 @@ Regla de oro: **nada está terminado sin evidencia ejecutada** (salida de los co
 | Componentes | Vitest + Testing Library + axe-core | `apps/web/src/features/**/*.test.tsx` | Formularios, asistente, cronómetro, revisión de IA, tablero; **0 violaciones axe** | pantallas clave |
 | E2E | Playwright + `@axe-core/playwright` | `apps/web/e2e` | Flujos T1–T5 (§4) contra el seed | 5 flujos en verde |
 | Manual | Lista de verificación | `docs/testing/` | Teclado, NVDA, contraste, exploratorias | cada sprint |
-| Usabilidad | Matriz + SUS | `docs/testing/usability/` | Antes (prototipo) y después (sistema) | S2 y S4 |
+| Usabilidad | Matriz + SUS | `docs/testing/usability/` | Antes (prototipo) y después (sistema) | S1/S2 y S4 |
 
 Cobertura global mínima: **70 %** (el CI falla por debajo). La meta no es el número: cada RN y cada
 criterio de aceptación debe tener al menos una prueba que falle si se rompe.
@@ -89,14 +89,17 @@ En cada PR hacia `develop`, `release/*` y `main`:
 
 ## 7. Evaluación de usabilidad del propio sistema (antes / después)
 
-Responsables: Pablo y Manuel (conducen), William (analiza). Materiales en `docs/testing/usability/`.
+Responsables según la matriz: **William** (recorrido del prototipo, DI-03 del Sprint 1) y **Jonathan**
+(aplicar las tareas al sistema con participantes, HU-12). Pablo y Manuel apoyan con la plantilla y el
+análisis. Materiales en `docs/testing/usability/`.
 
-- **Antes (S2, semana 1):** prueba moderada del **prototipo de Figma** con 3–5 compañeros que no sean
-  del grupo; tareas T1–T5; registro con la plantilla del docente (éxito, tiempo, errores, comentarios,
-  problema, severidad, mejora) y SUS al final. Consentimiento verbal registrado. Sirve además como la
-  validación con personas que quedó pendiente del Sprint 1.
-- **Después (S4, semana 2):** misma prueba sobre el **sistema implementado**, mismas tareas, perfil
-  similar de participantes.
+- **Antes:** el recorrido del **prototipo de Figma** con usuarios de prueba ya está en la matriz (DI-03,
+  Sprint 1). Se registra con la plantilla del docente (éxito, tiempo, errores, comentarios, problema,
+  severidad, mejora) y consentimiento verbal. Si faltan datos para poder comparar, se completan con 3–5
+  personas ajenas al grupo y se anota en la hoja "Tareas no Planificadas".
+- **Después (S4, 2.ª semana):** misma prueba sobre el **sistema implementado** (HU-12, Jonathan), mismas
+  tareas T1–T5, perfil similar de participantes. El SUS (HU-13, extra) se aplica al final de cada sesión y
+  su resultado se anota también en la matriz de usabilidad.
 - **Comparación:** los dos conjuntos se cargan en el propio Dashboard como dos evaluaciones con las
   mismas `equivalenceKey` (t1…t5) y se usa HU-12 para compararlos. Resultado → informe final.
 - Los hallazgos del "antes" se analizan también con el módulo de IA (HU-06/07) y las mejoras aprobadas

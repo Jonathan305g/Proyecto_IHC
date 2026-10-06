@@ -8,8 +8,8 @@ Proyecto integrador de **Interacción Humano–Computador** — Universidad Téc
 Ingeniería de Software. **Grupo 6:** Emilio Abril, Jonathan Gamboa, Pablo Lozada, Manuel Cusme (Scrum
 Master), William Martínez. **Product Owner:** Ing. José Caiza, Mg.
 
-> **Estado (6 oct 2026):** Sprint 1 (análisis y prototipo) cerrado. El repositorio contiene la
-> documentación base; el código comienza en el Sprint 2 con la tarea DI-04.
+> **Estado (6 oct 2026):** Sprint 1 (análisis y prototipo) cerrado; el Sprint 2 (1–15 oct) está en curso.
+> El repositorio contiene la documentación base; el código comienza con la raíz del monorepo (DI-04).
 
 ## Si eres un agente de código
 

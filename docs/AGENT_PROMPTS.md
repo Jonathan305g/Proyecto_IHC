@@ -12,7 +12,7 @@ sprint siguiendo su "modo sprint" (§3.1). Empieza mostrándome el plan.
 ```
 
 El agente busca tus ítems en `docs/TEAM.md`, revisa qué ya existe en `develop`, propone el orden y
-trabaja historia por historia (una rama y un PR por historia), pidiéndote aprobación en cada plan. Usa
+trabaja línea por línea (una rama y un PR por línea de la matriz), pidiéndote aprobación en cada plan. Usa
 los prompts de abajo cuando quieras dirigirlo a una sola historia o darle indicaciones específicas.
 
 ## 1. Prompt base (cualquier historia)
@@ -39,74 +39,76 @@ No implementes nada fuera de esta historia. Si encuentras una contradicción en 
 y pregúntame.
 ```
 
-## 2. Sprint 2 — prompts listos
+## 2. Sprint 2 — qué le toca a cada quien (matriz)
 
-Donde aparece `[prompt base, pasos 1 a 7]`, pega el prompt base de §1 (con tus datos) y agrega debajo
-las líneas específicas.
+Con el prompt corto de §0 el agente ya sabe qué hacer. Estos prompts son para **dirigirlo a una línea
+concreta**. Donde aparece `[prompt base, pasos 1 a 7]`, pega el prompt base de §1 (con tus datos).
+Orden del sprint: raíz (Emilio) → BD (Pablo) → API (Manuel) → pantallas.
 
-**Emilio — DI-04 (primero de todo):**
+**Manuel — HU-01 NestJS y raíz (8 h, va primero) y HU-02 endpoints (8 h):**
 ```text
-Soy Emilio Abril (Developer). Vamos a hacer DI-04 "Configuración técnica" del Sprint 2.
-Lee AGENTS.md y luego docs/BACKLOG.md (DI-04 y la sección Seed), docs/ARCHITECTURE.md completo,
-docs/DATA_MODEL.md completo, docs/TESTING.md §6 y docs/RISKS.md §4.
-Crea la estructura exacta de ARCHITECTURE.md §3, el esquema Prisma de DATA_MODEL.md (Prisma 7 con
-prisma.config.ts y @prisma/adapter-pg), el seed idempotente, Docker Compose, CI y los scripts de AGENTS.md §6.
-Usa TypeScript 6.0.x (no 7). Antes de instalar, consulta las versiones actuales y fíjalas exactas.
-Preséntame primero el plan de commits (rama chore/DI-04-configuracion) y espera mi aprobación.
-Al final demuéstrame, ejecutando los comandos, que un clon limpio funciona.
+Soy Manuel Cusme (Tester y Scrum Master). Sprint 2. (1) HU-01 "preparar NestJS, contratos de datos y
+validación de entrada", que incluye la raíz del monorepo y el DI-04 de docs/BACKLOG.md: pnpm workspace,
+TypeScript 6.0.x (no 7), tsconfig base, ESLint/Prettier, Husky + commitlint, packages/shared con tsup,
+apps/api base (health, Swagger, ZodValidationPipe, filtro de errores), docker-compose.yml, .env.example y
+scripts. Antes de instalar, consulta las versiones actuales y fíjalas exactas. Rama chore/DI-04-raiz; presenta
+el plan de commits y espera mi aprobación. (2) HU-02 "endpoints de sesiones, tiempos, éxito y errores":
+RN-08 (cronómetro con reloj del servidor), RN-21 (versiones), RN-03 y RN-05; lee
+docs/diagrams/04-secuencias.md §1. Un PR por línea.
 ```
 
-**William — DI-05 y luego HU-04:**
+**William — HU-01 estructura React + DI-05 (8 h) y HU-03 persistencia (8 h):**
 ```text
-Soy William Martínez (QA). Vamos a hacer DI-05 "Estructura de UI y design system" y después HU-04.
-Lee AGENTS.md, docs/BACKLOG.md (DI-05 y HU-04), docs/HCI_DESIGN.md completo, docs/ARCHITECTURE.md §5
-y docs/TESTING.md §5. Toma los tokens visuales del Figma del Sprint 1 (te pasaré capturas o valores) y
-verifica el contraste AA de cada combinación de color con un cálculo, mostrando los resultados.
-Preséntame el plan de commits (rama chore/DI-05-ui-base) y espera mi aprobación.
+Soy William Martínez (QA). Sprint 2. (1) HU-01 "estructura React, rutas y componentes del flujo", que incluye
+DI-05 y el CI: apps/web base (Vite, Tailwind, shadcn, Router, Query, Vitest + axe, Playwright), layout, tokens
+del Figma del Sprint 1 con contraste AA calculado, componentes base, página /design y .github/workflows/ci.yml
+(docs/BACKLOG.md DI-05, docs/HCI_DESIGN.md, docs/TESTING.md §6). Depende de la raíz de Manuel. (2) HU-03
+"persistencia y consulta de planes y sesiones" en la API, sobre el esquema de Pablo. Un PR por línea.
+Crea también docs/testing/a11y-checklist.md.
 ```
 
-**Jonathan — HU-01 (después de DI-04):**
+**Pablo — HU-03 base de datos (10 h) y HU-04 pruebas (8 h):**
 ```text
-Soy Jonathan Gamboa (Developer). Vamos a trabajar HU-01 "Configurar plan de prueba" del Sprint 2.
-[prompt base, pasos 1 a 7]
-Presta atención especial a: RN-01, RN-02, RN-04, RN-16 y a la clave de equivalencia (equivalenceKey),
-que necesita HU-12 en el Sprint 4. Divide el trabajo en 2 o 3 PR: (1) shared + API, (2) asistente web.
+Soy Pablo Lozada (Tester). Sprint 2. (1) HU-03 "diseñar base de datos": esquema Prisma completo de
+docs/DATA_MODEL.md (Prisma 7 con prisma.config.ts y @prisma/adapter-pg), migración inicial y seed idempotente
+de docs/BACKLOG.md §Seed; verifica con un clon limpio. Depende de la raíz de Manuel. Rama feature/HU-03-bd.
+Eres el dueño de HU-03. (2) HU-04 "probar flujo integral": escribe primero los casos de aceptación Gherkin de
+HU-01..HU-04 (docs/TESTING.md §3) y al final ejecuta el flujo T1 y corrige los fallos de registro.
 ```
 
-**Pablo — HU-02 (después de DI-04):**
+**Jonathan — HU-01 formulario (10 h) y HU-03 evidencias (8 h) + GitHub:**
 ```text
-Soy Pablo Lozada (Tester). Vamos a trabajar HU-02 "Ejecutar sesión" del Sprint 2. Es la ruta crítica.
-[prompt base, pasos 1 a 7]
-Presta atención especial a RN-08 (cronómetro con reloj del servidor), RN-21 (versiones y cola de
-autoguardado), RN-03 y RN-05, y a los riesgos D1–D4 de docs/RISKS.md. Revisa el diagrama
-docs/diagrams/04-secuencias.md §1. Divide en 3 PR: (1) dominio del cronómetro + API, (2) pantalla de
-ejecución, (3) revisión y cierre.
+Soy Jonathan Gamboa (Developer y admin del repo). Sprint 2. (1) Antes del primer PR, deja listo GitHub según
+docs/BACKLOG.md DI-04 (último punto): develop por defecto, protecciones, etiquetas y GitHub Project; dime los
+pasos manuales que yo deba hacer en la web. (2) HU-01 "formulario guiado para configurar planes y tareas",
+con la equivalenceKey; RN-01, RN-02, RN-04, RN-16. Eres el dueño de HU-01 (Closes #n). (3) HU-03 "carga de
+evidencias con validación" (RN-15). Un PR por línea.
 ```
 
-**Manuel — HU-03:**
+**Emilio — HU-02 ejecución (10 h) y HU-04 formularios (8 h):**
 ```text
-Soy Manuel Cusme (Tester y Scrum Master). Vamos a trabajar HU-03 "Consultar planes y sesiones; adjuntar
-evidencias" del Sprint 2.
-[prompt base, pasos 1 a 7]
-Presta atención especial a RN-15 (archivos: tipo real por bytes, tamaño, nombre UUID) y RN-16 (cerrar
-plan), y a los riesgos F1–F3 de docs/RISKS.md.
+Soy Emilio Abril (Developer). Sprint 2. (1) HU-02 "ejecución de tareas y captura de observaciones": la pantalla
+de ejecución con cronómetro, resultado, errores y observaciones, sobre los endpoints de Manuel. Eres el dueño de
+HU-02. Presta atención a RN-08, RN-21 y a los riesgos D1–D4 de docs/RISKS.md. (2) HU-04 "estados, errores y
+accesibilidad básica de formularios" en HU-01 y HU-02 (docs/TESTING.md §5). Mientras la raíz de Manuel no esté
+en develop, ofrécete a ayudar con ella (tienes 2 h de holgura).
 ```
 
 ## 3. Sprints 3 y 4
 
-Usa el prompt base con la historia que te asigna `TEAM.md` §4. Añade según el caso:
-- **HU-05 / HU-12 (Emilio):** "Las fórmulas están en BUSINESS_RULES.md RN-06 y RN-12; implementa primero
+Usa el prompt base con la línea que te asigna `TEAM.md` §4 (cada HU se reparte en 2–3 personas). Añade según el caso:
+- **HU-05 (William: métricas) / HU-12 (Pablo: comparación):** "Las fórmulas están en BUSINESS_RULES.md RN-06 y RN-12; implementa primero
   `shared/domain/metrics.ts` y `comparison.ts` con TDD y valores calculados a mano sobre el seed."
-- **HU-06 (Pablo):** "Lee docs/AI_MODULE.md completo. Empieza por el MockProvider y las pruebas de cada
+- **HU-06 (Pablo proveedor, William prompt y esquema, Manuel endpoint):** "Lee docs/AI_MODULE.md completo. Empieza por el MockProvider y las pruebas de cada
   fila de §6; el GeminiProvider va al final. Confirma en la documentación oficial de Structured outputs
   el nombre de los campos de configuración del SDK instalado."
-- **HU-07 (Jonathan) y HU-08 (Manuel):** "Lee RN-09, RN-10, RN-19 y docs/diagrams/04-secuencias.md §3. La
+- **HU-07 (Jonathan) y HU-08 (Emilio interfaz, Pablo persistencia):** "Lee RN-09, RN-10, RN-19 y docs/diagrams/04-secuencias.md §3. La
   aprobación es una transacción idempotente."
-- **HU-09 / HU-10:** "Lee RN-11, RN-14, RN-19 y docs/diagrams/03-estados.md. El tablero debe operarse sin
+- **HU-09 (William, Manuel, Jonathan) / HU-10 (Emilio, Pablo):** "Lee RN-11, RN-14, RN-19 y docs/diagrams/03-estados.md. El tablero debe operarse sin
   arrastrar (menú 'Mover a…')."
-- **HU-11 (Pablo):** "Lee RN-13. El modelo del informe se arma en el servidor; el Markdown en shared; el
+- **HU-11 (William exportación, Manuel verificación):** "Lee RN-13. El modelo del informe se arma en el servidor; el Markdown en shared; el
   PDF en la web con fuente incrustada."
-- **HU-13 (William):** "Lee RN-20 y ADR-0004."
+- **HU-13 (extra: William y Pablo, al final del S3):** "Lee RN-20 y ADR-0004."
 
 ## 4. Prompts de apoyo
 
