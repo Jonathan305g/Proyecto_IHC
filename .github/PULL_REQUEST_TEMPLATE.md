@@ -1,6 +1,6 @@
 ## Historia
 
-Closes #<issue> · **HU-xx / DI-xx**: <título>
+Closes #<issue> (solo si eres el dueño de la HU; si no, `Refs #<issue>`) · **HU-xx / DI-xx**: <título>
 
 ## Qué cambia
 

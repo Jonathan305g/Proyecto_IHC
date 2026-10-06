@@ -33,9 +33,9 @@ Issue HU-xx (To Do)
   → responsable crea la rama feature/HU-xx-… desde develop  (Issue → In Progress)
   → plan corto + TDD + commits atómicos
   → git fetch && git rebase origin/develop  (antes de abrir el PR y cuando develop avance)
-  → PR a develop con la plantilla, "Closes #n"            (Issue → Review)
+  → PR a develop con la plantilla: "Closes #n" solo el dueño de la HU, los demás "Refs #n"  (Issue → Review)
   → CI verde + revisión (rotación de TEAM.md §5) + revisión de accesibilidad si hay UI
-  → merge commit → se borra la rama                       (Issue → Done, automático por "Closes")
+  → merge commit → se borra la rama                       (Issue → Done cuando se fusiona el PR del dueño, por "Closes")
 ```
 
 Reglas prácticas:
@@ -55,7 +55,7 @@ Reglas prácticas:
 
 <cuerpo opcional: el porqué, no el qué>
 
-Refs #12        (o Closes #12 en el último commit de la HU)
+Refs #12        (o Closes #12 en el último commit de la línea del dueño de la HU; ver TEAM.md §4)
 ```
 
 **Tipos:** `feat` (funcionalidad), `fix` (corrección), `test` (solo pruebas), `refactor` (sin cambiar
