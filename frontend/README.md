@@ -1,6 +1,6 @@
 # Frontend del panel de pruebas de usabilidad
 
-Estructura inicial del Sprint 2, tarea S2-01. Contiene las rutas y pantallas base de Planes, Sesiones y Resultados, además de componentes para estados vacíos, de carga y de error. Las pantallas de creación son puntos de integración para las tareas S2-05 y S2-07; todavía no guardan datos.
+Base React de S2-01 ampliada con la persistencia de S2-04. Las pantallas de Planes y Sesiones consultan NestJS para crear, editar y volver a abrir registros. Resultados conserva su pantalla base para las próximas tareas.
 
 ## Requisitos
 
@@ -18,23 +18,23 @@ npm run dev
 
 En Windows PowerShell, usa `Copy-Item .env.example .env` en lugar de `cp`. Abre la dirección que muestre Vite, normalmente `http://localhost:5173`.
 
-La estructura inicial funciona sin backend. La variable `VITE_API_BASE_URL` queda preparada para el servicio de NestJS; nunca coloques claves secretas en variables `VITE_`, ya que se incluyen en el código del navegador.
+Las pantallas de planes y sesiones de S2-04 consultan el backend NestJS en `../backend`. Configura `VITE_API_BASE_URL=http://localhost:3000` en `.env`. Nunca coloques claves secretas en variables `VITE_`, ya que se incluyen en el código del navegador. Consulta `../backend/README.md` para el contrato de rutas y la conexión a Supabase.
 
-## Comprobación de navegación
+## Comprobación de persistencia
 
-1. Abre `/` y verifica que redirige a `/planes`.
-2. Usa el menú lateral para pasar por Planes, Sesiones y Resultados.
-3. Abre directamente `/planes`, `/sesiones` y `/resultados` en la barra de direcciones; tras recargar, cada página conserva su ruta.
-4. Pulsa «Nuevo plan» y «Nueva sesión» para comprobar los puntos de integración y el regreso.
-5. Abre una ruta inexistente para comprobar el mensaje y el enlace de retorno.
-6. Usa Tab y Enter para recorrer el menú, los botones y el enlace «Saltar al contenido principal».
+1. Crea un plan con dos tareas, guarda y copia la URL del detalle.
+2. Recarga esa URL: deben aparecer el nombre, el estado y las dos tareas.
+3. Modifica el objetivo y una tarea; vuelve a recargar para comprobarlos.
+4. Crea una sesión con un código anónimo, copia su URL y recarga.
+5. Confirma consentimiento, inicia la sesión, recarga y después ciérrala.
+6. Reinicia React y NestJS; vuelve a abrir ambas URL y comprueba que persisten.
 
 ## Integración posterior
 
-- `src/pages/PlansPage.jsx` y `/planes/nuevo`: creación y consulta de planes (S2-05).
-- `src/pages/SessionsPage.jsx` y `/sesiones/nueva`: ejecución y cierre (S2-07).
+- `src/pages/PlansPage.jsx` y `/planes/nuevo`: creación y consulta básicas de S2-04; S2-05 puede ampliar el asistente.
+- `src/pages/SessionsPage.jsx` y `/sesiones/nueva`: alta y estado de S2-04; S2-07 puede ampliar la ejecución de tareas.
 - `src/pages/ResultsPage.jsx`: consulta de resultados y evidencias.
-- `src/services/apiClient.js`: conexión HTTP configurable; los componentes actuales no llaman a una API inexistente.
+- `src/services/apiClient.js`: conexión HTTP configurable y mensajes de error de la API.
 - `src/components/UiState.jsx`: estados compartidos para páginas que consulten datos.
 
 El servidor que publique la compilación deberá devolver `index.html` también para las rutas directas de la aplicación.

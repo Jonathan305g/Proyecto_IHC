@@ -67,6 +67,21 @@ h1 { margin: 0; color: #172536; font-size: clamp(25px, 3vw, 31px); line-height: 
 .state-panel p { max-width: 490px; margin: 8px 0 20px; color: #526476; font-size: 14px; line-height: 1.55; }
 .notice { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 18px; border: 1px solid #cfdfec; border-radius: 8px; background: #f0f7fc; color: #244a6c; }
 .notice-error { border-color: #eacaca; background: #fff4f4; color: #8d2525; }
+.record-list { display: grid; gap: 14px; }
+.record-card, .form-panel { display: grid; gap: 14px; padding: 22px; border: 1px solid #dce4ed; border-radius: 10px; background: #fff; }
+.record-card { text-decoration: none; }
+.record-card:hover { border-color: #19558d; }
+.record-card span, .record-card small { color: #526476; }
+.form-panel { max-width: 760px; margin-bottom: 20px; }
+.form-panel label { display: grid; gap: 7px; font-weight: 600; }
+.form-panel input:not([type="checkbox"]), .form-panel textarea, .form-panel select { width: 100%; padding: 10px 12px; border: 1px solid #b9c8d7; border-radius: 7px; background: #fff; color: #172536; }
+.form-panel textarea { min-height: 90px; resize: vertical; }
+.form-panel fieldset { display: grid; gap: 14px; min-width: 0; border: 1px solid #dce4ed; border-radius: 8px; padding: 17px; }
+.form-panel legend { font-weight: 700; }
+.form-panel h2 { margin: 3px 0; }
+.form-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+.form-panel .checkbox-label { display: flex; align-items: center; gap: 8px; }
+.button:disabled { opacity: .55; cursor: not-allowed; }
 
 @media (max-width: 760px) {
   .app-shell { display: block; }

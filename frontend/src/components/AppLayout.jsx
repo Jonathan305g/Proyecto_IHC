@@ -32,7 +32,7 @@ export default function AppLayout() {
       <div className="main-column">
         <header className="topbar">
           <span className="topbar-title">Panel de pruebas de usabilidad</span>
-          <span className="topbar-stage">Sprint 2 · Estructura inicial</span>
+          <span className="topbar-stage">Sprint 2 · Planes y sesiones</span>
         </header>
         <main id="contenido" className="page-content" tabIndex="-1">
           <Outlet />

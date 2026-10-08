@@ -11,7 +11,9 @@ export async function request(path, options = {}) {
   })
 
   if (!response.ok) {
-    throw new Error(`La solicitud no se completó (${response.status}).`)
+    const error = await response.json().catch(() => null)
+    const message = Array.isArray(error?.message) ? error.message.join(' ') : error?.message
+    throw new Error(message || `La solicitud no se completó (${response.status}).`)
   }
 
   if (response.status === 204) return null
