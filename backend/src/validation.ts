@@ -47,10 +47,10 @@ export function bodyId(value: unknown, field: string): string {
 }
 
 export function dbError(error: unknown): never {
-  const code = (error as { code?: string }).code
+  const code = error && typeof error === 'object' && 'code' in error ? error.code : undefined
   if (code === '23505') throw new ConflictException('Ya existe un registro con esos datos.')
   if (code === '23503') throw new ConflictException('El registro tiene relaciones que impiden el cambio.')
-  if (code === '23514' || code === '23502' || code === '22001') {
+  if (code === '23514' || code === '23502' || code === '22001' || code === '22003' || code === '22P02') {
     throw new BadRequestException('Los datos no cumplen las restricciones de la base.')
   }
   throw error
