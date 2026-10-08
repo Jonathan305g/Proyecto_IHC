@@ -17,11 +17,4 @@ export class PlansController {
   @Patch(':id')
   update(@Param('id') id: string, @Body() body: unknown) { return this.plans.update(id, body) }
 
-  @Post(':id/tareas')
-  addTask(@Param('id') id: string, @Body() body: unknown) { return this.plans.addTask(id, body) }
-
-  @Patch(':id/tareas/:taskId')
-  updateTask(@Param('id') id: string, @Param('taskId') taskId: string, @Body() body: unknown) {
-    return this.plans.updateTask(id, taskId, body)
-  }
 }
