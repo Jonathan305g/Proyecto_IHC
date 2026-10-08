@@ -1,6 +1,7 @@
 import { BadRequestException, ConflictException, Injectable } from '@nestjs/common'
 import { DatabaseService } from './database.service'
-import { dbError, id, missing, object, text } from './validation'
+import { dbError, id, missing } from './validation'
+import { parseSession, parseUpdateSession } from './dto/sesion.dto'
 
 @Injectable()
 export class SessionsService {
@@ -37,9 +38,9 @@ export class SessionsService {
   }
 
   async create(body: unknown) {
-    const input = object(body)
-    const planId = id(String(input.plan_id ?? ''))
-    const code = text(input.codigo_participante, 'codigo_participante', 30)
+    const input = parseSession(body)
+    const planId = input.plan_id
+    const code = input.codigo_participante
     let sessionId: string
     try {
       sessionId = await this.db.transaction(async (client) => {
@@ -63,7 +64,7 @@ export class SessionsService {
 
   async update(sessionId: string, body: unknown) {
     const identifier = id(sessionId)
-    const input = object(body)
+    const input = parseUpdateSession(body)
     if (input.accion === 'iniciar') {
       if (input.consentimiento_confirmado !== true) {
         throw new BadRequestException('Confirma el consentimiento antes de iniciar.')

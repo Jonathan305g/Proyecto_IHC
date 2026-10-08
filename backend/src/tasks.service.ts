@@ -1,7 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common'
 import { DatabaseService } from './database.service'
-import { PlansService, parseTask } from './plans.service'
-import { dbError, id, missing, object, positive, text } from './validation'
+import { PlansService } from './plans.service'
+import { parseTask, parseUpdateTask } from './dto/tarea.dto'
+import { dbError, id, missing, positive, text } from './validation'
 
 @Injectable()
 export class TasksService {
@@ -10,7 +11,7 @@ export class TasksService {
   async updateTask(planId: string, taskId: string, body: unknown) {
     const plan = id(planId)
     const task = id(taskId)
-    const input = object(body)
+    const input = parseUpdateTask(body)
     const changes: string[] = []
     const values: unknown[] = []
     if (input.titulo !== undefined) {

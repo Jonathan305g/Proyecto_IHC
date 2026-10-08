@@ -1,42 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common'
 import { DatabaseService } from './database.service'
-import { dbError, id, missing, object, positive, text } from './validation'
-
-type PlanInput = { nombre: string; objetivo: string; tareas: TaskInput[] }
-type TaskInput = { titulo: string; descripcion: string; criterio_exito: string | null; codigo: string | null; orden: number }
-
-export function parseTask(value: unknown): TaskInput {
-  const task = object(value)
-  const criterio = task.criterio_exito == null ? null : text(task.criterio_exito, 'criterio_exito', 10000)
-  const codigo = task.codigo == null || task.codigo === '' ? null : text(task.codigo, 'codigo', 30)
-  return {
-    titulo: text(task.titulo, 'titulo', 150),
-    descripcion: text(task.descripcion, 'descripcion', 10000),
-    criterio_exito: criterio,
-    codigo,
-    orden: positive(task.orden, 'orden'),
-  }
-}
-
-function parsePlan(value: unknown): PlanInput {
-  const plan = object(value)
-  if (!Array.isArray(plan.tareas) || plan.tareas.length === 0) {
-    throw new BadRequestException('El plan debe incluir al menos una tarea.')
-  }
-  const tareas = plan.tareas.map(parseTask)
-  if (new Set(tareas.map((task) => task.orden)).size !== tareas.length) {
-    throw new BadRequestException('El orden de cada tarea debe ser único.')
-  }
-  const codes = tareas.map((task) => task.codigo).filter((code) => code !== null)
-  if (new Set(codes).size !== codes.length) {
-    throw new BadRequestException('El código de cada tarea debe ser único.')
-  }
-  return {
-    nombre: text(plan.nombre, 'nombre', 150),
-    objetivo: text(plan.objetivo, 'objetivo', 10000),
-    tareas,
-  }
-}
+import { dbError, id, missing, text } from './validation'
+import { parsePlan, parseUpdatePlan } from './dto/plan.dto'
 
 @Injectable()
 export class PlansService {
@@ -89,7 +54,7 @@ export class PlansService {
 
   async update(planId: string, body: unknown) {
     const identifier = id(planId)
-    const input = object(body)
+    const input = parseUpdatePlan(body)
     const changes: string[] = []
     const values: unknown[] = []
     if (input.nombre !== undefined) {
