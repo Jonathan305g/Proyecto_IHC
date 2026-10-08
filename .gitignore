@@ -3,4 +3,7 @@ frontend/dist/
 frontend/.env
 frontend/.env.local
 frontend/.env.*.local
+backend/node_modules/
+backend/dist/
+backend/.env
 *.log
