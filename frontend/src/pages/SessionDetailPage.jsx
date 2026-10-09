@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router'
 import PageHeader from '../components/PageHeader.jsx'
 import { ErrorState, LoadingState } from '../components/UiState.jsx'
+import ConfirmModal from '../components/ConfirmModal.jsx'
 import { sessions } from '../services/persistence.js'
 
 export default function SessionDetailPage() {
@@ -10,6 +11,7 @@ export default function SessionDetailPage() {
   const [consent, setConsent] = useState(false)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
+  const [showCloseModal, setShowCloseModal] = useState(false)
 
   const load = useCallback(() => {
     setError('')
@@ -50,6 +52,21 @@ export default function SessionDetailPage() {
         title={session ? `Sesión de ${session.participante_codigo}` : 'Detalle de sesión'}
         description="El avance guardado permanece disponible al recargar o reabrir esta dirección."
       />
+
+      <ConfirmModal
+        isOpen={showCloseModal}
+        title="Finalizar sesión"
+        message="¿Deseas cerrar y finalizar esta sesión de prueba? Ya no se podrán registrar nuevos resultados en ella."
+        confirmText="Finalizar sesión"
+        cancelText="Volver"
+        isDanger={false}
+        onConfirm={() => {
+          setShowCloseModal(false)
+          change('cerrar')
+        }}
+        onCancel={() => setShowCloseModal(false)}
+      />
+
       {error && <ErrorState message={error} onRetry={load} />}
       {!session && !error && <LoadingState />}
       {session && (
@@ -110,7 +127,7 @@ export default function SessionDetailPage() {
                   disabled={!consent || busy}
                   onClick={() => change('iniciar')}
                 >
-                  {busy ? 'Iniciando…' : '▶ Iniciar sesión de prueba'}
+                  {busy ? 'Iniciando…' : 'Iniciar sesión de prueba'}
                 </button>
               </div>
             </div>
@@ -121,7 +138,7 @@ export default function SessionDetailPage() {
               <button
                 className="button button-primary"
                 disabled={busy}
-                onClick={() => change('cerrar')}
+                onClick={() => setShowCloseModal(true)}
               >
                 {busy ? 'Cerrando…' : 'Finalizar y cerrar sesión'}
               </button>

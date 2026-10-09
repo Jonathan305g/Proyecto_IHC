@@ -29,7 +29,7 @@ export default function PlansPage() {
         description="Organiza las tareas, criterios de éxito y objetivos de cada evaluación de usabilidad."
         action={
           <Link className="button button-primary" to="/planes/nuevo">
-            + Nuevo plan (Asistente)
+            Nuevo plan
           </Link>
         }
       />

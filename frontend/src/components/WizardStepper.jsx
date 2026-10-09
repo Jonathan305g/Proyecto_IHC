@@ -26,7 +26,7 @@ export default function WizardStepper({ currentStep, setStep, maxReachedStep }) 
                 aria-current={isActive ? 'step' : undefined}
               >
                 <span className="stepper-number" aria-hidden="true">
-                  {isCompleted ? '✓' : step.number}
+                  {step.number}
                 </span>
                 <span className="stepper-label">
                   <strong>{step.title}</strong>

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router'
 import PageHeader from '../components/PageHeader.jsx'
 import { ErrorState, LoadingState } from '../components/UiState.jsx'
+import ConfirmModal from '../components/ConfirmModal.jsx'
 import { plans } from '../services/persistence.js'
 import {
   MODALIDADES_DISPONIBLES,
@@ -30,6 +31,7 @@ export default function PlanDetailPage() {
   const [error, setError] = useState('')
   const [message, setMessage] = useState('')
   const [saving, setSaving] = useState(false)
+  const [showDiscardModal, setShowDiscardModal] = useState(false)
 
   const load = useCallback(() => {
     setError('')
@@ -92,7 +94,7 @@ export default function PlanDetailPage() {
             <div className="form-actions">
               {plan.estado === 'activo' && (
                 <Link className="button button-primary" to="/sesiones/nueva">
-                  + Iniciar sesión con este plan
+                  Iniciar sesión con este plan
                 </Link>
               )}
               <Link className="button button-outline" to="/planes">
@@ -101,6 +103,21 @@ export default function PlanDetailPage() {
             </div>
           )
         }
+      />
+
+      <ConfirmModal
+        isOpen={showDiscardModal}
+        title="Descartar cambios"
+        message="¿Deseas descartar los cambios realizados en los datos generales del plan?"
+        confirmText="Descartar cambios"
+        cancelText="Continuar editando"
+        isDanger={true}
+        onConfirm={() => {
+          setShowDiscardModal(false)
+          setIsEditing(false)
+          load()
+        }}
+        onCancel={() => setShowDiscardModal(false)}
       />
 
       {error && <ErrorState message={error} onRetry={load} />}
@@ -133,9 +150,12 @@ export default function PlanDetailPage() {
                 <button
                   type="button"
                   className="button button-outline button-sm"
-                  onClick={() => setIsEditing(!isEditing)}
+                  onClick={() => {
+                    if (isEditing) setShowDiscardModal(true)
+                    else setIsEditing(true)
+                  }}
                 >
-                  {isEditing ? 'Cancelar edición' : '✏️ Editar datos'}
+                  {isEditing ? 'Cerrar edición' : 'Editar datos'}
                 </button>
               </div>
             </div>
@@ -215,7 +235,7 @@ export default function PlanDetailPage() {
                   <button
                     type="button"
                     className="button button-outline"
-                    onClick={() => setIsEditing(false)}
+                    onClick={() => setShowDiscardModal(true)}
                   >
                     Descartar
                   </button>
@@ -316,7 +336,7 @@ function TaskEditor({ task, planId, onSaved }) {
     <article className="task-card-wizard">
       <header className="task-card-header">
         <div className="task-badge-group">
-          <span className="badge badge-primary">Tarea #{task.orden}</span>
+          <span className="badge badge-primary">Tarea {task.orden}</span>
           {task.codigo && <span className="badge badge-subtle">{task.codigo}</span>}
           <strong>{task.titulo}</strong>
         </div>
@@ -325,7 +345,7 @@ function TaskEditor({ task, planId, onSaved }) {
           className="button button-outline button-sm"
           onClick={() => setIsEditing(!isEditing)}
         >
-          {isEditing ? 'Cerrar' : '✏️ Editar'}
+          {isEditing ? 'Cerrar' : 'Editar'}
         </button>
       </header>
 
@@ -477,14 +497,14 @@ function AddTask({ planId, nextOrder, onSaved }) {
         onClick={() => setOpen(true)}
         style={{ marginTop: '10px' }}
       >
-        + Agregar nueva tarea al plan
+        Agregar nueva tarea al plan
       </button>
     )
   }
 
   return (
     <form className="form-panel" onSubmit={save} style={{ marginTop: '16px' }}>
-      <h3>Nueva tarea #{nextOrder}</h3>
+      <h3>Nueva tarea {nextOrder}</h3>
       {error && <ErrorState message={error} />}
 
       <div className="form-row">

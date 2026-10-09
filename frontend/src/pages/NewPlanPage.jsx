@@ -1,9 +1,10 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router'
+import { useNavigate } from 'react-router'
 import PageHeader from '../components/PageHeader.jsx'
 import { ErrorState } from '../components/UiState.jsx'
 import WizardStepper from '../components/WizardStepper.jsx'
 import FieldError from '../components/FieldError.jsx'
+import ConfirmModal from '../components/ConfirmModal.jsx'
 import {
   MODALIDADES_DISPONIBLES,
   METRICAS_SUGERIDAS,
@@ -38,6 +39,10 @@ export default function NewPlanPage() {
   // Estado de persistencia
   const [saving, setSaving] = useState(false)
   const [submitError, setSubmitError] = useState('')
+
+  // Control de modales de confirmación
+  const [showCancelModal, setShowCancelModal] = useState(false)
+  const [taskToDeleteIndex, setTaskToDeleteIndex] = useState(null)
 
   // ----------------------------------------------------
   // Validaciones
@@ -162,10 +167,11 @@ export default function NewPlanPage() {
     setStep2Errors((prev) => [...prev, {}])
   }
 
-  function removeTask(index) {
-    if (tareas.length <= 1) return
-    setTareas((prev) => prev.filter((_, i) => i !== index))
-    setStep2Errors((prev) => prev.filter((_, i) => i !== index))
+  function confirmRemoveTask() {
+    if (taskToDeleteIndex === null || tareas.length <= 1) return
+    setTareas((prev) => prev.filter((_, i) => i !== taskToDeleteIndex))
+    setStep2Errors((prev) => prev.filter((_, i) => i !== taskToDeleteIndex))
+    setTaskToDeleteIndex(null)
   }
 
   function moveTask(index, direction) {
@@ -183,6 +189,21 @@ export default function NewPlanPage() {
       copy.splice(targetIndex, 0, moved)
       return copy
     })
+  }
+
+  function handleCancelRequest() {
+    const hasData =
+      nombre.trim() ||
+      interfazEvaluada.trim() ||
+      objetivo.trim() ||
+      perfil.trim() ||
+      tareas.some((t) => t.titulo.trim() || t.consignaNeutral.trim())
+
+    if (hasData) {
+      setShowCancelModal(true)
+    } else {
+      navigate('/planes')
+    }
   }
 
   // ----------------------------------------------------
@@ -227,7 +248,6 @@ export default function NewPlanPage() {
         tareas: payloadTareas,
       })
 
-      // Si se desea activar inmediatamente tras crear
       if (estadoDeseado === 'activo' && created.id) {
         await plans.update(created.id, { estado: 'activo' })
       }
@@ -255,6 +275,36 @@ export default function NewPlanPage() {
       />
 
       {submitError && <ErrorState message={submitError} />}
+
+      {/* Modal de confirmación para cancelar */}
+      <ConfirmModal
+        isOpen={showCancelModal}
+        title="Descartar creación del plan"
+        message="¿Deseas cancelar? Los datos ingresados no se guardarán."
+        confirmText="Sí, cancelar"
+        cancelText="Continuar editando"
+        isDanger={true}
+        onConfirm={() => navigate('/planes')}
+        onCancel={() => setShowCancelModal(false)}
+      />
+
+      {/* Modal de confirmación para eliminar tarea */}
+      <ConfirmModal
+        isOpen={taskToDeleteIndex !== null}
+        title="Eliminar tarea del plan"
+        message={
+          taskToDeleteIndex !== null
+            ? `¿Deseas eliminar la Tarea ${taskToDeleteIndex + 1}${
+                tareas[taskToDeleteIndex]?.titulo ? ` (${tareas[taskToDeleteIndex].titulo})` : ''
+              }?`
+            : ''
+        }
+        confirmText="Eliminar tarea"
+        cancelText="Conservar"
+        isDanger={true}
+        onConfirm={confirmRemoveTask}
+        onCancel={() => setTaskToDeleteIndex(null)}
+      />
 
       {/* ==================================================== */}
       {/* PASO 1: DATOS GENERALES                              */}
@@ -374,11 +424,15 @@ export default function NewPlanPage() {
               className="button button-primary"
               onClick={() => goToStep(2)}
             >
-              Siguiente: Tareas y criterios →
+              Siguiente: Tareas y criterios
             </button>
-            <Link className="button button-outline" to="/planes">
+            <button
+              type="button"
+              className="button button-outline"
+              onClick={handleCancelRequest}
+            >
               Cancelar
-            </Link>
+            </button>
           </div>
         </section>
       )}
@@ -407,29 +461,26 @@ export default function NewPlanPage() {
                       <button
                         type="button"
                         className="button button-ghost button-sm"
-                        title="Subir tarea"
                         disabled={index === 0}
                         onClick={() => moveTask(index, -1)}
                       >
-                        ▲ Subir
+                        Subir
                       </button>
                       <button
                         type="button"
                         className="button button-ghost button-sm"
-                        title="Bajar tarea"
                         disabled={index === tareas.length - 1}
                         onClick={() => moveTask(index, 1)}
                       >
-                        ▼ Bajar
+                        Bajar
                       </button>
                       {tareas.length > 1 && (
                         <button
                           type="button"
                           className="button button-danger button-sm"
-                          title="Eliminar tarea"
-                          onClick={() => removeTask(index)}
+                          onClick={() => setTaskToDeleteIndex(index)}
                         >
-                          ✕ Quitar
+                          Eliminar
                         </button>
                       )}
                     </div>
@@ -522,7 +573,7 @@ export default function NewPlanPage() {
             onClick={addTask}
             style={{ width: '100%', marginTop: '10px' }}
           >
-            + Agregar otra tarea al plan
+            Agregar otra tarea al plan
           </button>
 
           <div className="form-actions">
@@ -531,14 +582,14 @@ export default function NewPlanPage() {
               className="button button-outline"
               onClick={() => setCurrentStep(1)}
             >
-              ← Anterior: Datos generales
+              Anterior: Datos generales
             </button>
             <button
               type="button"
               className="button button-primary"
               onClick={() => goToStep(3)}
             >
-              Siguiente: Revisar y guardar →
+              Siguiente: Revisar y guardar
             </button>
           </div>
         </section>
@@ -590,7 +641,7 @@ export default function NewPlanPage() {
               <article key={index} className="review-task-item">
                 <h4>
                   <span>
-                    #{index + 1} — {task.titulo}
+                    Tarea {index + 1}: {task.titulo}
                   </span>
                   {task.codigo && <span className="badge badge-subtle">{task.codigo}</span>}
                 </h4>
@@ -619,7 +670,7 @@ export default function NewPlanPage() {
               disabled={saving}
               onClick={() => setCurrentStep(2)}
             >
-              ← Anterior: Editar tareas
+              Anterior: Editar tareas
             </button>
 
             <button
@@ -628,7 +679,7 @@ export default function NewPlanPage() {
               disabled={saving}
               onClick={() => handleSavePlan('borrador')}
             >
-              {saving ? 'Guardando…' : '📁 Guardar como borrador'}
+              {saving ? 'Guardando…' : 'Guardar como borrador'}
             </button>
 
             <button
@@ -637,12 +688,17 @@ export default function NewPlanPage() {
               disabled={saving}
               onClick={() => handleSavePlan('activo')}
             >
-              {saving ? 'Guardando…' : '🚀 Guardar y activar plan'}
+              {saving ? 'Guardando…' : 'Guardar y activar plan'}
             </button>
 
-            <Link className="button button-ghost" to="/planes">
+            <button
+              type="button"
+              className="button button-ghost"
+              disabled={saving}
+              onClick={handleCancelRequest}
+            >
               Cancelar
-            </Link>
+            </button>
           </div>
         </section>
       )}
