@@ -1,0 +1,85 @@
+import { BadRequestException, Injectable } from '@nestjs/common'
+import { DatabaseService } from './database.service'
+import { dbError, id, missing, text } from './validation'
+import { parsePlan, parseUpdatePlan } from './dto/plan.dto'
+
+@Injectable()
+export class PlansService {
+  constructor(private readonly db: DatabaseService) {}
+
+  async list() {
+    const { rows } = await this.db.query(
+      'SELECT id, nombre, objetivo, estado, creado_en, actualizado_en FROM public.planes ORDER BY creado_en DESC, id DESC',
+    )
+    return rows
+  }
+
+  async detail(planId: string) {
+    const identifier = id(planId)
+    const { rows } = await this.db.query(
+      'SELECT id, nombre, objetivo, estado, creado_en, actualizado_en FROM public.planes WHERE id = $1',
+      [identifier],
+    )
+    if (!rows.length) missing('El plan')
+    const tasks = await this.db.query(
+      'SELECT id, plan_id, titulo, descripcion, criterio_exito, codigo, orden FROM public.tareas WHERE plan_id = $1 ORDER BY orden',
+      [identifier],
+    )
+    return { ...rows[0], tareas: tasks.rows }
+  }
+
+  async create(body: unknown) {
+    const plan = parsePlan(body)
+    let createdId: string
+    try {
+      createdId = await this.db.transaction(async (client) => {
+        const saved = await client.query<{ id: string }>(
+          'INSERT INTO public.planes (nombre, objetivo) VALUES ($1, $2) RETURNING id',
+          [plan.nombre, plan.objetivo],
+        )
+        const planId = saved.rows[0].id
+        for (const task of plan.tareas) {
+          await client.query(
+            'INSERT INTO public.tareas (plan_id, titulo, descripcion, criterio_exito, codigo, orden) VALUES ($1, $2, $3, $4, $5, $6)',
+            [planId, task.titulo, task.descripcion, task.criterio_exito, task.codigo, task.orden],
+          )
+        }
+        return planId
+      })
+    } catch (error) {
+      dbError(error)
+    }
+    return this.detail(createdId)
+  }
+
+  async update(planId: string, body: unknown) {
+    const identifier = id(planId)
+    const input = parseUpdatePlan(body)
+    const changes: string[] = []
+    const values: unknown[] = []
+    if (input.nombre !== undefined) {
+      values.push(text(input.nombre, 'nombre', 150))
+      changes.push(`nombre = $${values.length}`)
+    }
+    if (input.objetivo !== undefined) {
+      values.push(text(input.objetivo, 'objetivo', 10000))
+      changes.push(`objetivo = $${values.length}`)
+    }
+    if (input.estado !== undefined) {
+      if (!['borrador', 'activo', 'finalizado'].includes(String(input.estado))) {
+        throw new BadRequestException('Estado del plan inválido.')
+      }
+      values.push(input.estado)
+      changes.push(`estado = $${values.length}`)
+    }
+    if (!changes.length) throw new BadRequestException('No hay cambios válidos.')
+    values.push(identifier)
+    const { rowCount } = await this.db.query(
+      `UPDATE public.planes SET ${changes.join(', ')}, actualizado_en = NOW() WHERE id = $${values.length}`,
+      values,
+    )
+    if (!rowCount) missing('El plan')
+    return this.detail(identifier)
+  }
+
+}
