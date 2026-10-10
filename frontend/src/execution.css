@@ -1,0 +1,23 @@
+/* Estilos propios de la pantalla de ejecución (S2-07). */
+.visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.run-panel { max-width: 900px; }
+.run-panel h2:focus { outline: none; }
+.run-progress { max-width: 900px; margin-bottom: 18px; }
+.run-progress [role="progressbar"] { height: 10px; border-radius: 999px; background: #dce4ed; overflow: hidden; }
+.run-progress [role="progressbar"] span { display: block; height: 100%; background: #19558d; transition: width .2s; }
+.run-progress p { margin: 6px 0 0; color: #3f5265; font-size: 13px; font-weight: 600; }
+.run-timer { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 14px 16px; border: 1px solid #dce4ed; border-radius: 8px; background: #f7f9fc; }
+.run-clock { font-size: 34px; font-weight: 800; font-variant-numeric: tabular-nums; color: #153b66; }
+.run-timer > span { flex: 1 1 140px; color: #3f5265; font-size: 14px; }
+.run-confirm { padding: 16px; border: 2px solid #ec9a3c; border-radius: 8px; background: #fff8ee; }
+.run-confirm h3 { margin: 0 0 6px; }
+.run-feedback { margin: 0; min-height: 1.4em; font-weight: 600; color: #1d5c34; }
+.run-feedback.notice { display: block; font-weight: 600; }
+.field-error { margin: 0; color: #8d2525; font-size: 14px; font-weight: 600; }
+.run-table { width: 100%; border-collapse: collapse; }
+.run-table th, .run-table td { padding: 10px 12px; border-bottom: 1px solid #dce4ed; text-align: left; vertical-align: middle; }
+.run-table thead th { color: #3f5265; font-size: 13px; }
+.run-card-actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.badge { display: inline-block; padding: 3px 9px; border-radius: 999px; background: #e9f2fb; color: #153b66; font-size: 12px; font-weight: 700; }
+.badge-warning { background: #fff1d6; color: #6b4300; }
+@media (max-width: 760px) { .run-table { display: block; overflow-x: auto; } }
