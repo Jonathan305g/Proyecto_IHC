@@ -8,6 +8,7 @@ import NewPlanPage from './pages/NewPlanPage.jsx'
 import PlanDetailPage from './pages/PlanDetailPage.jsx'
 import NewSessionPage from './pages/NewSessionPage.jsx'
 import SessionDetailPage from './pages/SessionDetailPage.jsx'
+import SessionRunPage from './pages/SessionRunPage.jsx'
 
 export default function App() {
   return (
@@ -20,6 +21,7 @@ export default function App() {
         <Route path="sesiones" element={<SessionsPage />} />
         <Route path="sesiones/nueva" element={<NewSessionPage />} />
         <Route path="sesiones/:id" element={<SessionDetailPage />} />
+        <Route path="sesiones/:id/ejecutar" element={<SessionRunPage />} />
         <Route path="resultados" element={<ResultsPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
