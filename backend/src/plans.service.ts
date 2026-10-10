@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common'
+import { BadRequestException, ConflictException, Injectable } from '@nestjs/common'
 import { DatabaseService } from './database.service'
 import { dbError, id, missing, text } from './validation'
 import { parsePlan, parseUpdatePlan } from './dto/plan.dto'
@@ -9,7 +9,7 @@ export class PlansService {
 
   async list() {
     const { rows } = await this.db.query(
-      'SELECT id, nombre, objetivo, estado, creado_en, actualizado_en FROM public.planes ORDER BY creado_en DESC, id DESC',
+      'SELECT id, nombre, objetivo, estado, cupo, creado_en, actualizado_en FROM public.planes ORDER BY creado_en DESC, id DESC',
     )
     return rows
   }
@@ -17,7 +17,7 @@ export class PlansService {
   async detail(planId: string) {
     const identifier = id(planId)
     const { rows } = await this.db.query(
-      'SELECT id, nombre, objetivo, estado, creado_en, actualizado_en FROM public.planes WHERE id = $1',
+      'SELECT id, nombre, objetivo, estado, cupo, creado_en, actualizado_en FROM public.planes WHERE id = $1',
       [identifier],
     )
     if (!rows.length) missing('El plan')
@@ -34,8 +34,8 @@ export class PlansService {
     try {
       createdId = await this.db.transaction(async (client) => {
         const saved = await client.query<{ id: string }>(
-          'INSERT INTO public.planes (nombre, objetivo) VALUES ($1, $2) RETURNING id',
-          [plan.nombre, plan.objetivo],
+          'INSERT INTO public.planes (nombre, objetivo, cupo) VALUES ($1, $2, $3) RETURNING id',
+          [plan.nombre, plan.objetivo, plan.cupo],
         )
         const planId = saved.rows[0].id
         for (const task of plan.tareas) {
@@ -72,13 +72,25 @@ export class PlansService {
       values.push(input.estado)
       changes.push(`estado = $${values.length}`)
     }
+    if (input.cupo !== undefined) {
+      values.push(input.cupo)
+      changes.push(`cupo = $${values.length}`)
+    }
     if (!changes.length) throw new BadRequestException('No hay cambios válidos.')
     values.push(identifier)
-    const { rowCount } = await this.db.query(
-      `UPDATE public.planes SET ${changes.join(', ')}, actualizado_en = NOW() WHERE id = $${values.length}`,
-      values,
-    )
-    if (!rowCount) missing('El plan')
+    await this.db.transaction(async (client) => {
+      const plan = await client.query('SELECT id FROM public.planes WHERE id = $1 FOR UPDATE', [identifier])
+      if (!plan.rows.length) missing('El plan')
+      if (input.cupo !== undefined && input.cupo !== null) {
+        const count = await client.query<{ total: string }>('SELECT COUNT(*) AS total FROM public.sesiones WHERE plan_id = $1', [identifier])
+        if (BigInt(count.rows[0].total) > BigInt(input.cupo)) {
+          throw new ConflictException('El cupo no puede ser menor que las sesiones ya creadas.')
+        }
+      }
+      await client.query(
+        `UPDATE public.planes SET ${changes.join(', ')}, actualizado_en = NOW() WHERE id = $${values.length}`, values,
+      )
+    })
     return this.detail(identifier)
   }
 
