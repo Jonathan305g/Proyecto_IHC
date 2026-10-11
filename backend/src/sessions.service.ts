@@ -23,10 +23,12 @@ export class SessionsService {
 
   async detail(sessionId: string) {
     const identifier = id(sessionId)
-    // Una transacción y los mismos bloqueos de escritura evitan mezclar estado y avance.
+    // Una instantánea consistente de solo lectura evita mezclar estado y avance
+    // sin bloquear las escrituras de otras sesiones del plan.
     return this.db.transaction(async (client) => {
-      await lockSession(client, identifier)
+      await client.query('SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY')
       const { rows } = await client.query(`${sessionSelect} WHERE s.id = $1`, [identifier])
+      if (!rows.length) missing('La sesión')
       const { rows: tareas } = await client.query(
         'SELECT id, titulo, descripcion, criterio_exito, orden FROM public.tareas WHERE plan_id = $1 ORDER BY orden', [rows[0].plan_id],
       )

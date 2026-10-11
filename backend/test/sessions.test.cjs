@@ -97,7 +97,11 @@ test('upsert conserva ID y recupera resultados y progreso para continuar', async
   assert.equal(f.saved.size, 1)
   assert.equal(second.duracion_segundos, 12)
   assert.deepEqual(await f.results.list('2'), [second])
+  const readStart = f.statements.length
   const detail = await f.sessions.detail('2')
+  const reads = f.statements.slice(readStart)
+  assert.equal(reads[0].sql, 'SET TRANSACTION ISOLATION LEVEL REPEATABLE READ, READ ONLY')
+  assert.ok(reads.every(({ sql }) => !/FOR UPDATE|FOR SHARE|LOCK TABLE|INSERT|UPDATE public|DELETE/.test(sql)))
   assert.deepEqual(detail.progreso, { total: 1, registradas: 1, pendientes: [] })
   assert.deepEqual(detail.resultados, [second])
 })

@@ -316,7 +316,7 @@ Las pruebas HTTP usan persistencia simulada y una URL PostgreSQL ficticia; no re
 
 ### Migración previa al despliegue
 
-El esquema original no incluye cupo ni distingue ayuda. Antes de ejecutar esta versión, aplica **una vez** `migrations/001_s2_06_ejecucion_sesiones.sql` mediante el procedimiento de migraciones del equipo. El backend no aplica DDL al arrancar. No vuelvas a ejecutar los scripts completos de creación. Esta entrega prepara el archivo; no modifica la base remota ni su conexión.
+El esquema limpio de `database/01_esquema.sql` incluye cupo y ayuda. Para actualizar una base existente antes de ejecutar esta versión, aplica la migración idempotente `migrations/001_s2_06_ejecucion_sesiones.sql` mediante el procedimiento de migraciones del equipo. La migración admite ejecuciones repetidas: solo agrega columnas y restricciones si faltan. El backend no aplica DDL al arrancar. No vuelvas a ejecutar los scripts completos de creación. Esta entrega prepara el archivo; no modifica la base remota ni su conexión.
 
 - `planes.cupo`: entero positivo o `null` (sin límite). Los planes existentes quedan con `null`; no se inventa un cupo predeterminado. POST/PATCH de planes admiten este campo. GET de planes lo devuelve.
 - Se cuentan **todas** las sesiones del plan: pendientes, en curso y cerradas. Crear consume un cupo; iniciar o continuar una sesión existente no consume otro. No se permite reducir el cupo por debajo del total ya creado.
@@ -356,7 +356,7 @@ Por compatibilidad, `{"plan_id":"1","codigo_participante":"P-001"}` sigue creand
 
 ### Consultar y continuar
 
-`GET /api/sesiones/2`, sin body, devuelve **200** con la forma completa anterior, más los resultados guardados. `progreso.pendientes` contiene los IDs de tareas sin resultados completos. La lista `GET /api/sesiones` añade `cupo` y `cupo_completo` a cada sesión.
+`GET /api/sesiones/2` usa una transacción de solo lectura con aislamiento REPEATABLE READ, sin bloqueos exclusivos sobre planes o sesiones. Sin body, devuelve **200** con la forma completa anterior, más los resultados guardados. `progreso.pendientes` contiene los IDs de tareas sin resultados completos. La lista `GET /api/sesiones` añade `cupo` y `cupo_completo` a cada sesión.
 
 `PATCH /api/sesiones/2`, request:
 

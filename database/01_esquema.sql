@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS public.planes (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     nombre VARCHAR(150) NOT NULL,
     objetivo TEXT NOT NULL,
+    cupo INTEGER NULL CONSTRAINT planes_cupo_check CHECK (cupo > 0),
     estado VARCHAR(20) NOT NULL DEFAULT 'borrador'
         CHECK (estado IN ('borrador', 'activo', 'finalizado')),
     creado_en TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -63,12 +64,15 @@ CREATE TABLE IF NOT EXISTS public.resultados (
     sesion_id BIGINT NOT NULL,
     tarea_id BIGINT NOT NULL,
     completada BOOLEAN,
+    con_ayuda BOOLEAN NOT NULL DEFAULT FALSE,
     duracion_segundos INTEGER CHECK (duracion_segundos >= 0),
     cantidad_errores INTEGER NOT NULL DEFAULT 0
         CHECK (cantidad_errores >= 0),
     observaciones TEXT,
     registrado_en TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     UNIQUE (sesion_id, tarea_id),
+    CONSTRAINT resultados_ayuda_completada
+        CHECK (NOT con_ayuda OR completada IS TRUE),
     FOREIGN KEY (sesion_id, plan_id)
         REFERENCES public.sesiones(id, plan_id),
     FOREIGN KEY (tarea_id, plan_id)
