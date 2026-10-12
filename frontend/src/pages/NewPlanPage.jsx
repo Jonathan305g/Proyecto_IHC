@@ -47,6 +47,11 @@ export default function NewPlanPage() {
   // ----------------------------------------------------
   // Validaciones
   // ----------------------------------------------------
+  // Lleva el foco al primer campo con error para que teclado y lector de pantalla lo encuentren.
+  function focusFirstError() {
+    window.setTimeout(() => document.querySelector("[aria-invalid='true']")?.focus(), 50)
+  }
+
   function validateStep1() {
     const errors = {}
     if (!nombre.trim()) {
@@ -77,7 +82,9 @@ export default function NewPlanPage() {
     }
 
     setStep1Errors(errors)
-    return Object.keys(errors).length === 0
+    const valid = Object.keys(errors).length === 0
+    if (!valid) focusFirstError()
+    return valid
   }
 
   function validateStep2() {
@@ -120,6 +127,7 @@ export default function NewPlanPage() {
     }
 
     setStep2Errors(taskErrorsList)
+    if (hasError) focusFirstError()
     return !hasError
   }
 
@@ -324,12 +332,16 @@ export default function NewPlanPage() {
               placeholder="Ej. Evaluación de usabilidad del flujo de checkout"
               value={nombre}
               className={step1Errors.nombre ? 'input-error' : ''}
+
+              aria-invalid={Boolean(step1Errors.nombre)}
+
+              aria-describedby={step1Errors.nombre ? "error-nombre" : undefined}
               onChange={(e) => {
                 setNombre(e.target.value)
                 if (step1Errors.nombre) setStep1Errors({ ...step1Errors, nombre: undefined })
               }}
             />
-            <FieldError error={step1Errors.nombre} />
+            <FieldError id="error-nombre" error={step1Errors.nombre} />
           </label>
 
           <label>
@@ -339,13 +351,17 @@ export default function NewPlanPage() {
               placeholder="Ej. Aplicación web de pagos v2.4 (módulo de carrito)"
               value={interfazEvaluada}
               className={step1Errors.interfazEvaluada ? 'input-error' : ''}
+
+              aria-invalid={Boolean(step1Errors.interfazEvaluada)}
+
+              aria-describedby={step1Errors.interfazEvaluada ? "error-interfazEvaluada" : undefined}
               onChange={(e) => {
                 setInterfazEvaluada(e.target.value)
                 if (step1Errors.interfazEvaluada)
                   setStep1Errors({ ...step1Errors, interfazEvaluada: undefined })
               }}
             />
-            <FieldError error={step1Errors.interfazEvaluada} />
+            <FieldError id="error-interfazEvaluada" error={step1Errors.interfazEvaluada} />
           </label>
 
           <label>
@@ -354,12 +370,16 @@ export default function NewPlanPage() {
               placeholder="Describe qué aspectos de la usabilidad se van a verificar y qué hipótesis se desean validar."
               value={objetivo}
               className={step1Errors.objetivo ? 'input-error' : ''}
+
+              aria-invalid={Boolean(step1Errors.objetivo)}
+
+              aria-describedby={step1Errors.objetivo ? "error-objetivo" : undefined}
               onChange={(e) => {
                 setObjetivo(e.target.value)
                 if (step1Errors.objetivo) setStep1Errors({ ...step1Errors, objetivo: undefined })
               }}
             />
-            <FieldError error={step1Errors.objetivo} />
+            <FieldError id="error-objetivo" error={step1Errors.objetivo} />
           </label>
 
           <div className="form-row">
@@ -370,12 +390,16 @@ export default function NewPlanPage() {
                 placeholder="Ej. Usuarios frecuentes con compras previas"
                 value={perfil}
                 className={step1Errors.perfil ? 'input-error' : ''}
+
+                aria-invalid={Boolean(step1Errors.perfil)}
+
+                aria-describedby={step1Errors.perfil ? "error-perfil" : undefined}
                 onChange={(e) => {
                   setPerfil(e.target.value)
                   if (step1Errors.perfil) setStep1Errors({ ...step1Errors, perfil: undefined })
                 }}
               />
-              <FieldError error={step1Errors.perfil} />
+              <FieldError id="error-perfil" error={step1Errors.perfil} />
             </label>
 
             <label>
@@ -383,6 +407,10 @@ export default function NewPlanPage() {
               <select
                 value={modalidad}
                 className={step1Errors.modalidad ? 'input-error' : ''}
+
+                aria-invalid={Boolean(step1Errors.modalidad)}
+
+                aria-describedby={step1Errors.modalidad ? "error-modalidad" : undefined}
                 onChange={(e) => {
                   setModalidad(e.target.value)
                   if (step1Errors.modalidad) setStep1Errors({ ...step1Errors, modalidad: undefined })
@@ -394,7 +422,7 @@ export default function NewPlanPage() {
                   </option>
                 ))}
               </select>
-              <FieldError error={step1Errors.modalidad} />
+              <FieldError id="error-modalidad" error={step1Errors.modalidad} />
             </label>
           </div>
 
@@ -406,6 +434,10 @@ export default function NewPlanPage() {
               max="500"
               value={numeroParticipantes}
               className={step1Errors.numeroParticipantes ? 'input-error' : ''}
+
+              aria-invalid={Boolean(step1Errors.numeroParticipantes)}
+
+              aria-describedby={step1Errors.numeroParticipantes ? "error-numeroParticipantes" : undefined}
               onChange={(e) => {
                 setNumeroParticipantes(e.target.value)
                 if (step1Errors.numeroParticipantes)
@@ -415,7 +447,7 @@ export default function NewPlanPage() {
             <span className="field-hint">
               Recomendación técnica: 5 a 8 participantes permiten detectar más del 80% de problemas de usabilidad.
             </span>
-            <FieldError error={step1Errors.numeroParticipantes} />
+            <FieldError id="error-numeroParticipantes" error={step1Errors.numeroParticipantes} />
           </label>
 
           <div className="form-actions">
@@ -506,9 +538,13 @@ export default function NewPlanPage() {
                         placeholder="Ej. Registrar un nuevo método de pago"
                         value={task.titulo}
                         className={errs.titulo ? 'input-error' : ''}
+
+                        aria-invalid={Boolean(errs.titulo)}
+
+                        aria-describedby={errs.titulo ? `error-tarea-${index}-titulo` : undefined}
                         onChange={(e) => editTask(index, 'titulo', e.target.value)}
                       />
-                      <FieldError error={errs.titulo} />
+                      <FieldError id={`error-tarea-${index}-titulo`} error={errs.titulo} />
                     </label>
                   </div>
 
@@ -518,9 +554,13 @@ export default function NewPlanPage() {
                       placeholder="Redacta la indicación que se leerá al usuario sin pistas sobre la solución (ej. 'Utilizando la plataforma, completa la compra de tu carrito usando tarjeta')."
                       value={task.consignaNeutral}
                       className={errs.consignaNeutral ? 'input-error' : ''}
+
+                      aria-invalid={Boolean(errs.consignaNeutral)}
+
+                      aria-describedby={errs.consignaNeutral ? `error-tarea-${index}-consignaNeutral` : undefined}
                       onChange={(e) => editTask(index, 'consignaNeutral', e.target.value)}
                     />
-                    <FieldError error={errs.consignaNeutral} />
+                    <FieldError id={`error-tarea-${index}-consignaNeutral`} error={errs.consignaNeutral} />
                   </label>
 
                   <div className="form-row">
@@ -530,9 +570,13 @@ export default function NewPlanPage() {
                         placeholder="Qué estado o pantalla final evidencia el éxito de la tarea."
                         value={task.resultadoEsperado}
                         className={errs.resultadoEsperado ? 'input-error' : ''}
+
+                        aria-invalid={Boolean(errs.resultadoEsperado)}
+
+                        aria-describedby={errs.resultadoEsperado ? `error-tarea-${index}-resultadoEsperado` : undefined}
                         onChange={(e) => editTask(index, 'resultadoEsperado', e.target.value)}
                       />
-                      <FieldError error={errs.resultadoEsperado} />
+                      <FieldError id={`error-tarea-${index}-resultadoEsperado`} error={errs.resultadoEsperado} />
                     </label>
 
                     <label>
@@ -541,9 +585,13 @@ export default function NewPlanPage() {
                         placeholder="Condiciones específicas para dar por superada la tarea (ej. Completada en menos de 2 minutos sin errores críticos)."
                         value={task.criterioExito}
                         className={errs.criterioExito ? 'input-error' : ''}
+
+                        aria-invalid={Boolean(errs.criterioExito)}
+
+                        aria-describedby={errs.criterioExito ? `error-tarea-${index}-criterioExito` : undefined}
                         onChange={(e) => editTask(index, 'criterioExito', e.target.value)}
                       />
-                      <FieldError error={errs.criterioExito} />
+                      <FieldError id={`error-tarea-${index}-criterioExito`} error={errs.criterioExito} />
                     </label>
                   </div>
 
@@ -552,6 +600,10 @@ export default function NewPlanPage() {
                     <select
                       value={task.metrica}
                       className={errs.metrica ? 'input-error' : ''}
+
+                      aria-invalid={Boolean(errs.metrica)}
+
+                      aria-describedby={errs.metrica ? `error-tarea-${index}-metrica` : undefined}
                       onChange={(e) => editTask(index, 'metrica', e.target.value)}
                     >
                       {METRICAS_SUGERIDAS.map((m) => (
@@ -560,7 +612,7 @@ export default function NewPlanPage() {
                         </option>
                       ))}
                     </select>
-                    <FieldError error={errs.metrica} />
+                    <FieldError id={`error-tarea-${index}-metrica`} error={errs.metrica} />
                   </label>
                 </div>
               )

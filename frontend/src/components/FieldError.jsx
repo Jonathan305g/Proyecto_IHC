@@ -1,11 +1,11 @@
 /**
  * Componente accesible para renderizar errores de validación junto al campo correspondiente.
  */
-export default function FieldError({ error }) {
+export default function FieldError({ error, id }) {
   if (!error) return null
 
   return (
-    <span className="field-error" role="alert">
+    <span className="field-error" id={id} role="alert">
       <svg
         aria-hidden="true"
         width="14"
