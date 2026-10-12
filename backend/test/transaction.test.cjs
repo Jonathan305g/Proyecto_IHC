@@ -29,3 +29,26 @@ test('revierte el plan cuando falla una tarea y libera la conexión', async () =
   ])
   assert.equal(released, true)
 })
+
+test('revierte participante y sesión si falla la creación; libera la conexión', async () => {
+  const { SessionsService } = require('../dist/sessions.service')
+  const statements = []
+  let released = false
+  const client = {
+    query: async sql => {
+      statements.push(sql)
+      if (sql.includes('COUNT(*)')) return { rows: [{ total: '0' }] }
+      if (sql.includes('AS siguiente')) return { rows: [{ siguiente: '1' }] }
+      if (sql.startsWith('INSERT INTO public.sesiones')) throw new Error('Fallo al crear sesión')
+      return { rows: [{ id: '1', cupo: 5, estado: 'activo' }] }
+    },
+    release: () => { released = true },
+  }
+  const db = Object.create(DatabaseService.prototype)
+  db.pool = { connect: async () => client }
+  await assert.rejects(new SessionsService(db).create({ plan_id: '1', consentimiento_confirmado: true }), /Fallo al crear sesión/)
+  assert.ok(statements.some(sql => sql.startsWith('INSERT INTO public.participantes')))
+  assert.equal(statements.at(-1), 'ROLLBACK')
+  assert.ok(!statements.includes('COMMIT'))
+  assert.equal(released, true)
+})

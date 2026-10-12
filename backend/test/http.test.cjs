@@ -20,13 +20,22 @@ test('mantiene las diez rutas de S2-04 y uniforma errores HTTP', async () => {
   process.env.DATABASE_URL = 'postgres://test:test@127.0.0.1:1/test'
   const app = await NestFactory.create(AppModule, { logger: false })
   const db = app.get(DatabaseService)
-  const plan = { id: '1', nombre: 'Prueba', objetivo: 'Buscar curso', estado: 'borrador' }
+  const plan = { id: '1', nombre: 'Prueba', objetivo: 'Buscar curso', estado: 'borrador', cupo: null }
   const tarea = { id: '4', plan_id: '1', titulo: 'Buscar', descripcion: 'Buscar curso', orden: 1, codigo: null, criterio_exito: null }
   const session = { id: '2', plan_id: '1', participante_id: '3', participante_codigo: 'P1', estado: 'pendiente', consentimiento_confirmado: false }
   let statements = []
   const query = async (sql) => {
     statements.push(sql)
     if (sql.includes('WHERE id = $1') && statements.at(-1).includes('public.planes') && missingPlan) return { rows: [], rowCount: 0 }
+    if (sql.includes('COUNT(*) AS total')) return { rows: [{ total: sql.includes('public.tareas') ? '1' : '0' }], rowCount: 1 }
+    if (sql.includes('NOT EXISTS')) return { rows: [], rowCount: 0 }
+    if (sql.startsWith('INSERT INTO public.resultados')) return { rows: [{ id: '10', sesion_id: '2', tarea_id: '4', completada: true, con_ayuda: true, duracion_segundos: 61, cantidad_errores: 2, observaciones: null, resultado: 'con_ayuda', tiempo_segundos: 61, errores: 2, observacion: null }], rowCount: 1 }
+    if (sql.includes('FROM public.resultados')) return { rows: [], rowCount: 0 }
+    if (sql.includes('FROM public.sesiones WHERE')) return { rows: [session], rowCount: 1 }
+    if (sql.startsWith('UPDATE public.sesiones')) {
+      session.estado = sql.includes("estado = 'cerrada'") ? 'cerrada' : 'en_curso'
+      session.consentimiento_confirmado = true
+    }
     if (sql.includes('FROM public.sesiones s')) return { rows: [session], rowCount: 1 }
     if (sql.includes('FROM public.tareas')) return { rows: [tarea], rowCount: 1 }
     return { rows: [plan], rowCount: 1 }
@@ -53,14 +62,29 @@ test('mantiene las diez rutas de S2-04 y uniforma errores HTTP', async () => {
       ['GET', '/sesiones/2', undefined, 200],
       ['POST', '/sesiones', { plan_id: '1', codigo_participante: 'P1' }, 201],
       ['PATCH', '/sesiones/2', { accion: 'iniciar', consentimiento_confirmado: true }, 200],
+      ['PATCH', '/sesiones/2', { accion: 'continuar' }, 200],
+      ['GET', '/sesiones/2/resultados', undefined, 200],
+      ['PUT', '/sesiones/2/resultados/4', { resultado: 'con_ayuda', tiempo_segundos: 61, errores: 2, observacion: null }, 200],
+      ['PUT', '/sesiones/2/resultados/4', { completada: true, con_ayuda: true, duracion_segundos: 61, cantidad_errores: 2 }, 200],
       ['PATCH', '/sesiones/2', { accion: 'cerrar', consentimiento_confirmado: false }, 200],
     ]
     for (const [method, path, body, status] of requests) {
       const response = await send(method, path, body)
       assert.equal(response.status, status, `${method} ${path}: ${JSON.stringify(response.body)}`)
       if (path === '/planes/1' || path.startsWith('/planes/1/tareas')) assert.deepEqual(response.body.tareas, [tarea])
+      if (method === 'PUT') {
+        assert.equal(response.body.resultado, 'con_ayuda')
+        assert.equal(response.body.tarea_id, '4')
+        assert.equal(response.body.tiempo_segundos, response.body.duracion_segundos)
+      }
       if (path === '/sesiones/2') assert.deepEqual(response.body.tareas, [tarea])
     }
+    const closedResult = await send('PUT', '/sesiones/2/resultados/4', { completada: true, duracion_segundos: 1, cantidad_errores: 0 })
+    assert.equal(closedResult.status, 409)
+    const invalidResult = await send('PUT', '/sesiones/2/resultados/4', { completada: true, duracion_segundos: -1, cantidad_errores: 0 })
+    assert.equal(invalidResult.status, 400)
+    assert.equal(invalidResult.body.code, 'INVALID_REQUEST')
+    assert.equal(invalidResult.body.details[0].field, 'duracion_segundos')
     statements = []
     const invalid = await send('POST', '/sesiones', { plan_id: {}, codigo_participante: 'P1' })
     assert.equal(invalid.status, 400)
@@ -77,11 +101,11 @@ test('mantiene las diez rutas de S2-04 y uniforma errores HTTP', async () => {
     const notFound = await send('GET', '/inexistente')
     assert.equal(notFound.status, 404)
     assert.equal(notFound.body.code, 'NOT_FOUND')
-    db.query = async () => { throw { code: '23505', detail: 'secreto' } }
+    db.transaction = async () => { throw { code: '23505', detail: 'secreto' } }
     assert.equal((await send('PATCH', '/planes/1', { estado: 'activo' })).status, 409)
     db.query = async () => { throw new Error('secreto') }
     assert.deepEqual((await send('GET', '/planes')).body, { code: 'INTERNAL_ERROR', message: 'No se pudo completar la solicitud.', details: [] })
-    db.query = async (sql) => sql.startsWith('UPDATE') ? { rowCount: 0, rows: [] } : { rowCount: 1, rows: [{ id: '2' }] }
+    db.transaction = async (operation) => operation({ query })
     const conflict = await send('PATCH', '/sesiones/2', { accion: 'iniciar', consentimiento_confirmado: true })
     assert.equal(conflict.status, 409)
     assert.equal(conflict.body.code, 'CONFLICT')
