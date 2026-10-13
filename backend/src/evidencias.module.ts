@@ -1,6 +1,12 @@
 import { Module } from '@nestjs/common'
+import { DatabaseModule } from './database.module'
+import { EvidencesController } from './evidencias.controller'
+import { EvidencesService } from './evidencias.service'
 
-// El repositorio no contiene el esquema ni el contrato de almacenamiento de
-// evidencias. Registrar el módulo no habilita rutas ni inventa tablas.
-@Module({})
+@Module({
+  imports: [DatabaseModule],
+  controllers: [EvidencesController],
+  providers: [EvidencesService],
+  exports: [EvidencesService],
+})
 export class EvidencesModule {}

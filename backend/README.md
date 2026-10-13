@@ -27,6 +27,12 @@ No vuelvas a ejecutar el SQL de creación sobre una base que ya está en uso. El
 | PATCH | `/api/sesiones/:id` | `accion: iniciar` con consentimiento; `continuar` o `cerrar` | Sesión con avance |
 | GET | `/api/sesiones/:id/resultados` | — | Resultados guardados |
 | PUT | `/api/sesiones/:id/resultados/:tareaId` | Resultado completo de una tarea | Resultado creado o reemplazado (200) |
+| POST | `/api/sesiones/:id/resultados/:tareaId/evidencias` | Archivo multipart (`archivo`) o enlace JSON | Evidencia creada (201) |
+| GET | `/api/sesiones/:id/resultados/:tareaId/evidencias` | — | Lista de evidencias de la tarea (200) |
+| GET | `/api/sesiones/:id/evidencias` | — | Lista de todas las evidencias de la sesión (200) |
+| GET | `/api/evidencias/:id` | — | Detalle y metadatos de evidencia (200) |
+| GET | `/api/evidencias/:id/archivo` | — | Visualización/streaming de archivo o redirección de enlace (200/302) |
+| DELETE | `/api/evidencias/:id` | — | Eliminación de evidencia y remoción física (200) |
 
 Ejemplo de creación de plan:
 
@@ -49,7 +55,7 @@ El contrato oficial de esta implementación utiliza las tablas españolas existe
 - `DatabaseModule` comparte una única instancia del servicio PostgreSQL existente.
 - `PlansModule` administra planes; `TasksModule` contiene controlador y servicio propios para las rutas anidadas de tareas.
 - `SessionsModule` administra participantes por código y transiciones de sesiones.
-- `EvidencesModule` está registrado como punto de integración, **sin endpoints ni persistencia habilitados**. El repositorio no contiene su esquema oficial ni el contrato de almacenamiento. Se necesitan columnas, relaciones, tipos de archivo y mecanismo de carga antes de implementar DTOs y operaciones. No se inventa una tabla ni se crean migraciones.
+- `EvidencesModule` administra la carga, consulta, transmisión y eliminación de evidencias asociadas a tareas/resultados (S2-08). Soporta archivos de tipo `imagen`, `video`, `audio`, `documento` (hasta 15 MB) y enlaces web externos, validando tamaños, tipos y previniendo archivos huérfanos.
 
 Los DTOs de `src/dto/` son interfaces TypeScript con funciones de validación en ejecución. Los servicios las invocan antes de consultar la BD; no requieren `class-validator`. La entrada debe ser un objeto JSON. Los campos desconocidos se rechazan, y PATCH exige al menos un campo editable. Los textos se recortan y deben quedar no vacíos.
 
