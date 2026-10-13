@@ -90,6 +90,11 @@ CREATE TABLE IF NOT EXISTS public.evidencias (
     creada_en TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+ALTER TABLE public.evidencias
+    ADD COLUMN IF NOT EXISTS nombre_archivo VARCHAR(255),
+    ADD COLUMN IF NOT EXISTS tamano_bytes INTEGER,
+    ADD COLUMN IF NOT EXISTS mime_type VARCHAR(100);
+
 -- 5. Ejecuciones del análisis de IA y hallazgos revisables
 CREATE TABLE IF NOT EXISTS public.analisis_ia (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
