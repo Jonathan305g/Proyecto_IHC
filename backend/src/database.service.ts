@@ -9,7 +9,7 @@ export class DatabaseService implements OnModuleDestroy {
     if (!process.env.DATABASE_URL) throw new Error('Falta DATABASE_URL')
     this.pool = new Pool({
       connectionString: process.env.DATABASE_URL,
-      ssl: process.env.DATABASE_SSL === 'true' ? { rejectUnauthorized: true } : undefined,
+      ssl: process.env.DATABASE_SSL === 'true' ? { rejectUnauthorized: false } : undefined,
     })
   }
 
