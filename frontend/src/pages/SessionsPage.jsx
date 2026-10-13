@@ -30,7 +30,7 @@ export default function SessionsPage() {
                 <strong>{session.plan_nombre}</strong>
                 <span>Participante: {session.participante_codigo}</span>
                 <small>Estado: {estados[session.estado] ?? session.estado}</small>
-                {session.cupo_completo && <p className="badge badge-warning">Cupo completo: puedes continuar esta sesión, pero no abrir otra en este plan.</p>}
+                {session.cupo_completo && <p><span className="badge badge-draft">Cupo completo</span> Puedes continuar esta sesión, pero no abrir otra en este plan.</p>}
                 <div className="run-card-actions">
                   {!closed && <Link className="button button-primary" to={`/sesiones/${session.id}/ejecutar`}>{session.estado === 'en_curso' ? 'Continuar sesión' : 'Ir a la sesión'}<span className="visually-hidden"> de {session.participante_codigo}</span></Link>}
                   <Link className="button button-outline" to={closed ? `/sesiones/${session.id}/ejecutar` : `/sesiones/${session.id}`}>{closed ? 'Ver resumen' : 'Ver detalle'}<span className="visually-hidden"> de {session.participante_codigo}</span></Link>

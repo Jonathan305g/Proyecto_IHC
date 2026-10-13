@@ -103,13 +103,13 @@ h1 { margin: 0; color: #172536; font-size: clamp(25px, 3vw, 31px); line-height: 
 .stepper-item.completed .stepper-number { background: #267c48; color: #fff; }
 .stepper-label { display: flex; flex-direction: column; }
 .stepper-label strong { font-size: 13px; line-height: 1.2; }
-.stepper-label small { font-size: 11px; color: #647688; }
+.stepper-label small { font-size: 11px; color: #52667a; }
 
 /* Form helpers & Inline validation */
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .input-error { border-color: #d63d3d !important; background: #fffafa !important; }
 .field-error { display: flex; align-items: center; gap: 6px; color: #b52020; font-size: 12px; font-weight: 600; margin-top: 2px; }
-.field-hint { font-size: 12px; color: #697c8f; font-weight: normal; margin-top: -3px; }
+.field-hint { font-size: 12px; color: #52667a; font-weight: normal; margin-top: -3px; }
 
 /* Task Card in Wizard */
 .task-card-wizard { border: 1px solid #d9e3ed; border-radius: 10px; padding: 18px; background: #fafcff; display: grid; gap: 14px; }
@@ -126,7 +126,7 @@ h1 { margin: 0; color: #172536; font-size: clamp(25px, 3vw, 31px); line-height: 
 
 .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; padding: 16px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2eaf1; margin-bottom: 16px; }
 .summary-field { display: flex; flex-direction: column; gap: 4px; }
-.summary-field dt { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: #6b7f94; font-weight: 700; }
+.summary-field dt { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: #52667a; font-weight: 700; }
 .summary-field dd { margin: 0; font-size: 14px; font-weight: 600; color: #172536; }
 
 .review-tasks-list { display: grid; gap: 12px; margin-top: 10px; }

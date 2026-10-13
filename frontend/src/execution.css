@@ -13,11 +13,8 @@
 .run-confirm h3 { margin: 0 0 6px; }
 .run-feedback { margin: 0; min-height: 1.4em; font-weight: 600; color: #1d5c34; }
 .run-feedback.notice { display: block; font-weight: 600; }
-.field-error { margin: 0; color: #8d2525; font-size: 14px; font-weight: 600; }
 .run-table { width: 100%; border-collapse: collapse; }
 .run-table th, .run-table td { padding: 10px 12px; border-bottom: 1px solid #dce4ed; text-align: left; vertical-align: middle; }
 .run-table thead th { color: #3f5265; font-size: 13px; }
 .run-card-actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-.badge { display: inline-block; padding: 3px 9px; border-radius: 999px; background: #e9f2fb; color: #153b66; font-size: 12px; font-weight: 700; }
-.badge-warning { background: #fff1d6; color: #6b4300; }
 @media (max-width: 760px) { .run-table { display: block; overflow-x: auto; } }
