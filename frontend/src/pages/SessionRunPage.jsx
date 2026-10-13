@@ -10,6 +10,7 @@ import {
 import { clearDrafts, loadDrafts, saveDrafts } from '../services/draftStore.js'
 import { results } from '../services/results.js'
 import { sessions } from '../services/persistence.js'
+import EvidenceSection from '../components/EvidenceSection.jsx'
 import '../execution.css'
 
 const OFFLINE_MESSAGE = 'Sin conexión con el servidor. Tu avance sigue guardado en este equipo; vuelve a guardar cuando se recupere.'
@@ -249,6 +250,8 @@ export default function SessionRunPage() {
         <textarea value={draft.observacion} aria-invalid={Boolean(fieldErrors.observacion)} aria-describedby={fieldErrors.observacion ? 'error-observacion' : undefined} onChange={(event) => changeField('observacion', event.target.value)} />
       </label>
       {fieldErrors.observacion && <p id="error-observacion" className="field-error">{fieldErrors.observacion}</p>}
+
+      <EvidenceSection sessionId={id} taskId={task.id} readOnly={closed} />
 
       <FeedbackLine feedback={feedback} />
       <div className="form-actions">

@@ -1,4 +1,5 @@
-const baseUrl = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, '') ?? ''
+export const baseUrl = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_BASE_URL)?.replace(/\/$/, '') ?? ''
+export const apiUrl = (path) => `${baseUrl}${path}`
 
 /** Punto único de conexión para los módulos que consuman el backend en próximos trabajos. */
 export async function request(path, options = {}) {

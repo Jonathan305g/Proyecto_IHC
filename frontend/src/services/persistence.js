@@ -17,3 +17,5 @@ export const sessions = {
   create: (data) => request('/api/sesiones', json('POST', data)),
   update: (id, data) => request(`/api/sesiones/${id}`, json('PATCH', data)),
 }
+
+export { evidencias } from './evidencias.js'

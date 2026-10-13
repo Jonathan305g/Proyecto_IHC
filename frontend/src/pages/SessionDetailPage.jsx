@@ -4,10 +4,12 @@ import PageHeader from '../components/PageHeader.jsx'
 import { ErrorState, LoadingState } from '../components/UiState.jsx'
 import ConfirmModal from '../components/ConfirmModal.jsx'
 import { sessions } from '../services/persistence.js'
+import { evidencias, formatFileSize } from '../services/evidencias.js'
 
 export default function SessionDetailPage() {
   const { id } = useParams()
   const [session, setSession] = useState(null)
+  const [sessionEvidences, setSessionEvidences] = useState([])
   const [consent, setConsent] = useState(false)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
@@ -22,6 +24,11 @@ export default function SessionDetailPage() {
         setConsent(Boolean(s.consentimiento_confirmado))
       })
       .catch((reason) => setError(reason.message))
+
+    evidencias
+      .listBySession(id)
+      .then((items) => setSessionEvidences(items || []))
+      .catch(() => setSessionEvidences([]))
   }, [id])
 
   useEffect(() => {
@@ -158,6 +165,51 @@ export default function SessionDetailPage() {
               </li>
             ))}
           </ol>
+
+          {session.estado === 'en_curso' && (
+            <div className="form-actions" style={{ marginTop: '10px' }}>
+              <Link className="button button-primary" to={`/sesiones/${session.id}/ejecutar`}>
+                Continuar ejecución de tareas
+              </Link>
+            </div>
+          )}
+
+          <h2>Evidencias registradas ({sessionEvidences.length})</h2>
+          {sessionEvidences.length === 0 ? (
+            <p className="field-hint">Esta sesión aún no tiene evidencias adjuntas.</p>
+          ) : (
+            <div className="evidence-list" style={{ marginBottom: '16px' }}>
+              {sessionEvidences.map((ev) => {
+                const isLink = ev.tipo === 'enlace'
+                const openUrl = isLink ? ev.ruta : evidencias.getFileUrl(ev.id)
+                return (
+                  <article key={ev.id} className="evidence-item">
+                    <div className="evidence-meta">
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <span className="badge badge-subtle">{ev.tipo.toUpperCase()}</span>
+                        <strong className="evidence-title">{ev.nombre_archivo || ev.ruta}</strong>
+                        {ev.tarea_titulo && <span className="badge badge-primary">{ev.tarea_titulo}</span>}
+                      </div>
+                      <small className="evidence-sub">
+                        {ev.tamano_bytes ? `${formatFileSize(ev.tamano_bytes)} · ` : ''}
+                        {ev.descripcion || (isLink ? 'Enlace externo' : 'Archivo adjunto')}
+                      </small>
+                    </div>
+                    <div className="evidence-actions">
+                      <a
+                        href={openUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="button button-outline button-sm"
+                      >
+                        Abrir evidencia
+                      </a>
+                    </div>
+                  </article>
+                )
+              })}
+            </div>
+          )}
 
           <div style={{ marginTop: '12px' }}>
             <Link className="button button-outline" to="/sesiones">
