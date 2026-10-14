@@ -26,9 +26,23 @@ Revisión del 11/10/2026 sobre las pantallas de `develop` (planes, sesiones y ej
 | 6 | Estados vacío, cargando, guardado y error | Cumple | Vacío y error con reintento en planes y sesiones; cargando con `role="status"`; guardado y error de red en la ejecución con región `aria-live`. Mensajes de carga más específicos en Nueva sesión. |
 | 7 | Confirmaciones antes de cerrar o descartar | Cumple | Cancelar el asistente, eliminar tarea, reiniciar cronómetro y cerrar sesión piden confirmación. |
 
+## Revisión de evidencias (S2-08, 14/10/2026)
+
+axe no reporta violaciones en la ejecución con evidencias listadas ni con los formularios de archivo y de enlace abiertos. La revisión manual encontró y corrigió en `EvidenceSection`:
+
+| Hallazgo | Corrección |
+| --- | --- |
+| Error de archivo o enlace sin asociar al campo y sin foco | `aria-invalid`, `aria-describedby` y foco al campo con error |
+| Validación nativa del navegador en inglés que oculta la propia | `noValidate` en ambos formularios |
+| «Abrir evidencia» y «Eliminar» repetidos sin decir de cuál evidencia son; abrir pestaña nueva sin avisar | Texto oculto con el nombre de la evidencia y «se abre en una pestaña nueva» (también en el detalle de sesión) |
+| Botones «Subir archivo»/«Agregar enlace» sin estado | `aria-expanded` |
+| Barra de progreso de subida sin nombre | `aria-label` |
+| Al adjuntar, el formulario desaparece y el foco se pierde | El foco pasa al aviso de confirmación |
+
+Sin probar: la subida real (progreso y fallo de transferencia) y la apertura de archivos requieren el backend y Supabase.
+
 ## Pendiente (no se puede cerrar todavía)
 
-- **Evidencias (S2-08, Jonathan):** aún no existe; la revisión de carga de archivos (progreso, error, texto alternativo) debe hacerse cuando esté en `develop`.
 - **Lector de pantalla:** no se probó con NVDA/Narrador; axe no detecta todo. Hace falta una pasada manual.
 - **Recorrido solo con teclado de punta a punta** y con datos reales (API de S2-06 y base de Supabase): se verificó por partes contra una API simulada.
 - El asistente mantiene los mensajes de error dentro del `<label>` del campo, por lo que forman parte de su nombre accesible. Funciona, pero conviene sacarlos del `<label>` en una mejora futura.
