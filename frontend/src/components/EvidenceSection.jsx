@@ -21,6 +21,12 @@ export default function EvidenceSection({ sessionId, taskId, readOnly = false })
   const [success, setSuccess] = useState('')
   const [evidenceToDelete, setEvidenceToDelete] = useState(null)
   const fileInputRef = useRef(null)
+  const urlInputRef = useRef(null)
+  const successRef = useRef(null)
+  const errorId = `evidencia-error-${taskId}`
+
+  // Tras adjuntar, el formulario desaparece: el foco pasa al aviso para no perder la posición.
+  useEffect(() => { if (success) successRef.current?.focus() }, [success])
 
   const loadEvidences = useCallback(async () => {
     if (!sessionId || !taskId) return
@@ -55,6 +61,7 @@ export default function EvidenceSection({ sessionId, taskId, readOnly = false })
     const clientErr = validateClientFile(file)
     if (clientErr) {
       setError(clientErr)
+      fileInputRef.current?.focus()
       return
     }
 
@@ -85,6 +92,7 @@ export default function EvidenceSection({ sessionId, taskId, readOnly = false })
     const clientErr = validateClientUrl(url)
     if (clientErr) {
       setError(clientErr)
+      urlInputRef.current?.focus()
       return
     }
 
@@ -133,6 +141,7 @@ export default function EvidenceSection({ sessionId, taskId, readOnly = false })
           <div className="evidence-tabs" role="group" aria-label="Opciones de carga de evidencia">
             <button
               type="button"
+              aria-expanded={mode === 'file'}
               className={`evidence-tab-btn ${mode === 'file' ? 'active' : ''}`}
               onClick={() => {
                 setMode(mode === 'file' ? 'none' : 'file')
@@ -144,6 +153,7 @@ export default function EvidenceSection({ sessionId, taskId, readOnly = false })
             </button>
             <button
               type="button"
+              aria-expanded={mode === 'link'}
               className={`evidence-tab-btn ${mode === 'link' ? 'active' : ''}`}
               onClick={() => {
                 setMode(mode === 'link' ? 'none' : 'link')
@@ -158,24 +168,26 @@ export default function EvidenceSection({ sessionId, taskId, readOnly = false })
       </div>
 
       {error && (
-        <p className="notice notice-error" role="alert">
+        <p id={errorId} className="notice notice-error" role="alert">
           {error}
         </p>
       )}
       {success && (
-        <p className="notice" role="status">
+        <p ref={successRef} tabIndex="-1" className="notice" role="status">
           {success}
         </p>
       )}
 
       {/* Formulario de carga de archivo */}
       {!readOnly && mode === 'file' && (
-        <form className="evidence-upload-box" onSubmit={handleUploadFile}>
+        <form className="evidence-upload-box" onSubmit={handleUploadFile} noValidate>
           <label>
             Archivo (imagen, video, audio, PDF o TXT, máx. 15 MB)
             <input
               ref={fileInputRef}
               type="file"
+              aria-invalid={Boolean(error)}
+              aria-describedby={error ? errorId : undefined}
               accept={ACCEPT_FILE_TYPES}
               disabled={uploading}
               onChange={(e) => {
@@ -199,7 +211,7 @@ export default function EvidenceSection({ sessionId, taskId, readOnly = false })
 
           {uploading && (
             <div style={{ display: 'grid', gap: '4px' }}>
-              <div className="evidence-progress-bar" role="progressbar" aria-valuenow={progress} aria-valuemin="0" aria-valuemax="100">
+              <div className="evidence-progress-bar" role="progressbar" aria-label="Progreso de la subida del archivo" aria-valuenow={progress} aria-valuemin="0" aria-valuemax="100">
                 <div className="evidence-progress-fill" style={{ width: `${progress}%` }} />
               </div>
               <small className="field-hint">Subiendo archivo: {progress}%</small>
@@ -224,11 +236,14 @@ export default function EvidenceSection({ sessionId, taskId, readOnly = false })
 
       {/* Formulario de carga de enlace */}
       {!readOnly && mode === 'link' && (
-        <form className="evidence-upload-box" onSubmit={handleAddLink}>
+        <form className="evidence-upload-box" onSubmit={handleAddLink} noValidate>
           <label>
             URL del enlace (debe iniciar con http:// o https://)
             <input
+              ref={urlInputRef}
               type="url"
+              aria-invalid={Boolean(error)}
+              aria-describedby={error ? errorId : undefined}
               placeholder="https://drive.google.com/..."
               value={url}
               disabled={uploading}
@@ -300,6 +315,7 @@ export default function EvidenceSection({ sessionId, taskId, readOnly = false })
                     className="button button-outline button-sm"
                   >
                     Abrir evidencia
+                    <span className="visually-hidden"> «{title}» (se abre en una pestaña nueva)</span>
                   </a>
                   {!readOnly && (
                     <button
@@ -307,7 +323,7 @@ export default function EvidenceSection({ sessionId, taskId, readOnly = false })
                       className="button button-danger button-sm"
                       onClick={() => setEvidenceToDelete(item)}
                     >
-                      Eliminar
+                      Eliminar<span className="visually-hidden"> evidencia «{title}»</span>
                     </button>
                   )}
                 </div>

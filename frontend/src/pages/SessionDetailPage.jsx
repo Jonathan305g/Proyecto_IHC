@@ -203,6 +203,7 @@ export default function SessionDetailPage() {
                         className="button button-outline button-sm"
                       >
                         Abrir evidencia
+                        <span className="visually-hidden"> «{ev.nombre_archivo || ev.ruta}» (se abre en una pestaña nueva)</span>
                       </a>
                     </div>
                   </article>
