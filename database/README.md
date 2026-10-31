@@ -1,52 +1,39 @@
-# Módulo de Base de Datos - Usability Test Dashboard con IA y Scrum
+# Base de datos · PostgreSQL / Supabase
 
-**Proyecto:** Usability Test Dashboard con IA y Scrum | Grupo 6  
-**Responsable Base de Datos (S2-03):** Pablo Lozada  
-**Plataforma / Motor:** PostgreSQL / Supabase  
+## Archivos oficiales
 
----
+| Archivo | Uso |
+|---|---|
+| `01_esquema.sql` | Instalación nueva. 14 tablas del dominio y la cola técnica `storage_deletions`; índices, claves foráneas, restricciones y RLS. |
+| `schema.sql` | Copia de compatibilidad idéntica a `01_esquema.sql`; una prueba impide que diverjan. |
+| `02_datos_ejemplo.sql` | Datos ficticios opcionales para desarrollo. Repetible; no registra archivos inexistentes. |
+| `03_storage_supabase.sql` | Solo Supabase: crea/configura el bucket privado `evidencias` (15 MB). |
+| `../backend/migrations/` | Actualización incremental de instalaciones existentes. |
 
-## 📁 Estructura del Módulo
+## Instalación nueva
 
-- `01_esquema.sql`: Script DDL ejecutable en Supabase / PostgreSQL para la creación de las 14 tablas, restricciones de integridad, índices y activación de Row Level Security (RLS).
-- `02_datos_ejemplo.sql`: Script DML con datos iniciales ficticios de planes, tareas, participantes, sesiones, resultados y equipo para pruebas local/desarrollo.
-- `README.md`: Guía de arquitectura de datos, contratos de entidad y manual de ejecución.
+1. Ejecuta `01_esquema.sql` desde SQL Editor con el rol administrador de tu proyecto.
+2. Ejecuta `03_storage_supabase.sql`.
+3. Opcionalmente, carga `02_datos_ejemplo.sql` en una BD de desarrollo. Los registros DEMO son ficticios.
+4. Configura el backend según el README principal. El esquema no carga credenciales ni crea cuentas de Auth.
 
----
+## Actualizar la base que ya usa el equipo
 
-## 🗄️ Modelo de Datos (14 Tablas)
+Conserva los datos existentes y aplica en orden:
 
-El esquema cubre la totalidad de requerimientos funcionalmente planificados para los Sprints 2, 3 y 4:
+1. `../backend/migrations/001_s2_06_ejecucion_sesiones.sql` (cupo y ayuda).
+2. `../backend/migrations/002_s2_08_evidencias.sql` (metadatos de archivos).
+3. `../backend/migrations/003_pre_sprint3_storage_cleanup.sql` (cola de eliminación).
+4. `03_storage_supabase.sql` (bucket privado).
 
-### 1. Núcleo de Usabilidad (Sprint 2)
-- **`planes`**: Contiene la definición del plan de pruebas de usabilidad (nombre, objetivo, estado `borrador|activo|finalizado`).
-- **`tareas`**: Consignas y criterios de éxito por plan. Incluye columna `codigo` para trazabilidad y comparación entre evaluaciones.
-- **`participantes`**: Identificadores de usuarios anónimos (`codigo` único), asegurando la separación estricta de datos personales.
-- **`sesiones`**: Estado de ejecución (`pendiente|en_curso|cerrada`), confirmación de consentimiento informado y tiempos globales.
-- **`resultados`**: Métricas por tarea en una sesión (completada `boolean`, duración en segundos, cantidad de errores, observaciones).
-- **`evidencias`**: Archivos o capturas vinculadas a un resultado (`imagen|video|audio|documento|enlace`, ruta en storage, descripción).
+Estas migraciones son repetibles. Ejecutar de nuevo un `CREATE TABLE IF NOT EXISTS` no actualiza las columnas de una tabla existente: para actualizar utiliza las migraciones. El backend no ejecuta DDL durante el arranque.
 
-### 2. Análisis con IA y Backlog (Sprint 3)
-- **`analisis_ia`**: Registro de llamadas/ejecuciones del motor de IA por plan (`pendiente|procesando|parcial|completado|fallido`).
-- **`hallazgos`**: Sugerencias extraídas de las observaciones para revisión humana (`pendiente|aprobado|rechazado`).
-- **`historias`**: Backlog de mejoras del producto. Pueden originarse de hallazgos aprobados o crearse manualmente.
+## Seguridad
 
-### 3. Módulo Scrum y Cierre de Evaluación (Sprint 4)
-- **`miembros`**: Desarrolladores e integrantes del equipo académico.
-- **`sprints`**: Definición y ciclo de vida de los sprints del módulo Scrum (`planificado|activo|cerrado`).
-- **`revisiones_sprint`**: Entregas, pendientes y observaciones del Sprint Review.
-- **`retrospectivas`**: Aspectos positivos y dificultades identificadas.
-- **`acuerdos_retrospectiva`**: Compromisos con responsable y fecha de cumplimiento.
+Las tablas públicas tienen RLS habilitado y no incluyen políticas públicas de lectura/escritura. React utiliza Auth y la API NestJS; no consulta estas tablas directamente. La conexión privilegiada de NestJS puede evitar RLS, por eso cada petición API exige token verificado y correo autorizado. RLS por sí solo no protege una API administrativa expuesta.
 
----
+Los archivos se almacenan en el bucket privado. `evidencias.ruta` contiene `supabase://<objeto>` para archivos nuevos o una URL HTTP(S) para enlaces. Las rutas locales anteriores requieren el script de migración explicado en `../docs/PREPARACION_SPRINT_3.md`.
 
-## 🚀 Guía de Despliegue en Supabase
+## Alcance del modelo
 
-1. Acceder al **SQL Editor** del proyecto en Supabase.
-2. Ejecutar secuencialmente el contenido del archivo [`01_esquema.sql`](file:///c:/Users/USER/Desktop/ProyectoIHC/Proyecto/database/01_esquema.sql).
-3. (Opcional para desarrollo) Ejecutar el archivo [`02_datos_ejemplo.sql`](file:///c:/Users/USER/Desktop/ProyectoIHC/Proyecto/database/02_datos_ejemplo.sql) para poblar la base con información de prueba.
-
----
-
-## 🔒 Seguridad (RLS)
-Todas las tablas cuentan con **Row Level Security (RLS)** habilitado por defecto, permitiendo configurar políticas de lectura y escritura públicas o restringidas mediante JWT según evolucione la arquitectura en NestJS.
+Planes, tareas, participantes, sesiones, resultados y evidencias forman el núcleo actual. `analisis_ia`, `hallazgos`, `historias`, `miembros`, `sprints`, `revisiones_sprint`, `retrospectivas` y `acuerdos_retrospectiva` preparan las siguientes actividades. Tener sus tablas no implica que sus funcionalidades estén desarrolladas.
