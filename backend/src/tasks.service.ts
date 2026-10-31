@@ -1,4 +1,5 @@
-import { BadRequestException, Injectable } from '@nestjs/common'
+import { BadRequestException, ConflictException, Injectable } from '@nestjs/common'
+import { PoolClient } from 'pg'
 import { DatabaseService } from './database.service'
 import { PlansService } from './plans.service'
 import { parseTask, parseUpdateTask } from './dto/tarea.dto'
@@ -7,6 +8,15 @@ import { dbError, id, missing, positive, text } from './validation'
 @Injectable()
 export class TasksService {
   constructor(private readonly db: DatabaseService, private readonly plans: PlansService) {}
+
+  private async editable(client: PoolClient, plan: string) {
+    const found = await client.query('SELECT id FROM public.planes WHERE id = $1 FOR UPDATE', [plan])
+    if (!found.rows.length) missing('El plan')
+    const used = await client.query<{ total: string }>(
+      "SELECT COUNT(*) AS total FROM public.sesiones WHERE plan_id = $1 AND estado <> 'pendiente'", [plan],
+    )
+    if (BigInt(used.rows[0].total) > 0n) throw new ConflictException('Las tareas no se pueden cambiar después de iniciar una sesión. Crea otro plan para una nueva evaluación.')
+  }
 
   async updateTask(planId: string, taskId: string, body: unknown) {
     const plan = id(planId)
@@ -37,11 +47,14 @@ export class TasksService {
     if (!changes.length) throw new BadRequestException('No hay cambios válidos.')
     values.push(plan, task)
     try {
-      const { rowCount } = await this.db.query(
-        `UPDATE public.tareas SET ${changes.join(', ')} WHERE plan_id = $${values.length - 1} AND id = $${values.length}`,
-        values,
-      )
-      if (!rowCount) missing('La tarea')
+      await this.db.transaction(async client => {
+        await this.editable(client, plan)
+        const { rowCount } = await client.query(
+          `UPDATE public.tareas SET ${changes.join(', ')} WHERE plan_id = $${values.length - 1} AND id = $${values.length}`,
+          values,
+        )
+        if (!rowCount) missing('La tarea')
+      })
     } catch (error) {
       dbError(error)
     }
@@ -52,12 +65,15 @@ export class TasksService {
     const plan = id(planId)
     const task = parseTask(body)
     try {
-      const { rowCount } = await this.db.query(
-        `INSERT INTO public.tareas (plan_id, titulo, descripcion, criterio_exito, codigo, orden)
-         SELECT id, $2, $3, $4, $5, $6 FROM public.planes WHERE id = $1 RETURNING id`,
-        [plan, task.titulo, task.descripcion, task.criterio_exito, task.codigo, task.orden],
-      )
-      if (!rowCount) missing('El plan')
+      await this.db.transaction(async client => {
+        await this.editable(client, plan)
+        const { rowCount } = await client.query(
+          `INSERT INTO public.tareas (plan_id, titulo, descripcion, criterio_exito, codigo, orden)
+           SELECT id, $2, $3, $4, $5, $6 FROM public.planes WHERE id = $1 RETURNING id`,
+          [plan, task.titulo, task.descripcion, task.criterio_exito, task.codigo, task.orden],
+        )
+        if (!rowCount) missing('El plan')
+      })
     } catch (error) {
       dbError(error)
     }

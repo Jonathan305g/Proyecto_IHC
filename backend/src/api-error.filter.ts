@@ -5,7 +5,7 @@ export interface ApiError { code: string; message: string; details: unknown[] }
 const codes: Record<number, string> = {
   400: 'INVALID_REQUEST', 401: 'UNAUTHORIZED', 403: 'FORBIDDEN',
   404: 'NOT_FOUND', 405: 'METHOD_NOT_ALLOWED', 409: 'CONFLICT',
-  413: 'PAYLOAD_TOO_LARGE', 415: 'UNSUPPORTED_MEDIA_TYPE', 429: 'TOO_MANY_REQUESTS',
+  503: 'SERVICE_UNAVAILABLE', 413: 'PAYLOAD_TOO_LARGE', 415: 'UNSUPPORTED_MEDIA_TYPE', 429: 'TOO_MANY_REQUESTS',
 }
 
 export function normalizeError(error: unknown): { status: number; body: ApiError } {
@@ -16,7 +16,7 @@ export function normalizeError(error: unknown): { status: number; body: ApiError
   if (['23514', '23502', '22001', '22003', '22P02'].includes(String(pgCode))) {
     return { status: 400, body: { code: 'INVALID_REQUEST', message: 'Los datos no cumplen las restricciones de la base.', details: [] } }
   }
-  if (error instanceof HttpException && error.getStatus() < 500) {
+  if (error instanceof HttpException && (error.getStatus() < 500 || error.getStatus() === 503)) {
     const status = error.getStatus()
     const response = error.getResponse()
     const payload = typeof response === 'string' ? { message: response } : response as { message?: string | string[]; details?: unknown[] }

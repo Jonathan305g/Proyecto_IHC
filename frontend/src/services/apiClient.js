@@ -1,3 +1,4 @@
+import { authHeaders } from './auth.js'
 export const baseUrl = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_BASE_URL)?.replace(/\/$/, '') ?? ''
 export const apiUrl = (path) => `${baseUrl}${path}`
 
@@ -6,6 +7,7 @@ export async function request(path, options = {}) {
   const response = await fetch(`${baseUrl}${path}`, {
     ...options,
     headers: {
+      ...(await authHeaders()),
       'Content-Type': 'application/json',
       ...options.headers,
     },

@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router'
 import PageHeader from '../components/PageHeader.jsx'
 import { ErrorState, LoadingState } from '../components/UiState.jsx'
 import {
-  RESULT_LABELS, RESULT_OPTIONS, canClose, draftFromResult, elapsedSeconds, emptyDraft, formatClock,
+  isCompleteResult, hasUnsavedChanges, RESULT_LABELS, RESULT_OPTIONS, canClose, draftFromResult, elapsedSeconds, emptyDraft, formatClock,
   needsResetConfirmation, pauseTimer, pendingTasks, progress, resetTimer, startTimer, summarize,
   toResultPayload, validateDraft,
 } from '../domain/sessionRun.js'
@@ -46,7 +46,7 @@ export default function SessionRunPage() {
         setWarning(`No se pudieron consultar los resultados guardados. ${reason.message}`)
       }
       setSession(detail)
-      setSaved(new Map(list.map((item) => [String(item.tarea_id), item])))
+      setSaved(new Map(list.filter(isCompleteResult).map((item) => [String(item.tarea_id), item])))
       setDrafts(loadDrafts(id))
     } catch (reason) { setLoadError(reason.message) }
   }, [id])
@@ -140,6 +140,11 @@ export default function SessionRunPage() {
   }
 
   async function closeSession() {
+    if (hasUnsavedChanges(drafts)) {
+      setConfirm(null)
+      setFeedback({ status: 'error', message: 'Guarda los cambios pendientes antes de cerrar la sesión.' })
+      return
+    }
     setBusy(true); setConfirm(null)
     try {
       setSession(await sessions.update(id, { accion: 'cerrar' }))
@@ -179,6 +184,7 @@ export default function SessionRunPage() {
   const summary = summarize(tasks, saved)
   const missing = pendingTasks(tasks, savedIds)
   const closed = session.estado === 'cerrada'
+  const dirty = hasUnsavedChanges(drafts)
 
   if (view === 'summary' || closed) {
     return <>{header}{warningNotice}{progressBar}
@@ -196,6 +202,7 @@ export default function SessionRunPage() {
           </tr>)}</tbody>
         </table>
         <p><strong>Total:</strong> {summary.totalErrors} errores · {formatClock(summary.totalSeconds)} de tiempo registrado</p>
+        {!closed && dirty && <p role="alert" className="notice notice-error">Hay cambios sin guardar. Vuelve a las tareas y guarda el avance antes de cerrar.</p>}
         {!closed && missing.length > 0 && <p className="notice notice-error" role="alert">Falta registrar: {missing.map((item) => item.titulo).join(', ')}. No se puede cerrar hasta completarlas.</p>}
         {confirm === 'close' && <div className="run-confirm" role="alertdialog" aria-labelledby="confirm-cierre" aria-describedby="confirm-cierre-texto">
           <h3 id="confirm-cierre">¿Cerrar la sesión?</h3>
@@ -205,10 +212,12 @@ export default function SessionRunPage() {
         <FeedbackLine feedback={feedback} />
         {!closed && <div className="form-actions">
           <button type="button" className="button button-outline" onClick={() => setView('task')}>Volver a las tareas</button>
-          <button type="button" className="button button-primary" disabled={!canClose(session, tasks, savedIds) || busy} onClick={() => setConfirm('close')}>Cerrar sesión</button>
+          <button type="button" className="button button-primary" disabled={!canClose(session, tasks, savedIds) || dirty || busy} onClick={() => setConfirm('close')}>Cerrar sesión</button>
         </div>}
       </section></>
   }
+
+  if (!task) return <>{header}<p role="alert" className="notice notice-error">El plan no tiene tareas. Agrega tareas antes de ejecutar esta sesión.</p></>
 
   const clock = formatClock(elapsedSeconds(draft.timer, now))
   const last = index === tasks.length - 1
@@ -251,7 +260,7 @@ export default function SessionRunPage() {
       </label>
       {fieldErrors.observacion && <p id="error-observacion" className="field-error">{fieldErrors.observacion}</p>}
 
-      <EvidenceSection sessionId={id} taskId={task.id} readOnly={closed} />
+      <EvidenceSection key={task.id} sessionId={id} taskId={task.id} readOnly={closed} />
 
       <FeedbackLine feedback={feedback} />
       <div className="form-actions">

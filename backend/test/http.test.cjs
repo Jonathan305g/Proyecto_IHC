@@ -19,6 +19,8 @@ test('mantiene las diez rutas de S2-04 y uniforma errores HTTP', async () => {
   const previousUrl = process.env.DATABASE_URL
   process.env.DATABASE_URL = 'postgres://test:test@127.0.0.1:1/test'
   const app = await NestFactory.create(AppModule, { logger: false })
+  // Estos casos prueban contratos; la autorización tiene pruebas HTTP separadas.
+  app.get(require('../dist/auth.guard').AuthGuard).canActivate = async () => true
   const db = app.get(DatabaseService)
   const plan = { id: '1', nombre: 'Prueba', objetivo: 'Buscar curso', estado: 'borrador', cupo: null }
   const tarea = { id: '4', plan_id: '1', titulo: 'Buscar', descripcion: 'Buscar curso', orden: 1, codigo: null, criterio_exito: null }

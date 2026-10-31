@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router'
+import EvidenceLink from '../components/EvidenceLink.jsx'
 import PageHeader from '../components/PageHeader.jsx'
 import { EmptyState, ErrorState, LoadingState } from '../components/UiState.jsx'
 import { sessions } from '../services/persistence.js'
@@ -12,6 +13,8 @@ export default function ResultsPage() {
   const [selectedSessionId, setSelectedSessionId] = useState(null)
   const [sessionResults, setSessionResults] = useState([])
   const [sessionEvidences, setSessionEvidences] = useState([])
+  const [detailError, setDetailError] = useState('')
+  const [retry, setRetry] = useState(0)
   const [loadingDetail, setLoadingDetail] = useState(false)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -36,26 +39,18 @@ export default function ResultsPage() {
     loadSessions()
   }, [loadSessions])
 
-  const loadSessionDetails = useCallback(async (sessionId) => {
-    if (!sessionId) return
-    setLoadingDetail(true)
-    try {
-      const [resList, evList] = await Promise.all([
-        results.list(sessionId).catch(() => []),
-        evidencias.listBySession(sessionId).catch(() => []),
-      ])
-      setSessionResults(resList || [])
-      setSessionEvidences(evList || [])
-    } finally {
-      setLoadingDetail(false)
-    }
-  }, [])
-
   useEffect(() => {
-    if (selectedSessionId) {
-      loadSessionDetails(selectedSessionId)
-    }
-  }, [selectedSessionId, loadSessionDetails])
+    if (!selectedSessionId) return undefined
+    let active = true
+    setLoadingDetail(true); setDetailError(''); setSessionResults([]); setSessionEvidences([])
+    Promise.all([results.list(selectedSessionId), evidencias.listBySession(selectedSessionId)])
+      .then(([resList, evList]) => {
+        if (active) { setSessionResults(resList || []); setSessionEvidences(evList || []) }
+      })
+      .catch(reason => { if (active) setDetailError(reason.message || 'No se pudo consultar la sesión.') })
+      .finally(() => { if (active) setLoadingDetail(false) })
+    return () => { active = false }
+  }, [selectedSessionId, retry])
 
   const selectedSession = items.find((s) => String(s.id) === String(selectedSessionId))
 
@@ -122,7 +117,7 @@ export default function ResultsPage() {
                 </div>
               </div>
 
-              {loadingDetail ? (
+              {detailError ? <ErrorState message={detailError} onRetry={() => setRetry(value => value + 1)} /> : loadingDetail ? (
                 <LoadingState label="Cargando resultados y evidencias de la sesión…" />
               ) : (
                 <>
@@ -165,7 +160,6 @@ export default function ResultsPage() {
                     <div className="evidence-list">
                       {sessionEvidences.map((ev) => {
                         const isLink = ev.tipo === 'enlace'
-                        const openUrl = isLink ? ev.ruta : evidencias.getFileUrl(ev.id)
                         return (
                           <article key={ev.id} className="evidence-item">
                             <div className="evidence-meta">
@@ -182,14 +176,7 @@ export default function ResultsPage() {
                               </small>
                             </div>
                             <div className="evidence-actions">
-                              <a
-                                href={openUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="button button-outline button-sm"
-                              >
-                                Abrir evidencia
-                              </a>
+                              <EvidenceLink evidence={ev} />
                             </div>
                           </article>
                         )

@@ -88,3 +88,17 @@ test('isQuotaFull solo es verdadero cuando la API lo indica', () => {
   assert.equal(isQuotaFull({ cupo_completo: true }), true)
   assert.equal(isQuotaFull({}), false)
 })
+
+test('una evidencia sin evaluación no completa una tarea ni habilita cierre', async () => {
+  const { isCompleteResult } = await import('../src/domain/sessionRun.js')
+  assert.equal(isCompleteResult({ tarea_id: '1', resultado: null, tiempo_segundos: null }), false)
+  assert.equal(isCompleteResult({ tarea_id: '1', resultado: 'sin_ayuda', tiempo_segundos: 0 }), true)
+})
+
+test('cierre detecta borradores modificados y cronómetros en marcha', async () => {
+  const { hasUnsavedChanges } = await import('../src/domain/sessionRun.js')
+  assert.equal(hasUnsavedChanges({}), false)
+  assert.equal(hasUnsavedChanges({ 1: { dirty: false, timer: { startedAt: null } } }), false)
+  assert.equal(hasUnsavedChanges({ 1: { dirty: true } }), true)
+  assert.equal(hasUnsavedChanges({ 1: { dirty: false, timer: { startedAt: 123 } } }), true)
+})
