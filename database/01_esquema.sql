@@ -233,3 +233,11 @@ ALTER TABLE public.historias ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.revisiones_sprint ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.retrospectivas ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.acuerdos_retrospectiva ENABLE ROW LEVEL SECURITY;
+BEGIN;
+-- Cola de limpieza: se confirma junto con el borrado de metadatos.
+CREATE TABLE IF NOT EXISTS public.storage_deletions (
+  object_key TEXT PRIMARY KEY,
+  creada_en TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+ALTER TABLE public.storage_deletions ENABLE ROW LEVEL SECURITY;
+COMMIT;

@@ -11,7 +11,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
-import * as fs from 'fs'
+import { MAX_FILE_SIZE } from './dto/evidencia.dto'
 import { EvidencesService } from './evidencias.service'
 import { UploadedFileDto } from './dto/evidencia.dto'
 
@@ -25,7 +25,7 @@ export class EvidencesController {
   constructor(private readonly evidences: EvidencesService) {}
 
   @Post('sesiones/:id/resultados/:tareaId/evidencias')
-  @UseInterceptors(FileInterceptor('archivo'))
+  @UseInterceptors(FileInterceptor('archivo', { limits: { fileSize: MAX_FILE_SIZE, files: 1, fields: 4, fieldSize: 4096 } }))
   async upload(
     @Param('id') sessionId: string,
     @Param('tareaId') taskId: string,
@@ -70,21 +70,16 @@ export class EvidencesController {
     return this.evidences.getDetail(id)
   }
 
+  @Get('evidencias/:id/acceso')
+  async access(@Param('id') id: string) {
+    const info = await this.evidences.getFile(id)
+    return { url: info.url }
+  }
+
   @Get('evidencias/:id/archivo')
   async streamFile(@Param('id') id: string, @Res() res: HttpResponse) {
     const info = await this.evidences.getFile(id)
-    if (info.isLink && info.url) {
-      return res.redirect(info.url)
-    }
-    if (!info.absolutePath) {
-      throw new BadRequestException('Archivo no disponible.')
-    }
-    res.setHeader('Content-Type', info.mimeType || 'application/octet-stream')
-    res.setHeader(
-      'Content-Disposition',
-      `inline; filename="${encodeURIComponent(info.filename || 'evidencia')}"`,
-    )
-    fs.createReadStream(info.absolutePath).pipe(res as any)
+    return res.redirect(info.url)
   }
 
   @Delete('evidencias/:id')

@@ -7,3 +7,13 @@ backend/node_modules/
 backend/dist/
 backend/.env
 *.log
+
+# Archivos locales, credenciales, certificados y resultados de pruebas
+**/.env
+**/.env.*
+!**/.env.example
+backend/uploads/
+*.pem
+*.crt
+frontend/playwright-report/
+frontend/test-results/

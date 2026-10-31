@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS public.planes (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     nombre VARCHAR(150) NOT NULL,
     objetivo TEXT NOT NULL,
+    cupo INTEGER NULL CONSTRAINT planes_cupo_check CHECK (cupo > 0),
     estado VARCHAR(20) NOT NULL DEFAULT 'borrador'
         CHECK (estado IN ('borrador', 'activo', 'finalizado')),
     creado_en TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -63,12 +64,15 @@ CREATE TABLE IF NOT EXISTS public.resultados (
     sesion_id BIGINT NOT NULL,
     tarea_id BIGINT NOT NULL,
     completada BOOLEAN,
+    con_ayuda BOOLEAN NOT NULL DEFAULT FALSE,
     duracion_segundos INTEGER CHECK (duracion_segundos >= 0),
     cantidad_errores INTEGER NOT NULL DEFAULT 0
         CHECK (cantidad_errores >= 0),
     observaciones TEXT,
     registrado_en TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     UNIQUE (sesion_id, tarea_id),
+    CONSTRAINT resultados_ayuda_completada
+        CHECK (NOT con_ayuda OR completada IS TRUE),
     FOREIGN KEY (sesion_id, plan_id)
         REFERENCES public.sesiones(id, plan_id),
     FOREIGN KEY (tarea_id, plan_id)
@@ -214,6 +218,7 @@ CREATE INDEX IF NOT EXISTS idx_historias_sprint
 
 COMMIT;
 
+-- Habilitar Row Level Security (RLS) en Supabase para las 14 tablas
 ALTER TABLE public.planes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.tareas ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.participantes ENABLE ROW LEVEL SECURITY;
@@ -228,3 +233,11 @@ ALTER TABLE public.historias ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.revisiones_sprint ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.retrospectivas ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.acuerdos_retrospectiva ENABLE ROW LEVEL SECURITY;
+BEGIN;
+-- Cola de limpieza: se confirma junto con el borrado de metadatos.
+CREATE TABLE IF NOT EXISTS public.storage_deletions (
+  object_key TEXT PRIMARY KEY,
+  creada_en TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+ALTER TABLE public.storage_deletions ENABLE ROW LEVEL SECURITY;
+COMMIT;

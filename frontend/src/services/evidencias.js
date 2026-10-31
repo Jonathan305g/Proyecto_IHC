@@ -1,3 +1,4 @@
+import { authHeaders } from './auth.js'
 import { apiUrl, request } from './apiClient.js'
 
 export const MAX_FILE_SIZE = 15 * 1024 * 1024 // 15 MB
@@ -45,6 +46,10 @@ export function validateClientUrl(url) {
   if (!/^https?:\/\//i.test(url.trim())) {
     return 'La URL debe comenzar con http:// o https://.'
   }
+  try {
+    const parsed = new URL(url.trim())
+    if (!parsed.hostname || parsed.username || parsed.password || url.trim().length > 2048) throw new Error()
+  } catch { return 'Ingresa una URL válida de hasta 2048 caracteres, sin credenciales.' }
   return null
 }
 
@@ -61,6 +66,7 @@ export const evidencias = {
     request(`/api/sesiones/${sessionId}/resultados/${taskId}/evidencias`),
   listBySession: (sessionId) =>
     request(`/api/sesiones/${sessionId}/evidencias`),
+  access: (id) => request(`/api/evidencias/${id}/acceso`),
   getDetail: (id) =>
     request(`/api/evidencias/${id}`),
   addLink: (sessionId, taskId, data) =>
@@ -72,10 +78,15 @@ export const evidencias = {
         descripcion: data.descripcion || null,
       }),
     }),
-  uploadFile: (sessionId, taskId, file, descripcion, onProgress) => {
+  uploadFile: async (sessionId, taskId, file, descripcion, onProgress) => {
+    const headers = await authHeaders()
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest()
       xhr.open('POST', apiUrl(`/api/sesiones/${sessionId}/resultados/${taskId}/evidencias`))
+      xhr.setRequestHeader('Authorization', headers.Authorization)
+      xhr.timeout = 120000
+      xhr.ontimeout = () => reject(new Error('La subida tardó demasiado. Comprueba la lista antes de reintentar.'))
+      xhr.onabort = () => reject(new Error('La subida fue cancelada.'))
 
       if (xhr.upload && onProgress) {
         xhr.upload.onprogress = (event) => {

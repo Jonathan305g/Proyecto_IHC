@@ -7,7 +7,7 @@ const FOCUSABLE = 'button:not([disabled]), [href], input:not([disabled]), select
  * Al abrirse lleva el foco al botón seguro, lo mantiene dentro del diálogo, se cierra con Escape
  * y devuelve el foco al elemento que lo abrió.
  */
-export default function ConfirmModal({ isOpen, title, message, confirmText = 'Confirmar', cancelText = 'Cancelar', isDanger = false, onConfirm, onCancel }) {
+export default function ConfirmModal({ isOpen, title, message, confirmText = 'Confirmar', cancelText = 'Cancelar', isDanger = false, busy = false, onConfirm, onCancel }) {
   const dialogRef = useRef(null)
   const cancelRef = useRef(null)
   const baseId = useId()
@@ -24,7 +24,7 @@ export default function ConfirmModal({ isOpen, title, message, confirmText = 'Co
   if (!isOpen) return null
 
   function handleKeyDown(event) {
-    if (event.key === 'Escape') {
+    if (event.key === 'Escape' && !busy) {
       event.stopPropagation()
       onCancel()
       return
@@ -44,12 +44,13 @@ export default function ConfirmModal({ isOpen, title, message, confirmText = 'Co
         <h3 id={titleId} className="modal-title">{title}</h3>
         <p id={messageId} className="modal-message">{message}</p>
         <div className="form-actions" style={{ justifyContent: 'flex-end', marginTop: '20px' }}>
-          <button ref={cancelRef} type="button" className="button button-outline" onClick={onCancel}>
+          <button ref={cancelRef} type="button" className="button button-outline" disabled={busy} onClick={onCancel}>
             {cancelText}
           </button>
           <button
             type="button"
             className={`button ${isDanger ? 'button-danger' : 'button-primary'}`}
+            disabled={busy}
             onClick={onConfirm}
           >
             {confirmText}

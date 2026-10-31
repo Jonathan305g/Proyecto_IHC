@@ -123,3 +123,13 @@ export function summarize(tasks, resultsById) {
 export function isQuotaFull(session) {
   return session?.cupo_completo === true
 }
+
+/** Una fila creada para adjuntar evidencia todavía no es una evaluación. */
+export function isCompleteResult(result) {
+  return Boolean(result && RESULT_LABELS[result.resultado] && result.tiempo_segundos !== null &&
+    Number.isInteger(Number(result.tiempo_segundos)) && Number(result.tiempo_segundos) >= 0)
+}
+
+export function hasUnsavedChanges(drafts) {
+  return Object.values(drafts).some(draft => draft?.dirty || draft?.timer?.startedAt != null)
+}

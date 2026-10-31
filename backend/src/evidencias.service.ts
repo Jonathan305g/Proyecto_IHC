@@ -1,7 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
-import * as fs from 'fs'
-import * as path from 'path'
-import { randomBytes } from 'crypto'
+import { ConflictException, Injectable, ServiceUnavailableException } from '@nestjs/common'
+import { randomUUID } from 'crypto'
+import { StorageService } from './storage.service'
+import { lockSession } from './session-lock'
+import { PoolClient } from 'pg'
 import { DatabaseService } from './database.service'
 import {
   parseLinkEvidence,
@@ -12,26 +13,22 @@ import { id, missing, text } from './validation'
 
 @Injectable()
 export class EvidencesService {
-  private readonly uploadDir: string
+  constructor(private readonly db: DatabaseService, private readonly storage: StorageService) {}
 
-  constructor(private readonly db: DatabaseService) {
-    this.uploadDir = path.join(process.cwd(), 'uploads', 'evidencias')
-    if (!fs.existsSync(this.uploadDir)) {
-      fs.mkdirSync(this.uploadDir, { recursive: true })
+  private async writable(client: PoolClient, sessionId: string) {
+    const session = await lockSession(client, sessionId)
+    if (session.estado !== 'en_curso' || !session.consentimiento_confirmado) {
+      throw new ConflictException('Solo puedes modificar evidencias en una sesión en curso con consentimiento.')
     }
+    return session
   }
 
   private async ensureResultadoId(
-    client: { query: DatabaseService['query'] },
+    client: PoolClient,
     sessionId: string,
     taskId: string,
   ): Promise<string> {
-    const sessionRes = await client.query(
-      'SELECT id, plan_id, estado FROM public.sesiones WHERE id = $1',
-      [sessionId],
-    )
-    if (!sessionRes.rows.length) missing('La sesión')
-    const session = sessionRes.rows[0]
+    const session = await this.writable(client, sessionId)
 
     const taskRes = await client.query(
       'SELECT id FROM public.tareas WHERE id = $1 AND plan_id = $2',
@@ -50,7 +47,7 @@ export class EvidencesService {
     // Si aún no se guardó el resultado de la tarea, crear el registro base asociado
     const createdRes = await client.query<{ id: string }>(
       `INSERT INTO public.resultados (plan_id, sesion_id, tarea_id, completada, con_ayuda, duracion_segundos, cantidad_errores, observaciones)
-       VALUES ($1, $2, $3, NULL, FALSE, 0, 0, NULL)
+       VALUES ($1, $2, $3, NULL, FALSE, NULL, 0, NULL)
        RETURNING id`,
       [session.plan_id, sessionId, taskId],
     )
@@ -71,18 +68,9 @@ export class EvidencesService {
         ? text(rawDescripcion, 'descripcion', 1000)
         : null
 
-    const ext = path.extname(meta.nombre_archivo) || ''
-    const uniqueName = `${Date.now()}-${randomBytes(8).toString('hex')}${ext}`
-    const relativePath = path.join('uploads', 'evidencias', uniqueName).replace(/\\/g, '/')
-    const absolutePath = path.join(this.uploadDir, uniqueName)
-
-    if (file.buffer) {
-      await fs.promises.writeFile(absolutePath, file.buffer)
-    } else if (file.path && fs.existsSync(file.path)) {
-      await fs.promises.copyFile(file.path, absolutePath)
-    } else {
-      missing('El contenido del archivo')
-    }
+    const objectKey = `${sessionId}/${taskId}/${randomUUID()}`
+    const relativePath = `supabase://${objectKey}`
+    await this.storage.upload(objectKey, file.buffer!, meta.mime_type)
 
     try {
       const saved = await this.db.transaction(async (client) => {
@@ -106,7 +94,10 @@ export class EvidencesService {
       return saved
     } catch (error) {
       // Evitar archivos huérfanos: si la base de datos rechaza la operación, se borra el archivo
-      await fs.promises.unlink(absolutePath).catch(() => {})
+      await this.storage.remove(objectKey).catch(async () => {
+        await this.db.query('INSERT INTO public.storage_deletions (object_key) VALUES ($1) ON CONFLICT DO NOTHING', [objectKey])
+          .catch(() => console.error('Revisar objeto de evidencia sin metadatos:', objectKey))
+      })
       throw error
     }
   }
@@ -186,34 +177,35 @@ export class EvidencesService {
   async getFile(evidenceIdParam: string) {
     const evidence = await this.getDetail(evidenceIdParam)
     if (evidence.tipo === 'enlace') {
-      return { isLink: true, url: evidence.ruta, evidence }
+      return { isLink: true, url: parseLinkEvidence({ tipo: 'enlace', ruta: evidence.ruta }).ruta, evidence }
     }
 
-    const absolutePath = path.resolve(process.cwd(), evidence.ruta)
-    if (!fs.existsSync(absolutePath)) {
-      throw new NotFoundException('El archivo físico de la evidencia no existe.')
+    if (!String(evidence.ruta).startsWith('supabase://')) {
+      throw new ServiceUnavailableException('Esta evidencia antigua debe migrarse al almacenamiento compartido.')
     }
-
-    return {
-      isLink: false,
-      absolutePath,
-      evidence,
-      mimeType: evidence.mime_type || 'application/octet-stream',
-      filename: evidence.nombre_archivo || path.basename(absolutePath),
-    }
+    return { isLink: false, url: await this.storage.sign(String(evidence.ruta).slice(11), String(evidence.nombre_archivo || 'evidencia')), evidence }
   }
 
   async delete(evidenceIdParam: string) {
     const evidence = await this.getDetail(evidenceIdParam)
     const identifier = id(evidenceIdParam)
 
-    await this.db.query('DELETE FROM public.evidencias WHERE id = $1', [identifier])
-
-    if (evidence.tipo !== 'enlace' && evidence.ruta) {
-      const absolutePath = path.resolve(process.cwd(), evidence.ruta)
-      await fs.promises.unlink(absolutePath).catch(() => {})
+    await this.db.transaction(async (client) => {
+      await this.writable(client, String(evidence.sesion_id))
+      const current = await client.query('SELECT id FROM public.evidencias WHERE id = $1 FOR UPDATE', [identifier])
+      if (!current.rows.length) missing('La evidencia')
+      if (evidence.tipo !== 'enlace' && String(evidence.ruta).startsWith('supabase://')) {
+        await client.query('INSERT INTO public.storage_deletions (object_key) VALUES ($1) ON CONFLICT DO NOTHING', [String(evidence.ruta).slice(11)])
+      }
+      await client.query('DELETE FROM public.evidencias WHERE id = $1', [identifier])
+    })
+    // La cola transaccional permite reintentar sin perder los metadatos de limpieza.
+    if (evidence.tipo !== 'enlace' && String(evidence.ruta).startsWith('supabase://')) {
+      const key = String(evidence.ruta).slice(11)
+      await this.storage.remove(key)
+        .then(() => this.db.query('DELETE FROM public.storage_deletions WHERE object_key = $1', [key]))
+        .catch(() => console.error('Limpieza de Storage pendiente; ejecutar npm run storage:cleanup.'))
     }
-
     return { id: identifier, borrado: true }
   }
 }

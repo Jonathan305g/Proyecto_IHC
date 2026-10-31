@@ -1,3 +1,5 @@
+import { useState } from 'react'
+import { supabase } from '../services/auth.js'
 import { NavLink, Outlet } from 'react-router'
 
 const navigation = [
@@ -7,6 +9,11 @@ const navigation = [
 ]
 
 export default function AppLayout() {
+  const [error, setError] = useState('')
+  async function logout() {
+    const { error: failure } = await supabase.auth.signOut({ scope: 'local' })
+    if (failure) setError('No se pudo cerrar la sesión. Reintenta.')
+  }
   return (
     <div className="app-shell">
       <a className="skip-link" href="#contenido">Saltar al contenido principal</a>
@@ -32,9 +39,10 @@ export default function AppLayout() {
       <div className="main-column">
         <header className="topbar">
           <span className="topbar-title">Panel de pruebas de usabilidad</span>
-          <span className="topbar-stage">Sprint 2 · Planes y sesiones</span>
+          <button className="button button-outline" onClick={logout}>Cerrar mi sesión</button>
         </header>
         <main id="contenido" className="page-content" tabIndex="-1">
+          {error && <p role="alert">{error}</p>}
           <Outlet />
         </main>
       </div>

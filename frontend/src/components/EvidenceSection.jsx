@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import EvidenceLink from './EvidenceLink.jsx'
 import ConfirmModal from './ConfirmModal.jsx'
 import {
   ACCEPT_FILE_TYPES,
@@ -10,6 +11,9 @@ import {
 
 export default function EvidenceSection({ sessionId, taskId, readOnly = false }) {
   const [list, setList] = useState([])
+  const [loadError, setLoadError] = useState('')
+  const loadVersion = useRef(0)
+  const [deleting, setDeleting] = useState(false)
   const [loading, setLoading] = useState(false)
   const [mode, setMode] = useState('none') // 'none' | 'file' | 'link'
   const [file, setFile] = useState(null)
@@ -30,15 +34,15 @@ export default function EvidenceSection({ sessionId, taskId, readOnly = false })
 
   const loadEvidences = useCallback(async () => {
     if (!sessionId || !taskId) return
-    setLoading(true)
+    const version = ++loadVersion.current
+    setLoading(true); setLoadError('')
     try {
       const items = await evidencias.listByTask(sessionId, taskId)
-      setList(items || [])
-    } catch (_) {
-      // Si la sesión aún no tiene resultados para esta tarea, devuelve lista vacía
-      setList([])
+      if (version === loadVersion.current) setList(items || [])
+    } catch (reason) {
+      if (version === loadVersion.current) setLoadError(reason.message || 'No se pudieron consultar las evidencias.')
     } finally {
-      setLoading(false)
+      if (version === loadVersion.current) setLoading(false)
     }
   }, [sessionId, taskId])
 
@@ -115,7 +119,8 @@ export default function EvidenceSection({ sessionId, taskId, readOnly = false })
   }
 
   async function confirmDelete() {
-    if (!evidenceToDelete) return
+    if (!evidenceToDelete || deleting) return
+    setDeleting(true)
     try {
       await evidencias.delete(evidenceToDelete.id)
       setEvidenceToDelete(null)
@@ -124,7 +129,7 @@ export default function EvidenceSection({ sessionId, taskId, readOnly = false })
     } catch (err) {
       setError(err.message || 'No se pudo eliminar la evidencia.')
       setEvidenceToDelete(null)
-    }
+    } finally { setDeleting(false) }
   }
 
   return (
@@ -285,13 +290,13 @@ export default function EvidenceSection({ sessionId, taskId, readOnly = false })
       {/* Lista de evidencias registradas */}
       <div className="evidence-list" aria-label="Evidencias asociadas">
         {loading && <small className="field-hint">Cargando evidencias…</small>}
-        {!loading && list.length === 0 && (
+        {loadError && <p role="alert" className="notice notice-error">{loadError} <button type="button" onClick={loadEvidences}>Reintentar</button></p>}
+        {!loading && !loadError && list.length === 0 && (
           <small className="field-hint">No hay evidencias adjuntas para esta tarea.</small>
         )}
-        {!loading &&
+        {!loading && !loadError &&
           list.map((item) => {
             const isLink = item.tipo === 'enlace'
-            const openUrl = isLink ? item.ruta : evidencias.getFileUrl(item.id)
             const title = item.nombre_archivo || (isLink ? item.ruta : `Evidencia #${item.id}`)
 
             return (
@@ -308,15 +313,7 @@ export default function EvidenceSection({ sessionId, taskId, readOnly = false })
                 </div>
 
                 <div className="evidence-actions">
-                  <a
-                    href={openUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="button button-outline button-sm"
-                  >
-                    Abrir evidencia
-                    <span className="visually-hidden"> «{title}» (se abre en una pestaña nueva)</span>
-                  </a>
+                  <EvidenceLink evidence={item} />
                   {!readOnly && (
                     <button
                       type="button"
@@ -345,6 +342,7 @@ export default function EvidenceSection({ sessionId, taskId, readOnly = false })
         confirmText="Eliminar evidencia"
         cancelText="Conservar"
         isDanger={true}
+        busy={deleting}
         onConfirm={confirmDelete}
         onCancel={() => setEvidenceToDelete(null)}
       />

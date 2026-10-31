@@ -7,9 +7,17 @@ export class DatabaseService implements OnModuleDestroy {
 
   constructor() {
     if (!process.env.DATABASE_URL) throw new Error('Falta DATABASE_URL')
+    const connectionUrl = new URL(process.env.DATABASE_URL)
+    // pg puede sobrescribir ssl a partir de la URI; centralizar TLS aquí.
+    if (process.env.DATABASE_SSL === 'true') {
+      for (const key of ['sslmode', 'sslcert', 'sslkey', 'sslrootcert']) connectionUrl.searchParams.delete(key)
+    }
     this.pool = new Pool({
-      connectionString: process.env.DATABASE_URL,
-      ssl: process.env.DATABASE_SSL === 'true' ? { rejectUnauthorized: false } : undefined,
+      connectionString: connectionUrl.toString(),
+      ssl: process.env.DATABASE_SSL === 'true' ? {
+        rejectUnauthorized: true,
+        ...(process.env.DATABASE_CA_CERT ? { ca: process.env.DATABASE_CA_CERT.replace(/\\n/g, '\n') } : {}),
+      } : undefined,
     })
   }
 
