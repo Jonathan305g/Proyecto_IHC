@@ -8,7 +8,9 @@
     "dev:backend": "npm run dev --prefix backend",
     "build": "npm run build --prefix backend && npm run build --prefix frontend",
     "test": "npm test --prefix backend && npm test --prefix frontend",
-    "test:e2e": "npm run test:e2e --prefix frontend"
+    "test:e2e": "npm run test:e2e --prefix frontend",
+    "verify:environment": "npm run verify:environment --prefix backend",
+    "verify:live": "npm run verify:live --prefix backend --"
   },
   "engines": {
     "node": ">=22.12.0"

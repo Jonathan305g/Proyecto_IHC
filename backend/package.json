@@ -8,7 +8,9 @@
     "start": "node dist/main.js",
     "dev": "npm run build && node --env-file=.env dist/main.js",
     "storage:cleanup": "npm run build && node --env-file=.env scripts/storage-maintenance.cjs --cleanup",
-    "storage:migrate": "npm run build && node --env-file=.env scripts/storage-maintenance.cjs"
+    "storage:migrate": "npm run build && node --env-file=.env scripts/storage-maintenance.cjs",
+    "verify:environment": "npm run build && node --env-file-if-exists=.env scripts/check-environment.cjs",
+    "verify:live": "npm run build && node --env-file-if-exists=.env scripts/verify-live.cjs"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.0",
