@@ -21,7 +21,7 @@ Estos pasos requieren acceso al Dashboard y a la configuración privada del equi
 
 ### 1. Base de datos
 
-Ejecuta en orden las tres migraciones de `backend/migrations`, luego `database/03_storage_supabase.sql`. No borres ni recrees las tablas de producción. Verifica:
+Ejecuta todos los archivos SQL de `backend/migrations` en orden por nombre, luego `database/03_storage_supabase.sql`. La migración con fecha incorpora los ocho índices de apoyo ya creados en el Supabase del equipo. No borres ni recrees las tablas de producción. Verifica:
 
 ```sql
 SELECT table_name, column_name
@@ -73,6 +73,8 @@ npm run storage:cleanup --prefix backend
 ```
 
 ### 4. Comprobación integrada obligatoria antes de iniciar el Sprint 3
+
+Primero ejecuta `npm run verify:environment` desde la raíz. Con una cuenta de prueba autorizada en el `.env` privado, ejecuta `npm run verify:live -- --apply`. Consulta [VALIDACION_ENTORNO_SPRINT_3.md](VALIDACION_ENTORNO_SPRINT_3.md) para los requisitos, el alcance y las limitaciones. Las pruebas automáticas locales no acreditan por sí solas que el entorno remoto esté validado.
 
 - Cuenta autorizada: puede consultar y guardar. Cuenta ajena o petición sin token: 403/401.
 - Crear plan con dos tareas; recargar y recuperar sus datos.
