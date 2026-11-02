@@ -34,6 +34,11 @@ test('PostgreSQL embebido: esquema, migraciones repetibles, datos y flujo comple
     }
     assert.equal((await pg.query('SELECT COUNT(*)::int AS total FROM public.planes')).rows[0].total, 1)
     assert.equal((await pg.query('SELECT COUNT(*)::int AS total FROM public.sesiones')).rows[0].total, 1)
+    const uncovered = await pg.query(`SELECT c.conname FROM pg_constraint c JOIN pg_namespace n ON n.oid=c.connamespace
+      WHERE c.contype='f' AND n.nspname='public' AND NOT EXISTS (
+        SELECT 1 FROM pg_index i WHERE i.indrelid=c.conrelid AND i.indisvalid AND i.indpred IS NULL
+        AND ARRAY(SELECT unnest(i.indkey) LIMIT cardinality(c.conkey)) @> c.conkey)`)
+    assert.deepEqual(uncovered.rows, [], 'Todas las claves foráneas deben tener un índice que las cubra')
     const db = adapter(pg), plans = new PlansService(db), tasks = new TasksService(db, plans)
     const sessions = new SessionsService(db), results = new ResultsService(db)
     const objects = new Set()

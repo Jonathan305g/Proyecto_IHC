@@ -14,6 +14,7 @@ export class DatabaseService implements OnModuleDestroy {
     }
     this.pool = new Pool({
       connectionString: connectionUrl.toString(),
+      connectionTimeoutMillis: 10000,
       ssl: process.env.DATABASE_SSL === 'true' ? {
         rejectUnauthorized: true,
         ...(process.env.DATABASE_CA_CERT ? { ca: process.env.DATABASE_CA_CERT.replace(/\\n/g, '\n') } : {}),

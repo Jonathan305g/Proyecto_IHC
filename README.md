@@ -49,6 +49,15 @@ npm run test:e2e --prefix frontend
 
 Antes de la primera prueba de navegador: `cd frontend`, `npx playwright install chromium`, y vuelve a la raíz. Las pruebas de navegador usan API y Auth controladas; las pruebas SQL usan PostgreSQL embebido sin credenciales de producción. La conexión, TLS, cuentas y Storage del proyecto real se verifican con el procedimiento de integración de la guía.
 
+Con los `.env` privados completos, comprobar el entorno y ejecutar el ensayo remoto:
+
+```powershell
+npm run verify:environment
+npm run verify:live -- --apply
+```
+
+El segundo comando crea datos temporales propios y los retira al terminar. Un resultado `PENDIENTE` o un código de salida distinto de cero impide declarar el entorno validado. Consulta [Validación del entorno del Sprint 3](docs/VALIDACION_ENTORNO_SPRINT_3.md) para configurar las cuentas, conocer el alcance y revisar los pendientes de acceso de esta entrega.
+
 ## Seguridad y mantenimiento
 
 - Todas las rutas API requieren un token válido de Supabase Auth y un correo autorizado. CORS no sustituye autenticación.

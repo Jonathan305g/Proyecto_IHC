@@ -17,3 +17,7 @@ backend/uploads/
 *.crt
 frontend/playwright-report/
 frontend/test-results/
+
+# Resultados locales de la validación real
+verification-results/
+supabase/.temp/

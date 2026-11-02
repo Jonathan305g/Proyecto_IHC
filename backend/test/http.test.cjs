@@ -1,8 +1,7 @@
 require('reflect-metadata')
 const { test } = require('node:test')
 const assert = require('node:assert/strict')
-const { NestFactory } = require('@nestjs/core')
-const { AppModule } = require('../dist/app.module')
+const { createApplication } = require('../dist/application')
 const { DatabaseService } = require('../dist/database.service')
 const { normalizeError } = require('../dist/api-error.filter')
 
@@ -18,7 +17,7 @@ test('mantiene las diez rutas de S2-04 y uniforma errores HTTP', async () => {
   // URL ficticia: todas las operaciones se reemplazan antes de atender solicitudes.
   const previousUrl = process.env.DATABASE_URL
   process.env.DATABASE_URL = 'postgres://test:test@127.0.0.1:1/test'
-  const app = await NestFactory.create(AppModule, { logger: false })
+  const app = await createApplication(false)
   // Estos casos prueban contratos; la autorización tiene pruebas HTTP separadas.
   app.get(require('../dist/auth.guard').AuthGuard).canActivate = async () => true
   const db = app.get(DatabaseService)
@@ -46,9 +45,11 @@ test('mantiene las diez rutas de S2-04 y uniforma errores HTTP', async () => {
   db.query = query
   db.transaction = async (operation) => operation({ query })
   try {
-    app.setGlobalPrefix('api')
     await app.listen(0, '127.0.0.1')
     const url = await app.getUrl()
+    const headers = await fetch(`${url}/api/planes`)
+    assert.equal(headers.headers.get('Cache-Control'), 'no-store')
+    assert.equal(headers.headers.get('X-Content-Type-Options'), 'nosniff')
     const send = async (method, path, body) => {
       const response = await fetch(`${url}/api${path}`, { method, headers: { 'Content-Type': 'application/json' }, ...(body === undefined ? {} : { body: JSON.stringify(body) }) })
       return { status: response.status, body: await response.json() }

@@ -24,6 +24,7 @@ Conserva los datos existentes y aplica en orden:
 1. `../backend/migrations/001_s2_06_ejecucion_sesiones.sql` (cupo y ayuda).
 2. `../backend/migrations/002_s2_08_evidencias.sql` (metadatos de archivos).
 3. `../backend/migrations/003_pre_sprint3_storage_cleanup.sql` (cola de eliminación).
+4. `../backend/migrations/20261101165559_pre_sprint3_indices_claves_foraneas.sql` (ocho índices para claves foráneas).
 4. `03_storage_supabase.sql` (bucket privado).
 
 Estas migraciones son repetibles. Ejecutar de nuevo un `CREATE TABLE IF NOT EXISTS` no actualiza las columnas de una tabla existente: para actualizar utiliza las migraciones. El backend no ejecuta DDL durante el arranque.
