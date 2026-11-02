@@ -1,0 +1,18 @@
+{
+  "version": "1.0",
+  "estado": "borrador",
+  "hallazgos": [
+    {
+      "observacion_ids": [
+        "resultado:999"
+      ],
+      "resumen": "La confirmación de guardado no fue reconocible.",
+      "categoria": "retroalimentacion",
+      "severidad": "media",
+      "mejora_sugerida": "Mostrar una confirmación textual visible después de guardar."
+    }
+  ],
+  "observaciones_sin_hallazgo": [
+    "resultado:2"
+  ]
+}
