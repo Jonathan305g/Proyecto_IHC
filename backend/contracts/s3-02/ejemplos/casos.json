@@ -1,0 +1,62 @@
+[
+  {
+    "archivo": "respuesta_correcta.json",
+    "codigo_esperado": null
+  },
+  {
+    "archivo": "respuesta_incompleta.json",
+    "codigo_esperado": "IA_ESQUEMA_INVALIDO"
+  },
+  {
+    "archivo": "origen_inexistente.json",
+    "codigo_esperado": "IA_ORIGEN_INVALIDO"
+  },
+  {
+    "archivo": "cobertura_incompleta.json",
+    "codigo_esperado": "IA_COBERTURA_INCOMPLETA"
+  },
+  {
+    "archivo": "aprobacion_automatica.json",
+    "codigo_esperado": "IA_ESQUEMA_INVALIDO"
+  },
+  {
+    "archivo": "severidad_invalida.json",
+    "codigo_esperado": "IA_ESQUEMA_INVALIDO"
+  },
+  {
+    "archivo": "categoria_invalida.json",
+    "codigo_esperado": "IA_ESQUEMA_INVALIDO"
+  },
+  {
+    "archivo": "texto_vacio.json",
+    "codigo_esperado": "IA_ESQUEMA_INVALIDO"
+  },
+  {
+    "archivo": "campo_no_permitido.json",
+    "codigo_esperado": "IA_ESQUEMA_INVALIDO"
+  },
+  {
+    "archivo": "cobertura_contradictoria.json",
+    "codigo_esperado": "IA_COBERTURA_INVALIDA"
+  },
+  {
+    "archivo": "origen_repetido.json",
+    "codigo_esperado": "IA_ESQUEMA_INVALIDO"
+  },
+  {
+    "archivo": "hallazgo_duplicado.json",
+    "codigo_esperado": "IA_HALLAZGO_DUPLICADO"
+  },
+  {
+    "archivo": "datos_personales_en_salida.json",
+    "codigo_esperado": "IA_DATOS_PERSONALES"
+  },
+  {
+    "archivo": "sin_hallazgos.json",
+    "codigo_esperado": null
+  },
+  {
+    "archivo": "respuesta_malformada.txt",
+    "codigo_esperado": "IA_JSON_INVALIDO"
+  }
+]

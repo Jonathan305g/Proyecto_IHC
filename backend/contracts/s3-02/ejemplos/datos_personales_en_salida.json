@@ -1,0 +1,18 @@
+{
+  "version": "1.0",
+  "estado": "borrador",
+  "hallazgos": [
+    {
+      "observacion_ids": [
+        "resultado:1"
+      ],
+      "resumen": "Contactar a persona@example.org para ver el problema.",
+      "categoria": "retroalimentacion",
+      "severidad": "media",
+      "mejora_sugerida": "Mostrar una confirmación textual visible después de guardar."
+    }
+  ],
+  "observaciones_sin_hallazgo": [
+    "resultado:2"
+  ]
+}
