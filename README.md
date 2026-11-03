@@ -5,6 +5,7 @@ Proyecto de Interacción Humano–Computador: preparación de pruebas, participa
 ## Estado
 
 - Sprint 2: planes y tareas; sesiones, consentimiento y cupos; cronómetro, resultados, recuperación de borradores y evidencias compartidas.
+- Sprint 3 / S3-04: [API privada de indicadores y filtros](docs/sprint3/S3-04_API_INDICADORES.md) basada en S3-01, con reporte general y por tarea. [Verificación y pendientes](docs/sprint3/S3-04_VERIFICACION.md).
 - Sprint 3: la BD prepara análisis de IA, hallazgos e historias. Sus pantallas y servicios corresponden al trabajo siguiente; no se presentan como implementados.
 - Integración y activación de esta rama: [PREPARACION_SPRINT_3.md](docs/PREPARACION_SPRINT_3.md).
 
