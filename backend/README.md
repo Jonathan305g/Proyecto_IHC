@@ -16,6 +16,9 @@ Prefijo `/api`. **Todas las rutas requieren `Authorization: Bearer <access_token
 |---|---|---|
 | GET / POST | `/planes` | Listar / crear plan y tareas en transacción |
 | GET / PATCH | `/planes/:id` | Consultar / actualizar plan |
+| GET | `/planes/:id/indicadores` | Reporte S3-01 completo: general y por tarea |
+| GET | `/planes/:id/indicadores/general` | Indicadores generales y metadatos del filtro |
+| GET | `/planes/:id/indicadores/tareas` | Indicadores por tarea y metadatos del filtro |
 | POST | `/planes/:id/tareas` | Agregar tarea |
 | PATCH | `/planes/:id/tareas/:tareaId` | Editar tarea |
 | GET / POST | `/sesiones` | Listar / crear sesión |
@@ -29,6 +32,17 @@ Prefijo `/api`. **Todas las rutas requieren `Authorization: Bearer <access_token
 | GET | `/evidencias/:id/archivo` | Redirección compatible; también requiere token |
 
 IDs BIGINT se intercambian como cadenas. Los cuerpos se validan sin coerciones de objetos ni campos desconocidos. Errores `{ code, message, details }`, con 400 para datos inválidos, 401/403 para acceso, 404 inexistente, 409 conflicto, 413 archivo excesivo, 503 servicio/configuración no disponible y 500 para errores internos sin revelar secretos.
+
+### Indicadores y filtros (S3-04)
+
+Las tres rutas de indicadores aceptan `desde`, `hasta` (ISO 8601 con zona explícita)
+y `tarea_ids` (IDs únicos separados por comas). Omitirlos selecciona todas las fechas
+y tareas del plan. Se filtra por cierre en el intervalo `[desde, hasta)`.
+La selección vacía es inválida. Se conserva el JSON y los cálculos oficiales S3-01.
+Contrato, ejemplos para React, distribución del SQL y errores:
+[API de indicadores](../docs/sprint3/S3-04_API_INDICADORES.md).
+Resultados reales de pruebas y pendientes:
+[comprobación S3-04](../docs/sprint3/S3-04_VERIFICACION.md).
 
 ### Plan y tareas
 
