@@ -6,7 +6,12 @@ import { AppModule } from './app.module'
 export async function createApplication(logger: false | undefined = undefined) {
   const app = await NestFactory.create(AppModule, { logger })
   app.setGlobalPrefix('api')
-  app.enableCors({ origin: process.env.FRONTEND_ORIGIN ?? 'http://localhost:5173' })
+  const allowed = Array.from(new Set([
+    process.env.FRONTEND_ORIGIN,
+    'http://localhost:5173',
+    'http://127.0.0.1:5173',
+  ].filter(Boolean))) as string[]
+  app.enableCors({ origin: allowed })
   app.enableShutdownHooks()
   app.use((_req: unknown, res: { setHeader(name: string, value: string): void }, next: () => void) => {
     res.setHeader('X-Content-Type-Options', 'nosniff')
