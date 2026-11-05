@@ -92,6 +92,9 @@ export default function PlanDetailPage() {
         action={
           plan && (
             <div className="form-actions">
+              <Link className="button button-outline" to={`/resultados?plan_id=${plan.id}`}>
+                Ver dashboard
+              </Link>
               {plan.estado === 'activo' && (
                 <Link className="button button-primary" to="/sesiones/nueva">
                   Iniciar sesión con este plan

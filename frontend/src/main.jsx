@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router'
 import AuthGate from './components/AuthGate.jsx'
 import App from './App.jsx'
 import './styles.css'
+import './dashboard.css'
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
