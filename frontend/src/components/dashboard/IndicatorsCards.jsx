@@ -143,3 +143,4 @@ export default function IndicatorsCards({ general, sesionesIncluidas, tareasSele
     </div>
   )
 }
+

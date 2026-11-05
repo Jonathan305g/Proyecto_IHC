@@ -140,3 +140,4 @@ Comprobaciones efectuadas:
 - Manejo defensivo en planes sin sesiones (`sesiones_incluidas: 0`).
 - Distinción estricta de métricas de éxito sin ayuda y con ayuda.
 - Serialización de parámetros y query string.
+

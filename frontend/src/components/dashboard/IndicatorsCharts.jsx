@@ -267,3 +267,4 @@ export default function IndicatorsCharts({ general, porTarea = [] }) {
     </div>
   )
 }
+

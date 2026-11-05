@@ -50,3 +50,4 @@ export function buildQueryString(filters = {}) {
   const str = params.toString()
   return str ? `?${str}` : ''
 }
+

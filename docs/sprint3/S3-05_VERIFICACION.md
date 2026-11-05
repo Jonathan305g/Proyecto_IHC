@@ -57,3 +57,4 @@ El árbol de trabajo inició limpio y actualizado.
 - `frontend/src/services/persistence.js`: Reexportación del servicio `indicadores`.
 - `frontend/src/pages/ResultsPage.jsx`: Integración del `PlanDashboard` en la vista de resultados.
 - `frontend/src/pages/PlanDetailPage.jsx`: Botón de acceso directo al dashboard del plan.
+
