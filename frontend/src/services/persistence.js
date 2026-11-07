@@ -19,3 +19,4 @@ export const sessions = {
 }
 
 export { evidencias } from './evidencias.js'
+export { indicadores } from './indicadores.js'
