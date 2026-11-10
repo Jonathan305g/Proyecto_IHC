@@ -3,21 +3,32 @@ import { Link } from 'react-router'
 import { ErrorState, LoadingState } from '../UiState.jsx'
 import IndicatorsCards from './IndicatorsCards.jsx'
 import IndicatorsCharts from './IndicatorsCharts.jsx'
+import IndicatorsFilters from './IndicatorsFilters.jsx'
 import IndicatorsTable from './IndicatorsTable.jsx'
+import { hasActiveFilters } from '../../domain/indicadores.js'
 import { indicadores } from '../../services/indicadores.js'
 import { plans } from '../../services/persistence.js'
 
 /**
- * Dashboard de Resultados e Indicadores (S3-05 / HU-05).
+ * Dashboard de Resultados e Indicadores (S3-05 / S3-06 / HU-05).
  * Conecta a la API S3-04 (GET /api/planes/:id/indicadores).
  * Garantiza que tarjetas, gráficos y tabla compartan el mismo conjunto de datos
  * y que los estados de carga o error limpien de inmediato las cifras anteriores.
+ * Incluye panel interactivo de filtros de período y tareas (S3-06).
  */
 export default function PlanDashboard({ initialPlanId = null }) {
   const [plansList, setPlansList] = useState([])
   const [selectedPlanId, setSelectedPlanId] = useState(initialPlanId)
   const [loadingPlans, setLoadingPlans] = useState(true)
   const [plansError, setPlansError] = useState('')
+
+  // Tareas del plan actual para alimentar los filtros (S3-06)
+  const [planTasks, setPlanTasks] = useState([])
+  const [activeFilters, setActiveFilters] = useState({
+    desde: null,
+    hasta: null,
+    tarea_ids: null,
+  })
 
   // Estado del reporte actual (S3-04)
   const [report, setReport] = useState(null)
@@ -54,8 +65,35 @@ export default function PlanDashboard({ initialPlanId = null }) {
     }
   }, [initialPlanId])
 
-  // 2. Cargar reporte de indicadores al cambiar el plan seleccionado o al reintentar
-  // REGLA CLAVE S3-05: Limpiar de inmediato el estado previo al cambiar de plan
+  // 2. Al cambiar el plan seleccionado, cargar sus tareas y reiniciar filtros
+  useEffect(() => {
+    if (!selectedPlanId) {
+      setPlanTasks([])
+      setActiveFilters({ desde: null, hasta: null, tarea_ids: null })
+      return undefined
+    }
+
+    let active = true
+    setActiveFilters({ desde: null, hasta: null, tarea_ids: null })
+
+    plans
+      .detail(selectedPlanId)
+      .then((detail) => {
+        if (!active) return
+        setPlanTasks(detail?.tareas || [])
+      })
+      .catch(() => {
+        if (!active) return
+        setPlanTasks([])
+      })
+
+    return () => {
+      active = false
+    }
+  }, [selectedPlanId])
+
+  // 3. Cargar reporte de indicadores al cambiar el plan, los filtros o al reintentar
+  // REGLA CLAVE S3-05: Limpiar de inmediato el estado previo al cambiar de plan o filtro
   useEffect(() => {
     if (!selectedPlanId) {
       setReport(null)
@@ -71,10 +109,22 @@ export default function PlanDashboard({ initialPlanId = null }) {
     setLoadingReport(true)
 
     indicadores
-      .getReport(selectedPlanId)
+      .getReport(selectedPlanId, activeFilters)
       .then((data) => {
         if (!active) return
         setReport(data)
+        // Sembrar tareas si detail aún no las trajo y el reporte trajo por_tarea
+        if (data?.por_tarea?.length > 0) {
+          setPlanTasks((prev) => {
+            if (prev.length > 0) return prev
+            return data.por_tarea.map((t) => ({
+              id: t.tarea_id,
+              codigo: t.codigo,
+              titulo: t.titulo,
+              orden: t.orden,
+            }))
+          })
+        }
       })
       .catch((err) => {
         if (!active) return
@@ -88,13 +138,23 @@ export default function PlanDashboard({ initialPlanId = null }) {
     return () => {
       active = false
     }
-  }, [selectedPlanId, refreshTick])
+  }, [selectedPlanId, activeFilters, refreshTick])
 
   const selectedPlan = plansList.find((p) => String(p.id) === String(selectedPlanId))
 
   function handleRetry() {
     setRefreshTick((t) => t + 1)
   }
+
+  function handleApplyFilters(newFilters) {
+    setActiveFilters(newFilters)
+  }
+
+  function handleResetFilters() {
+    setActiveFilters({ desde: null, hasta: null, tarea_ids: null })
+  }
+
+  const isFiltered = hasActiveFilters(activeFilters)
 
   return (
     <div className="plan-dashboard" role="region" aria-label="Dashboard de resultados de pruebas">
@@ -147,6 +207,17 @@ export default function PlanDashboard({ initialPlanId = null }) {
         </div>
       </section>
 
+      {/* Panel interactivo de filtros de período y tareas (S3-06 / HU-05) */}
+      {selectedPlanId && !plansError && (
+        <IndicatorsFilters
+          tasks={planTasks}
+          activeFilters={activeFilters}
+          onApplyFilters={handleApplyFilters}
+          onResetFilters={handleResetFilters}
+          disabled={loadingReport || loadingPlans}
+        />
+      )}
+
       {/* Estados globales de carga y error en planes */}
       {plansError && <ErrorState message={plansError} onRetry={loadPlans} />}
       {loadingPlans && !plansError && <LoadingState label="Cargando planes..." />}
@@ -163,19 +234,35 @@ export default function PlanDashboard({ initialPlanId = null }) {
         <LoadingState label="Consultando indicadores y métricas del plan..." />
       )}
 
-      {/* Ausencia de resultados / Plan sin sesiones */}
+      {/* Ausencia de resultados / Plan sin sesiones o sin coincidencias de filtro */}
       {!loadingReport && !reportError && report && report.sesiones_incluidas === 0 && (
         <div className="notice" role="status" style={{ marginBottom: '20px' }}>
           <div>
-            <strong>Sin sesiones cerradas para este plan.</strong>
+            <strong>
+              {isFiltered
+                ? 'Sin sesiones cerradas para los filtros aplicados.'
+                : 'Sin sesiones cerradas para este plan.'}
+            </strong>
             <p style={{ margin: '4px 0 0', fontSize: '13px' }}>
-              Para calcular tasas y tiempos, se requieren sesiones en estado <em>cerrada</em> con consentimiento confirmado.
-              Puedes iniciar y completar una sesión desde el menú de sesiones.
+              {isFiltered
+                ? 'No se encontraron sesiones cerradas dentro del período o tareas seleccionadas. Puedes ampliar el rango de fechas o restablecer los filtros para ver el universo completo.'
+                : 'Para calcular tasas y tiempos, se requieren sesiones en estado cerrada con consentimiento confirmado. Puedes iniciar y completar una sesión desde el menú de sesiones.'}
             </p>
           </div>
-          <Link className="button button-primary button-sm" to="/sesiones/nueva">
-            Iniciar nueva sesión
-          </Link>
+          {isFiltered ? (
+            <button
+              type="button"
+              className="button button-outline button-sm"
+              onClick={handleResetFilters}
+              title="Restablecer filtros y consultar todas las sesiones"
+            >
+              Restablecer filtros
+            </button>
+          ) : (
+            <Link className="button button-primary button-sm" to="/sesiones/nueva">
+              Iniciar nueva sesión
+            </Link>
+          )}
         </div>
       )}
 
