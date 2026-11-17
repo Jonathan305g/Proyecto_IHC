@@ -15,7 +15,7 @@ Rama: `feature/s3-03-gemini-pablo`, base develop `11deafc`.
 
 ## Pruebas ejecutadas
 
-- `npm test --prefix backend`: **125 aprobadas, 0 fallidas** (104 existentes y 21 nuevas).
+- `npm test --prefix backend`: **126 aprobadas, 0 fallidas** (104 existentes y 22 nuevas).
 - La suite compila TypeScript antes de probar.
 - `npm test --prefix frontend`: **29 aprobadas, 0 fallidas**.
 - `npm run build --prefix frontend`: compilacion Vite correcta.
@@ -25,12 +25,23 @@ Rama: `feature/s3-03-gemini-pablo`, base develop `11deafc`.
   no envia solicitudes ni usa la demo como reemplazo.
 - `git diff --check`: correcto.
 
-Los 21 casos cubren configuracion, PII previa al envio, solicitud generateContent,
+Los 22 casos cubren configuracion, PII previa al envio, solicitud generateContent,
 JSON Schema y validacion S3-02, reintentos 429/503, Retry-After/RetryInfo, cuota
 diaria/cero, acceso/red, timeout de cuerpo y global, truncamiento, bloqueos,
 JSON/formatos invalidos, tamanos, copia de origenes, exclusion de razonamiento,
 rechazo de herramientas/candidatos multiples, limite maximo de intentos,
 proteccion de URL/clave, inyeccion en Nest y una transferencia HTTP local real.
+La regresion del esquema comprueba que no se envian minItems/maxItems y que Ajv
+sigue rechazando mas de 100 hallazgos, mas de 50 origenes por hallazgo, mas de
+50 observaciones sin hallazgo y hallazgos sin origen; sin reenvio automatico.
+
+## Diagnostico real del 17/11/2026
+
+El equipo comprobo que `gemini-3.5-flash-lite` aparece en su catalogo. La llamada
+real devolvio HTTP 400 `INVALID_ARGUMENT`: el esquema generaba demasiados estados
+para servirlo. Se retiraron las cardinalidades de arrays solo de la proyeccion
+enviada a Gemini. El contrato S3-02 permanece intacto. Hace falta repetir --live
+con esta correccion para acreditar que el proveedor acepta la peticion.
 
 ## Evidencia externa que debe completar el equipo
 

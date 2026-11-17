@@ -43,8 +43,9 @@ export function configurarIA(env: NodeJS.ProcessEnv = process.env): Configuracio
     maxTokens: numero('IA_MAX_OUTPUT_TOKENS', 4096, 128, 8192) }
 }
 
-// El proveedor recibe la estructura estricta; Ajv conserva TODAS las restricciones
-// del contrato canonico, incluso las no soportadas por Structured Outputs.
+// El proveedor recibe campos, tipos y enums. Los limites de arrays anidados
+// multiplican los estados del decodificador de Gemini y pueden causar HTTP 400.
+// Ajv conserva TODAS las restricciones del contrato canonico al recibir la salida.
 export function esquemaProveedor(): unknown {
   const schema = JSON.parse(readFileSync(join(__dirname, '../../contracts/s3-02/respuesta.schema.json'), 'utf8'))
   function proyectar(value: any): any {
@@ -52,7 +53,7 @@ export function esquemaProveedor(): unknown {
     if (!value || typeof value !== 'object') return value
     const result: Record<string, unknown> = {}
     for (const [key, item] of Object.entries(value)) {
-      if (['$schema', '$id', 'title', 'minLength', 'maxLength', 'pattern', 'uniqueItems'].includes(key)) continue
+      if (['$schema', '$id', 'title', 'minLength', 'maxLength', 'pattern', 'uniqueItems', 'minItems', 'maxItems'].includes(key)) continue
       if (key === 'const') result.enum = [item]
       else result[key] = proyectar(item)
     }

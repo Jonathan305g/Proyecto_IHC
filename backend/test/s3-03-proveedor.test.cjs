@@ -55,6 +55,9 @@ test('S3-03: transporte generateContent, schema, token limite y salida S3-02', a
     assert.equal(body.generationConfig.maxOutputTokens, 4096)
     assert.equal(body.generationConfig.responseMimeType, 'application/json')
     assert.deepEqual(body.generationConfig.responseJsonSchema, esquemaProveedor())
+    // Regresion del HTTP 400 real: no enviar cardinalidades de arrays anidados.
+    const remoteSchema = JSON.stringify(body.generationConfig.responseJsonSchema)
+    assert.doesNotMatch(remoteSchema, /"(?:minItems|maxItems)":/)
     assert.deepEqual(body.generationConfig.responseJsonSchema.properties.estado, { enum: ['borrador'], type: 'string' })
     assert.equal(body.generationConfig.responseJsonSchema.properties.hallazgos.items.properties.categoria.type, 'string')
     assert.match(body.systemInstruction.parts[0].text, /datos no confiables/)
@@ -77,6 +80,25 @@ test('S3-03: validacion final conserva restricciones y origen del contrato', asy
     const result = await new ProveedorIA(env(), async () => { calls++; return http(envelope(read(file))) }).analizar(input())
     assert.equal(result.error.code, code, file)
     assert.equal(calls, 1, 'Salida invalida no se repara ni reintenta')
+  }
+})
+
+test('S3-03: Ajv mantiene cardinalidades aunque Gemini recibe arrays sin limites', async () => {
+  const cases = [
+    [data => { data.hallazgos = Array.from({ length: 101 }, () => structuredClone(data.hallazgos[0])) }, 'maxItems'],
+    [data => { data.hallazgos[0].observacion_ids = Array.from({ length: 51 }, (_, i) => `resultado:${i + 1}`) }, 'maxItems'],
+    [data => { data.observaciones_sin_hallazgo = Array.from({ length: 51 }, (_, i) => `resultado:${i + 1}`) }, 'maxItems'],
+    [data => { data.hallazgos[0].observacion_ids = [] }, 'minItems'],
+  ]
+  for (const [mutate, rule] of cases) {
+    const data = valid(); mutate(data)
+    let calls = 0
+    const result = await new ProveedorIA(env(), async () => { calls++; return http(envelope(data)) }).analizar(input())
+    assert.equal(result.ok, false)
+    assert.equal(result.error.code, 'IA_ESQUEMA_INVALIDO')
+    assert.ok(result.error.details.some(detail => detail.rule === rule))
+    assert.equal(result.meta.estado, 'fallido')
+    assert.equal(calls, 1, 'No reparar ni reenviar la salida invalida')
   }
 })
 

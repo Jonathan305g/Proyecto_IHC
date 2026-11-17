@@ -65,8 +65,11 @@ transmitir. Usa los mensajes system/user de S3-02. Solicita JSON Schema estricto
 estructura, campos obligatorios, categorias, severidad y estado borrador,
 mediante `generationConfig.responseMimeType=application/json` y `responseJsonSchema`.
 La proyección de esquema para el proveedor omite limites de longitud,
-patrones y unicidad; conserva limites de cantidad, y convierte `const` en `enum`, para mantener un subconjunto
-estructural compatible. **Ajv aplica después todas las restricciones originales**,
+patrones, unicidad y cardinalidades de arrays (`minItems`/`maxItems`), y convierte
+`const` en `enum`. Los limites de arrays anidados multiplican los estados del
+decodificador; Gemini rechazo la primera prueba real con HTTP 400
+`INVALID_ARGUMENT` por exceso de estados. Se conserva la estructura, campos
+obligatorios y enums en la peticion corregida. **Ajv aplica después todas las restricciones originales**,
 incluidos tamanos, IDs, PII evidente, cobertura y duplicados; el contrato no se flexibiliza.
 
 Solo se acepta un candidato con `finishReason=STOP`. Se concatenan sus partes
