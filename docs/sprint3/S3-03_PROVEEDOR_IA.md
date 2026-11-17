@@ -187,8 +187,9 @@ Si el modelo no existe en la cuenta, el ensayo devuelve IA_CONFIGURACION_PROVEED
 seleccionar explicitamente un modelo de texto con JSON estructurado disponible
 segun AI Studio. No hay cambio automatico a otro modelo o nivel de pago.
 
-La captura de creacion de clave prueba su existencia y nivel gratuito, pero no
-acredita aun el envio desde este adaptador: la prueba real --live debe ejecutarse
-con esa clave en el equipo. Su salida no contiene la clave y puede adjuntarse como
-evidencia. Esta implementacion reemplaza el paquete provisional de OpenAI, que
-no debe importarse ni combinarse con esta rama.
+El equipo aprobo la prueba real --live el 17/11/2026 a las 17:19 de Ecuador con
+`gemini-3.5-flash-lite`: un intento, estado completado, respuesta borrador y un
+hallazgo con contrato y origen validos. La salida y las condiciones del ensayo
+estan registradas en [S3-03_VERIFICACION.md](S3-03_VERIFICACION.md).
+Esta implementacion reemplaza el paquete provisional de OpenAI, que no debe
+importarse ni combinarse con esta rama.
