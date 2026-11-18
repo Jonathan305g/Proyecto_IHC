@@ -33,6 +33,16 @@ Prefijo `/api`. **Todas las rutas requieren `Authorization: Bearer <access_token
 
 IDs BIGINT se intercambian como cadenas. Los cuerpos se validan sin coerciones de objetos ni campos desconocidos. Errores `{ code, message, details }`, con 400 para datos inválidos, 401/403 para acceso, 404 inexistente, 409 conflicto, 413 archivo excesivo, 503 servicio/configuración no disponible y 500 para errores internos sin revelar secretos.
 
+### Análisis con IA (S3-07)
+
+La [API de análisis](../docs/sprint3/S3-07_API_ANALISIS_IA.md) añade POST
+`/planes/:planId/analisis-ia`, GET `/:analisisId` y las acciones relativas
+PUT `/:analisisId/revision`, POST `/:analisisId/ejecutar` y POST
+`/:analisisId/reintentar`. Utiliza AuthGuard global, fuentes S3-02 y ProveedorIA
+S3-03. La ejecución es síncrona, con avance durable por grupo y propuestas solo
+en borrador. Aplicar `migrations/20261118000000_s3_07_ejecuciones_ia.sql` antes
+de usarla, también en instalaciones nuevas. [Pruebas y límites](../docs/sprint3/S3-07_VERIFICACION.md).
+
 ### Indicadores y filtros (S3-04)
 
 Las tres rutas de indicadores aceptan `desde`, `hasta` (ISO 8601 con zona explícita)

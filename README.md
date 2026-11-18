@@ -7,7 +7,7 @@ Proyecto de Interacción Humano–Computador: preparación de pruebas, participa
 - Sprint 2: planes y tareas; sesiones, consentimiento y cupos; cronómetro, resultados, recuperación de borradores y evidencias compartidas.
 - Sprint 3 / S3-04: [API privada de indicadores y filtros](docs/sprint3/S3-04_API_INDICADORES.md) basada en S3-01, con reporte general y por tarea. [Verificación y pendientes](docs/sprint3/S3-04_VERIFICACION.md).
 - Sprint 3 / S3-03: [adaptador de Gemini](docs/sprint3/S3-03_PROVEEDOR_IA.md), modos disabled/demo/gemini, clave solo en backend, limites, reintentos y validacion S3-02. [Comprobacion y activacion real](docs/sprint3/S3-03_VERIFICACION.md).
-- Sprint 3: la BD prepara análisis de IA, hallazgos e historias. Sus pantallas y servicios corresponden al trabajo siguiente; no se presentan como implementados.
+- Sprint 3 / S3-07: [API privada de análisis y estados](docs/sprint3/S3-07_API_ANALISIS_IA.md), revisión de privacidad, grupos, borradores y reintentos recuperables. Requiere su migración operativa. [Verificación y pendientes](docs/sprint3/S3-07_VERIFICACION.md). Las pantallas, persistencia de hallazgos y aprobación de historias corresponden a las actividades siguientes.
 - Integración y activación de esta rama: [PREPARACION_SPRINT_3.md](docs/PREPARACION_SPRINT_3.md).
 
 ## Requisitos e instalación
@@ -72,4 +72,4 @@ El segundo comando crea datos temporales propios y los retira al terminar. Un re
 
 ## Git Flow
 
-Crear ramas desde `develop`, abrir PR hacia `develop` y reservar `main` para versiones entregables. Esta corrección no implementa anticipadamente los módulos de IA o Scrum.
+Crear ramas desde `develop`, abrir PR hacia `develop` y reservar `main` para versiones entregables.
