@@ -13,7 +13,9 @@
 ## Instalación nueva
 
 1. Ejecuta `01_esquema.sql` desde SQL Editor con el rol administrador de tu proyecto.
-2. Ejecuta `03_storage_supabase.sql`.
+2. Aplica los archivos de `../backend/migrations/` en orden por nombre, incluida
+   `20261118000000_s3_07_ejecuciones_ia.sql` para el diario operativo S3-07.
+   Después ejecuta `03_storage_supabase.sql`.
 3. Opcionalmente, carga `02_datos_ejemplo.sql` en una BD de desarrollo. Los registros DEMO son ficticios.
 4. Configura el backend según el README principal. El esquema no carga credenciales ni crea cuentas de Auth.
 
@@ -25,7 +27,8 @@ Conserva los datos existentes y aplica en orden:
 2. `../backend/migrations/002_s2_08_evidencias.sql` (metadatos de archivos).
 3. `../backend/migrations/003_pre_sprint3_storage_cleanup.sql` (cola de eliminación).
 4. `../backend/migrations/20261101165559_pre_sprint3_indices_claves_foraneas.sql` (ocho índices para claves foráneas).
-4. `03_storage_supabase.sql` (bucket privado).
+5. `../backend/migrations/20261118000000_s3_07_ejecuciones_ia.sql` (diario, revisión y reservas de ejecución de IA).
+6. `03_storage_supabase.sql` (bucket privado).
 
 Estas migraciones son repetibles. Ejecutar de nuevo un `CREATE TABLE IF NOT EXISTS` no actualiza las columnas de una tabla existente: para actualizar utiliza las migraciones. El backend no ejecuta DDL durante el arranque.
 
@@ -37,4 +40,4 @@ Los archivos se almacenan en el bucket privado. `evidencias.ruta` contiene `supa
 
 ## Alcance del modelo
 
-Planes, tareas, participantes, sesiones, resultados y evidencias forman el núcleo actual. `analisis_ia`, `hallazgos`, `historias`, `miembros`, `sprints`, `revisiones_sprint`, `retrospectivas` y `acuerdos_retrospectiva` preparan las siguientes actividades. Tener sus tablas no implica que sus funcionalidades estén desarrolladas.
+Planes, tareas, participantes, sesiones, resultados y evidencias forman el núcleo actual. S3-07 utiliza `analisis_ia` y su migración como diario operativo recuperable; véase la [API](../docs/sprint3/S3-07_API_ANALISIS_IA.md). `hallazgos`, `historias`, `miembros`, `sprints`, `revisiones_sprint`, `retrospectivas` y `acuerdos_retrospectiva` preparan las siguientes actividades. Tener sus tablas no implica que sus funcionalidades estén desarrolladas.

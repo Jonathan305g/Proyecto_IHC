@@ -9,6 +9,12 @@ const codes: Record<number, string> = {
 }
 
 export function normalizeError(error: unknown): { status: number; body: ApiError } {
+  // Express rechaza JSON >100 KiB antes del controlador; no es HttpException.
+  // La revisión S3-07 puede alcanzar ese límite: conservar 413 sin exponer el cuerpo.
+  if (error && typeof error === 'object' && 'type' in error && error.type === 'entity.too.large'
+    && 'status' in error && error.status === 413) {
+    return { status: 413, body: { code: 'PAYLOAD_TOO_LARGE', message: 'El cuerpo JSON supera el límite permitido.', details: [] } }
+  }
   const pgCode = error && typeof error === 'object' && 'code' in error ? error.code : undefined
   if (pgCode === '23505' || pgCode === '23503') {
     return { status: 409, body: { code: 'CONFLICT', message: 'Los datos entran en conflicto con un registro existente o sus relaciones.', details: [] } }
