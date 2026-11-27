@@ -9,6 +9,9 @@ import PlanDetailPage from './pages/PlanDetailPage.jsx'
 import NewSessionPage from './pages/NewSessionPage.jsx'
 import SessionDetailPage from './pages/SessionDetailPage.jsx'
 import SessionRunPage from './pages/SessionRunPage.jsx'
+import ReviewPage from './pages/ReviewPage.jsx'
+import StoryDetailPage from './pages/StoryDetailPage.jsx'
+import './review.css'
 
 export default function App() {
   return (
@@ -23,6 +26,8 @@ export default function App() {
         <Route path="sesiones/:id" element={<SessionDetailPage />} />
         <Route path="sesiones/:id/ejecutar" element={<SessionRunPage />} />
         <Route path="resultados" element={<ResultsPage />} />
+        <Route path="revision" element={<ReviewPage />} />
+        <Route path="historias/:id" element={<StoryDetailPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>

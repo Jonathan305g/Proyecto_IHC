@@ -6,6 +6,7 @@ const navigation = [
   { to: '/planes', label: 'Planes', icon: '▤' },
   { to: '/sesiones', label: 'Sesiones', icon: '◷' },
   { to: '/resultados', label: 'Resultados', icon: '▥' },
+  { to: '/revision', label: 'Revisión de IA', icon: '✓' },
 ]
 
 export default function AppLayout() {
