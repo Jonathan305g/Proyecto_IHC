@@ -11,7 +11,9 @@ import SessionDetailPage from './pages/SessionDetailPage.jsx'
 import SessionRunPage from './pages/SessionRunPage.jsx'
 import ReviewPage from './pages/ReviewPage.jsx'
 import StoryDetailPage from './pages/StoryDetailPage.jsx'
+import BacklogPage from './pages/BacklogPage.jsx'
 import './review.css'
+import './backlog.css'
 
 export default function App() {
   return (
@@ -28,6 +30,7 @@ export default function App() {
         <Route path="resultados" element={<ResultsPage />} />
         <Route path="revision" element={<ReviewPage />} />
         <Route path="historias/:id" element={<StoryDetailPage />} />
+        <Route path="backlog" element={<BacklogPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>

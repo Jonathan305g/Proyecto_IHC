@@ -8,7 +8,9 @@ export async function setupReview(page, options = {}) {
  const group = { id: '1', estado: 'completado', intentos: 1, reintentable: false, meta: { modo: 'gemini' }, solicitud: { observaciones: [{ id: 'resultado:1', texto: source.observacion_original, tarea: { titulo: source.titulo_tarea, criterio_exito: source.criterio_exito } }] } }
  const analysis = { id: '7', plan_id: '1', estado: options.partial ? 'parcial' : 'completado', revision_en: '2026-11-27T12:00:00Z', max_intentos: 3, grupos: [group] }
  if (options.partial) analysis.grupos.push({ id: '2', estado: 'fallido', intentos: 1, reintentable: true, error: { code: 'IA_TIEMPO_AGOTADO', message: 'Tiempo agotado' }, solicitud: { observaciones: [] } })
- const state = { findings: options.empty ? [] : [finding], analyses: options.empty ? [] : [analysis], stories: [], approvals: 0, version: 1, calls: [], lost: options.approvalResponseLost }
+ const state = { findings: options.empty ? [] : [finding], analyses: options.empty ? [] : [analysis], stories: [], approvals: 0, version: 1, calls: [], lost: options.approvalResponseLost,
+  manualLost: options.manualResponseLost, orderConflict: options.orderConflict, failList: false, requests: new Map() }
+ if (options.seedStories) state.stories = [1, 2, 3].map(n => ({ id: String(n), plan_id: '1', hallazgo_id: null, titulo: `Mejora manual ${n}`, descripcion: `Descripción ${n}`, criterio_aceptacion: `Criterio ${n}`, prioridad: 3, puntos: null, estado: 'pendiente', orden: n, version: 1, origen: 'manual' }))
  await page.route('**/api/**', async route => {
   const req = route.request(), url = new URL(req.url()), method = req.method(), body = req.postData() ? req.postDataJSON() : null
   expect(req.headers().authorization).toBe(`Bearer ${token}`)
@@ -36,8 +38,26 @@ export async function setupReview(page, options = {}) {
   }
   if (suffix === 'hallazgos/1/descartar') { finding.estado = 'rechazado'; finding.comentario_revision = body.comentario; finding.version++; return reply(finding) }
   if (suffix === 'hallazgos/1') return reply(finding)
+  if (suffix === 'historias' && method === 'GET') {
+   if (state.failList) return reply({ message: 'No se pudo consultar el backlog' }, 503)
+   const stories = state.stories.filter(s => (!url.searchParams.get('estado') || s.estado === url.searchParams.get('estado')) && (!url.searchParams.get('prioridad') || String(s.prioridad) === url.searchParams.get('prioridad'))).sort((a, b) => a.orden - b.orden)
+   return reply({ plan_id: '1', version_orden: state.version, historias: stories })
+  }
+  if (suffix === 'historias' && method === 'POST') {
+   let s = state.requests.get(body.solicitud_id)
+   if (!s) { s = { ...body, id: String(Math.max(0, ...state.stories.map(s => Number(s.id))) + 1), plan_id: '1', hallazgo_id: null, orden: state.stories.length + 1, version: 1, origen: 'manual' }; state.stories.push(s); state.requests.set(body.solicitud_id, s); state.version++ }
+   if (state.manualLost) { state.manualLost = false; return reply({ message: 'Confirmación de guardado perdida' }, 503) }
+   return reply(s, 201)
+  }
+  if (suffix === 'historias/orden') {
+   if (state.orderConflict) { state.orderConflict = false; state.version++; return reply({ message: 'El orden cambió. Recarga el backlog.' }, 409) }
+   if (body.version_orden !== state.version) return reply({ message: 'Versión de orden obsoleta' }, 409)
+   body.historia_ids.forEach((id, i) => { state.stories.find(s => s.id === id).orden = i + 1 }); state.version++
+   return reply({ version_orden: state.version, historia_ids: body.historia_ids })
+  }
   const detail = suffix.match(/^historias\/(\d+)$/)
   if (detail && method === 'GET') { const s = state.stories.find(s => s.id === detail[1]); return s ? reply({ ...s, hallazgo: s.hallazgo_id ? finding : null }) : reply({ message: 'Historia inexistente' }, 404) }
+  if (detail && method === 'PATCH') { const s = state.stories.find(s => s.id === detail[1]); if (s.version !== body.version) return reply({ message: 'La historia cambió. Recarga.' }, 409); Object.assign(s, body, { version: s.version + 1 }); return reply(s) }
   return reply({ message: 'Ruta no prevista en prueba: ' + suffix }, 501)
  })
  return state

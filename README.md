@@ -7,14 +7,13 @@ Proyecto de Interacción Humano–Computador: preparación de pruebas, participa
 - Sprint 2: planes y tareas; sesiones, consentimiento y cupos; cronómetro, resultados, recuperación de borradores y evidencias compartidas.
 - Sprint 3 / S3-04: [API privada de indicadores y filtros](docs/sprint3/S3-04_API_INDICADORES.md) basada en S3-01, con reporte general y por tarea. [Verificación y pendientes](docs/sprint3/S3-04_VERIFICACION.md).
 - Sprint 3 / S3-03: [adaptador de Gemini](docs/sprint3/S3-03_PROVEEDOR_IA.md), modos disabled/demo/gemini, clave solo en backend, limites, reintentos y validacion S3-02. [Comprobacion y activacion real](docs/sprint3/S3-03_VERIFICACION.md).
-- Sprint 3 / S3-07: [API privada de análisis y estados](docs/sprint3/S3-07_API_ANALISIS_IA.md), revisión de privacidad, grupos, borradores y reintentos recuperables. Requiere su migración operativa. [Verificación y pendientes](docs/sprint3/S3-07_VERIFICACION.md). Las pantallas, persistencia de hallazgos y aprobación de historias corresponden a las actividades siguientes.
+- Sprint 3 / S3-07: [API privada de análisis y estados](docs/sprint3/S3-07_API_ANALISIS_IA.md), revisión de privacidad, grupos, borradores y reintentos recuperables. Requiere su migración operativa. [Verificación y pendientes](docs/sprint3/S3-07_VERIFICACION.md). Su consumo por la interfaz y la persistencia de revision se integran en S3-08, S3-09 y S3-10.
+- Sprint 3 / S3-08: [hallazgos e historias persistentes](docs/sprint3/S3-08_HALLAZGOS_HISTORIAS.md), origen N:M, aprobacion atomica, UUID de reintento y orden durable. Aplicar su migracion.
+- Sprint 3 / S3-09: [revision humana](docs/sprint3/S3-09_REVISION_HUMANA.md) en `/revision`, con privacidad, edicion, descarte y aprobacion explicita.
+- Sprint 3 / S3-10: [backlog de mejoras](docs/sprint3/S3-10_BACKLOG_MEJORAS.md) en `/backlog`, creacion manual, origen, edicion, filtros y orden persistente. [Verificacion integrada](docs/sprint3/S3-10_VERIFICACION.md).
 - Integración y activación de esta rama: [PREPARACION_SPRINT_3.md](docs/PREPARACION_SPRINT_3.md).
 
 ## Requisitos e instalación
-
-Sprint 3 / S3-08: [hallazgos revisados e historias persistentes](docs/sprint3/S3-08_HALLAZGOS_HISTORIAS.md), aprobacion atomica, origen N:M, reintentos sin duplicados y orden del backlog. Aplicar su migracion antes de usar las rutas nuevas.
-
-Sprint 3 / S3-09: [revision humana de sugerencias](docs/sprint3/S3-09_REVISION_HUMANA.md) en `/revision`, con preparacion del analisis, privacidad, edicion, descarte y aprobacion explicita. Historia y origen consultables sin aprobar automaticamente propuestas.
 
 Node.js **22.12 o superior**, npm y un proyecto Supabase. Desde la raíz:
 
