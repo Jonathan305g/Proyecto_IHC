@@ -7,9 +7,10 @@ import { AuthGuard } from './auth.guard'
 import { APP_FILTER, APP_GUARD } from '@nestjs/core'
 import { ApiErrorFilter } from './api-error.filter'
 import { AnalisisModule } from './analisis-ia/analisis.module'
+import { BacklogModule } from './backlog/backlog.module'
 
 @Module({
-  imports: [PlansModule, TasksModule, SessionsModule, EvidencesModule, AnalisisModule],
+  imports: [PlansModule, TasksModule, SessionsModule, EvidencesModule, AnalisisModule, BacklogModule],
   providers: [AuthGuard, { provide: APP_FILTER, useClass: ApiErrorFilter }, { provide: APP_GUARD, useExisting: AuthGuard }],
 })
 export class AppModule {}
