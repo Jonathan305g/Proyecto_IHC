@@ -28,7 +28,8 @@ Conserva los datos existentes y aplica en orden:
 3. `../backend/migrations/003_pre_sprint3_storage_cleanup.sql` (cola de eliminación).
 4. `../backend/migrations/20261101165559_pre_sprint3_indices_claves_foraneas.sql` (ocho índices para claves foráneas).
 5. `../backend/migrations/20261118000000_s3_07_ejecuciones_ia.sql` (diario, revisión y reservas de ejecución de IA).
-6. `03_storage_supabase.sql` (bucket privado).
+6. `../backend/migrations/20261127000000_s3_08_hallazgos_historias.sql` (revision humana, origen N:M, historias y orden persistente).
+7. `03_storage_supabase.sql` (bucket privado).
 
 Estas migraciones son repetibles. Ejecutar de nuevo un `CREATE TABLE IF NOT EXISTS` no actualiza las columnas de una tabla existente: para actualizar utiliza las migraciones. El backend no ejecuta DDL durante el arranque.
 
@@ -40,4 +41,4 @@ Los archivos se almacenan en el bucket privado. `evidencias.ruta` contiene `supa
 
 ## Alcance del modelo
 
-Planes, tareas, participantes, sesiones, resultados y evidencias forman el núcleo actual. S3-07 utiliza `analisis_ia` y su migración como diario operativo recuperable; véase la [API](../docs/sprint3/S3-07_API_ANALISIS_IA.md). `hallazgos`, `historias`, `miembros`, `sprints`, `revisiones_sprint`, `retrospectivas` y `acuerdos_retrospectiva` preparan las siguientes actividades. Tener sus tablas no implica que sus funcionalidades estén desarrolladas.
+Planes, tareas, participantes, sesiones, resultados y evidencias forman el núcleo actual. S3-07 utiliza `analisis_ia` como diario recuperable. S3-08 implementa revision y persistencia de `hallazgos`, su origen N:M e `historias` con orden persistente: [contrato e instalacion](../docs/sprint3/S3-08_HALLAZGOS_HISTORIAS.md). `miembros`, `sprints`, `revisiones_sprint`, `retrospectivas` y `acuerdos_retrospectiva` preparan las actividades del Sprint 4.

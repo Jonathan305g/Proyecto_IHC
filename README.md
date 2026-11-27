@@ -12,6 +12,8 @@ Proyecto de Interacción Humano–Computador: preparación de pruebas, participa
 
 ## Requisitos e instalación
 
+Sprint 3 / S3-08: [hallazgos revisados e historias persistentes](docs/sprint3/S3-08_HALLAZGOS_HISTORIAS.md), aprobacion atomica, origen N:M, reintentos sin duplicados y orden del backlog. Aplicar su migracion antes de usar las rutas nuevas.
+
 Node.js **22.12 o superior**, npm y un proyecto Supabase. Desde la raíz:
 
 ```powershell
