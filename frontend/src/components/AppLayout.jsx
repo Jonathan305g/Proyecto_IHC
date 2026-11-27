@@ -7,6 +7,7 @@ const navigation = [
   { to: '/sesiones', label: 'Sesiones', icon: '◷' },
   { to: '/resultados', label: 'Resultados', icon: '▥' },
   { to: '/revision', label: 'Revisión de IA', icon: '✓' },
+  { to: '/backlog', label: 'Backlog', icon: '≡' },
 ]
 
 export default function AppLayout() {

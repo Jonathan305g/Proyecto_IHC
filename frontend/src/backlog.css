@@ -1,0 +1,18 @@
+.backlog-workspace { display: grid; gap: 24px; }
+.backlog-workspace .form-panel { max-width: none; }
+.backlog-toolbar { display: flex; align-items: end; gap: 18px; flex-wrap: wrap; }
+.backlog-toolbar label { display: block; margin-bottom: 8px; }
+.backlog-toolbar select { min-width: 170px; }
+.backlog-table-wrap { overflow-x: auto; }
+.backlog-table { width: 100%; border-collapse: collapse; }
+.backlog-table th, .backlog-table td { padding: 14px 10px; text-align: left; vertical-align: top; border-bottom: 1px solid #d6e0ec; }
+.backlog-table th { background: #edf3fa; color: #17304a; }
+.backlog-table .highlight-story { background: #edf7ef; }
+.backlog-table .button { white-space: nowrap; }
+.backlog-row-actions { display: flex; flex-wrap: wrap; gap: 8px; min-width: 210px; }
+.story-form fieldset { display: grid; gap: 14px; border: 1px solid #c6d3e3; border-radius: 10px; padding: 16px; min-width: 0; }
+.story-form input, .story-form select, .story-form textarea { width: 100%; box-sizing: border-box; }
+.story-form textarea { min-height: 95px; resize: vertical; }
+.story-form-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 18px; }
+.backlog-workspace :focus-visible { outline: 3px solid #1761a0; outline-offset: 3px; }
+@media(max-width:700px) { .story-form-grid { grid-template-columns: 1fr; } .backlog-toolbar { display: grid; } }

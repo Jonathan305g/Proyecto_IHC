@@ -19,6 +19,7 @@ export default function StoryDetailPage() {
     {data && <article className="form-panel story-detail">
       <h2>{data.titulo}</h2><p className="preserve-text">{data.descripcion}</p><h3>Criterio de aceptación</h3><p className="preserve-text">{data.criterio_aceptacion || 'Sin criterio registrado (historia legada).'}</p>
       <p>Prioridad: {data.prioridad} · Puntos: {data.puntos ?? 'Sin estimar'} · Estado: {data.estado} · Orden: {data.orden}</p>
+      <p><Link className="button button-outline" to={`/backlog?plan_id=${planId}&historia_id=${id}`}>Localizar en el backlog</Link></p>
       {data.hallazgo ? <><h3>Hallazgo de origen #{data.hallazgo.id}</h3><p>{data.hallazgo.resumen}</p>
         {data.hallazgo.observaciones.map(o => <section key={o.resultado_id} className="review-source"><strong>Resultado #{o.resultado_id} · {o.tarea_titulo}</strong><p className="preserve-text">{o.texto_original}</p></section>)}
         <Link className="button button-outline" to={`/revision?plan_id=${planId}&hallazgo_id=${data.hallazgo.id}`}>Consultar revisión de origen</Link>
