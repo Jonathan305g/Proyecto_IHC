@@ -465,5 +465,105 @@
     grid-template-columns: 1fr;
     gap: 8px;
   }
+  .filters-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .date-inputs-row {
+    flex-direction: column !important;
+  }
+}
+
+/* Panel de Filtros de Indicadores (S3-06 / HU-05) */
+.dashboard-filters-panel {
+  background: #ffffff;
+  border: 1px solid #dce4ed;
+  border-radius: 10px;
+  padding: 18px 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.filters-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #edf2f7;
+}
+
+.active-filters-summary {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin-bottom: 16px;
+  font-size: 13px;
+  color: #1e40af;
+}
+
+.active-filters-summary .summary-text {
+  flex: 1;
+}
+
+.filters-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.filters-fieldset {
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #fafbfd;
+}
+
+.filters-legend {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1e293b;
+  padding: 0 6px;
+}
+
+.date-inputs-row {
+  display: flex;
+  gap: 12px;
+}
+
+.filter-input-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.filter-input-col input[type="date"] {
+  width: 100%;
+  padding: 7px 10px;
+  font-size: 13px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #fff;
+  color: #172536;
+}
+
+.filter-input-col input[type="date"]:focus-visible {
+  outline: 2px solid #19558d;
+  outline-offset: 1px;
+}
+
+.task-checkbox-row:hover {
+  background: #f1f5f9 !important;
+}
+
+.task-checkbox-row:focus-within {
+  outline: 2px solid #19558d;
 }
 

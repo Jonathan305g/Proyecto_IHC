@@ -94,6 +94,177 @@ export function formatCount(value, unit = '', fallback = 'Sin datos') {
 }
 
 /**
+ * Zona horaria de Ecuador continental (UTC-05:00 / America/Guayaquil).
+ */
+export const ECUADOR_TIMEZONE_OFFSET = '-05:00'
+
+/**
+ * Convierte una fecha a formato ISO 8601 con zona horaria explícita.
+ * Cumple con el contrato S3-01 / S3-04:
+ * - Para límites de inicio ('desde'): establece 00:00:00 en la zona seleccionada.
+ * - Para límites de fin ('hasta'): calcula el inicio del día siguiente exclusivo (00:00:00),
+ *   abarcando completamente el día seleccionado por el usuario en su zona local.
+ * Si ya viene en formato ISO completo con Z o zona (contiene 'T'), se valida y conserva.
+ */
+export function formatDateToIsoLimit(dateString, isEnd = false, offset = ECUADOR_TIMEZONE_OFFSET) {
+  if (!dateString || typeof dateString !== 'string') return null
+  const trimmed = dateString.trim()
+  if (!trimmed) return null
+
+  // Si ya es un timestamp ISO 8601 con zona explícita
+  if (trimmed.includes('T')) {
+    const isoRegex = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.(\d{1,6}))?(Z|[+-](\d{2}):(\d{2}))$/
+    if (!isoRegex.test(trimmed)) {
+      throw new Error(`Formato de fecha ISO inválido: ${trimmed}`)
+    }
+    return trimmed
+  }
+
+  // Si viene en formato fecha 'YYYY-MM-DD'
+  const dateRegex = /^(\d{4})-(\d{2})-(\d{2})$/
+  const match = dateRegex.exec(trimmed)
+  if (!match) {
+    throw new Error(`Formato de fecha inválido (se esperaba YYYY-MM-DD): ${trimmed}`)
+  }
+
+  const [, year, month, day] = match
+  const y = Number(year), m = Number(month), d = Number(day)
+  const isLeap = y % 4 === 0 && (y % 100 !== 0 || y % 400 === 0)
+  const daysInMonth = [31, isLeap ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+  if (m < 1 || m > 12 || d < 1 || d > daysInMonth[m - 1]) {
+    throw new Error(`Fecha de calendario inválida: ${trimmed}`)
+  }
+
+  if (!isEnd) {
+    return `${trimmed}T00:00:00${offset}`
+  }
+
+  // Para límite superior ('hasta' exclusivo en SQL), sumar 1 día calendario en UTC
+  const nextDate = new Date(Date.UTC(y, m - 1, d + 1))
+  const nextDateStr = nextDate.toISOString().slice(0, 10)
+  return `${nextDateStr}T00:00:00${offset}`
+}
+
+/**
+ * Valida los parámetros de filtro antes de enviarlos a la API S3-04 (HU-05 / S3-06).
+ * Reglas del contrato:
+ * - Selección de tareas no puede estar vacía si se personaliza.
+ * - Período debe cumplir desde < hasta.
+ * - Restablecer utiliza NULL para período y tareas.
+ */
+export function validateIndicatorFilters({
+  desdeDate = '',
+  hastaDate = '',
+  selectedTaskIds = [],
+  allTaskIds = [],
+  offset = ECUADOR_TIMEZONE_OFFSET,
+} = {}) {
+  // 1. Validar selección de tareas
+  const normalizedTaskIds = (selectedTaskIds || []).map(String)
+  const normalizedAllIds = (allTaskIds || []).map(String)
+
+  if (normalizedAllIds.length > 0 && normalizedTaskIds.length === 0) {
+    return {
+      valid: false,
+      error: 'La selección de tareas no puede estar vacía. Selecciona al menos una tarea del plan.',
+      filters: null,
+    }
+  }
+
+  // Si todas las tareas del plan están seleccionadas o no hay tareas especificadas,
+  // enviar null para que la consulta incluya todas las tareas (contrato S3-01 / S3-04).
+  const allSelected =
+    normalizedAllIds.length > 0 &&
+    normalizedTaskIds.length === normalizedAllIds.length &&
+    normalizedAllIds.every((id) => normalizedTaskIds.includes(id))
+
+  const finalTareaIds = allSelected || normalizedTaskIds.length === 0 ? null : normalizedTaskIds
+
+  // 2. Validar fechas
+  let desdeIso = null
+  let hastaIso = null
+
+  try {
+    desdeIso = formatDateToIsoLimit(desdeDate, false, offset)
+  } catch (err) {
+    return {
+      valid: false,
+      error: `Fecha "Desde" inválida: ${err.message}`,
+      filters: null,
+    }
+  }
+
+  try {
+    hastaIso = formatDateToIsoLimit(hastaDate, true, offset)
+  } catch (err) {
+    return {
+      valid: false,
+      error: `Fecha "Hasta" inválida: ${err.message}`,
+      filters: null,
+    }
+  }
+
+  if (desdeIso && hastaIso) {
+    const startMillis = Date.parse(desdeIso)
+    const endMillis = Date.parse(hastaIso)
+    if (startMillis >= endMillis) {
+      return {
+        valid: false,
+        error: 'El período es inválido: la fecha de inicio ("Desde") debe ser anterior a la fecha de fin ("Hasta").',
+        filters: null,
+      }
+    }
+  }
+
+  return {
+    valid: true,
+    error: null,
+    filters: {
+      desde: desdeIso,
+      hasta: hastaIso,
+      tarea_ids: finalTareaIds,
+    },
+  }
+}
+
+/**
+ * Determina si hay algún filtro actualmente activo.
+ */
+export function hasActiveFilters(filters) {
+  if (!filters) return false
+  return Boolean(
+    filters.desde ||
+    filters.hasta ||
+    (Array.isArray(filters.tarea_ids) && filters.tarea_ids.length > 0) ||
+    (typeof filters.tarea_ids === 'string' && filters.tarea_ids.trim().length > 0)
+  )
+}
+
+/**
+ * Genera una descripción legible para el usuario de los filtros activos.
+ */
+export function describeActiveFilters(filters) {
+  if (!hasActiveFilters(filters)) return 'Reporte completo (sin filtros activos)'
+  const parts = []
+
+  if (filters.desde || filters.hasta) {
+    const desdeStr = filters.desde ? filters.desde.slice(0, 10) : 'Inicio'
+    const hastaStr = filters.hasta ? filters.hasta.slice(0, 10) : 'Fin'
+    parts.push(`Período [${desdeStr} a ${hastaStr}]`)
+  }
+
+  if (filters.tarea_ids) {
+    const ids = Array.isArray(filters.tarea_ids)
+      ? filters.tarea_ids
+      : String(filters.tarea_ids).split(',')
+    const count = ids.length
+    parts.push(`${count} ${count === 1 ? 'tarea seleccionada' : 'tareas seleccionadas'}`)
+  }
+
+  return parts.join(' · ')
+}
+
+/**
  * Reporte de referencia oficial S3-01 / S3-04 (Caso 1 de verificación: 6 evaluados, 3 pendientes).
  * Puede usarse para pruebas y desarrollo paralelo.
  */

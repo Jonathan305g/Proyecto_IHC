@@ -6,6 +6,11 @@ import {
   formatSeconds,
   formatErrors,
   formatCount,
+  formatDateToIsoLimit,
+  validateIndicatorFilters,
+  hasActiveFilters,
+  describeActiveFilters,
+  ECUADOR_TIMEZONE_OFFSET,
   MOCK_S301_REFERENCE_REPORT,
 } from '../src/domain/indicadores.js'
 import { buildQueryString } from '../src/services/indicadores.js'
@@ -161,6 +166,123 @@ test('buildQueryString serializa parámetros correctamente', () => {
     buildQueryString({ tarea_ids: '1001,1002' }),
     '?tarea_ids=1001%2C1002'
   )
+})
+
+test('formatDateToIsoLimit convierte fechas YYYY-MM-DD y timestamps según contrato S3-01/S3-04', () => {
+  assert.equal(formatDateToIsoLimit(''), null)
+  assert.equal(formatDateToIsoLimit(null), null)
+
+  // Desde (inicio inclusivo a las 00:00:00 del día local Ecuador)
+  assert.equal(
+    formatDateToIsoLimit('2026-10-20', false),
+    '2026-10-20T00:00:00-05:00'
+  )
+
+  // Hasta (fin exclusivo: inicio del día siguiente calendario)
+  assert.equal(
+    formatDateToIsoLimit('2026-10-22', true),
+    '2026-10-23T00:00:00-05:00'
+  )
+
+  // Transiciones de fin de mes y año
+  assert.equal(formatDateToIsoLimit('2026-10-31', true), '2026-11-01T00:00:00-05:00')
+  assert.equal(formatDateToIsoLimit('2026-12-31', true), '2027-01-01T00:00:00-05:00')
+  assert.equal(formatDateToIsoLimit('2024-02-28', true), '2024-02-29T00:00:00-05:00') // bisiesto
+  assert.equal(formatDateToIsoLimit('2026-02-28', true), '2026-03-01T00:00:00-05:00') // no bisiesto
+
+  // Mantiene formato si ya es ISO con Z u offset
+  assert.equal(
+    formatDateToIsoLimit('2026-10-20T05:00:00Z', false),
+    '2026-10-20T05:00:00Z'
+  )
+
+  // Rechaza fechas inválidas
+  assert.throws(() => formatDateToIsoLimit('2026-02-29', false), /Fecha de calendario inválida/)
+  assert.throws(() => formatDateToIsoLimit('2026-13-01', false), /Fecha de calendario inválida/)
+  assert.throws(() => formatDateToIsoLimit('invalida', false), /Formato de fecha inválido/)
+})
+
+test('validateIndicatorFilters valida reglas de selección de tareas (S3-06)', () => {
+  const allTaskIds = ['1001', '1002', '1003']
+
+  // Selección vacía de tareas es inválida (contrato S3-01 / S3-04)
+  const emptyRes = validateIndicatorFilters({
+    selectedTaskIds: [],
+    allTaskIds,
+  })
+  assert.equal(emptyRes.valid, false)
+  assert.match(emptyRes.error, /selección de tareas no puede estar vacía/)
+
+  // Todas las tareas seleccionadas normaliza tarea_ids a null (reporte completo)
+  const allRes = validateIndicatorFilters({
+    selectedTaskIds: ['1001', '1002', '1003'],
+    allTaskIds,
+  })
+  assert.equal(allRes.valid, true)
+  assert.equal(allRes.error, null)
+  assert.equal(allRes.filters.tarea_ids, null)
+
+  // Subconjunto de tareas conserva el array seleccionado
+  const subRes = validateIndicatorFilters({
+    selectedTaskIds: ['1001', '1002'],
+    allTaskIds,
+  })
+  assert.equal(subRes.valid, true)
+  assert.deepEqual(subRes.filters.tarea_ids, ['1001', '1002'])
+})
+
+test('validateIndicatorFilters valida coherencia de período desde < hasta', () => {
+  // Rango válido
+  const validRange = validateIndicatorFilters({
+    desdeDate: '2026-10-20',
+    hastaDate: '2026-10-22',
+  })
+  assert.equal(validRange.valid, true)
+  assert.equal(validRange.filters.desde, '2026-10-20T00:00:00-05:00')
+  assert.equal(validRange.filters.hasta, '2026-10-23T00:00:00-05:00')
+
+  // Mismo día (válido porque 'hasta' exclusivo se extiende al inicio del día siguiente)
+  const sameDay = validateIndicatorFilters({
+    desdeDate: '2026-10-20',
+    hastaDate: '2026-10-20',
+  })
+  assert.equal(sameDay.valid, true)
+  assert.equal(sameDay.filters.desde, '2026-10-20T00:00:00-05:00')
+  assert.equal(sameDay.filters.hasta, '2026-10-21T00:00:00-05:00')
+
+  // Rango invertido
+  const inverted = validateIndicatorFilters({
+    desdeDate: '2026-10-25',
+    hastaDate: '2026-10-20',
+  })
+  assert.equal(inverted.valid, false)
+  assert.match(inverted.error, /debe ser anterior a la fecha de fin/)
+
+  // Rango invertido con ISO timestamps explícitos
+  const invertedIso = validateIndicatorFilters({
+    desdeDate: '2026-10-22T00:00:00Z',
+    hastaDate: '2026-10-20T00:00:00Z',
+  })
+  assert.equal(invertedIso.valid, false)
+  assert.match(invertedIso.error, /debe ser anterior a la fecha de fin/)
+})
+
+test('hasActiveFilters y describeActiveFilters informan el estado actual de filtros', () => {
+  assert.equal(hasActiveFilters(null), false)
+  assert.equal(hasActiveFilters({ desde: null, hasta: null, tarea_ids: null }), false)
+  assert.equal(describeActiveFilters(null), 'Reporte completo (sin filtros activos)')
+
+  const withPeriod = { desde: '2026-10-20T00:00:00-05:00', hasta: '2026-10-22T00:00:00-05:00', tarea_ids: null }
+  assert.equal(hasActiveFilters(withPeriod), true)
+  assert.match(describeActiveFilters(withPeriod), /Período \[2026-10-20 a 2026-10-22\]/)
+
+  const withTasks = { desde: null, hasta: null, tarea_ids: ['1001', '1002'] }
+  assert.equal(hasActiveFilters(withTasks), true)
+  assert.match(describeActiveFilters(withTasks), /2 tareas seleccionadas/)
+
+  const combined = { desde: '2026-10-20T00:00:00-05:00', hasta: null, tarea_ids: ['1001'] }
+  assert.equal(hasActiveFilters(combined), true)
+  assert.match(describeActiveFilters(combined), /1 tarea seleccionada/)
 })
 
 
