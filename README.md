@@ -14,6 +14,8 @@ Proyecto de Interacción Humano–Computador: preparación de pruebas, participa
 
 Sprint 3 / S3-08: [hallazgos revisados e historias persistentes](docs/sprint3/S3-08_HALLAZGOS_HISTORIAS.md), aprobacion atomica, origen N:M, reintentos sin duplicados y orden del backlog. Aplicar su migracion antes de usar las rutas nuevas.
 
+Sprint 3 / S3-09: [revision humana de sugerencias](docs/sprint3/S3-09_REVISION_HUMANA.md) en `/revision`, con preparacion del analisis, privacidad, edicion, descarte y aprobacion explicita. Historia y origen consultables sin aprobar automaticamente propuestas.
+
 Node.js **22.12 o superior**, npm y un proyecto Supabase. Desde la raíz:
 
 ```powershell
