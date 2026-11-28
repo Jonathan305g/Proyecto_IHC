@@ -10,9 +10,10 @@ import { AnalisisModule } from './analisis-ia/analisis.module'
 import { BacklogModule } from './backlog/backlog.module'
 import { ScrumModule } from './scrum/scrum.module'
 import { ComparisonModule } from './comparison/comparison.module'
+import { ReportsModule } from './reports/reports.module'
 
 @Module({
-  imports: [PlansModule, TasksModule, SessionsModule, EvidencesModule, AnalisisModule, BacklogModule, ScrumModule, ComparisonModule],
+  imports: [PlansModule, TasksModule, SessionsModule, EvidencesModule, AnalisisModule, BacklogModule, ScrumModule, ComparisonModule, ReportsModule],
   providers: [AuthGuard, { provide: APP_FILTER, useClass: ApiErrorFilter }, { provide: APP_GUARD, useExisting: AuthGuard }],
 })
 export class AppModule {}

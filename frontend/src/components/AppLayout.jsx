@@ -10,6 +10,7 @@ const navigation = [
   { to: '/backlog', label: 'Backlog', icon: '≡' },
   { to: '/sprints', label: 'Sprints del producto', icon: '▦' },
   { to: '/comparacion', label: 'Comparar evaluaciones', icon: '↔' },
+  { to: '/informes', label: 'Exportar informe', icon: '⇩' },
 ]
 
 export default function AppLayout() {
