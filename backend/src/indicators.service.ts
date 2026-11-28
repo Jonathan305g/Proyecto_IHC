@@ -19,9 +19,9 @@ const filterErrors = {
 export class IndicatorsService {
   constructor(private readonly db: DatabaseService) {}
 
-  async report(planId: unknown, query: unknown = {}): Promise<IndicatorsReport> {
+  async report(planId: unknown, query: unknown = {}, db: Pick<DatabaseService, 'query'> = this.db): Promise<IndicatorsReport> {
     const filters = parseIndicatorFilters(planId, query)
-    const { rows } = await this.db.query<{ reporte: IndicatorsReport | InvalidIndicatorsReport }>(sql,
+    const { rows } = await db.query<{ reporte: IndicatorsReport | InvalidIndicatorsReport }>(sql,
       [filters.plan_id, filters.desde, filters.hasta, filters.tarea_ids])
     const report = rows[0]?.reporte
     if (!report) throw new InternalServerErrorException()

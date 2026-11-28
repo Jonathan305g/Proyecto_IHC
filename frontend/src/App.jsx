@@ -15,6 +15,7 @@ import BacklogPage from './pages/BacklogPage.jsx'
 import SprintsPage from './pages/SprintsPage.jsx'
 import SprintBoardPage from './pages/SprintBoardPage.jsx'
 import SprintClosePage from './pages/SprintClosePage.jsx'
+import ComparisonPage from './pages/ComparisonPage.jsx'
 import './scrum.css'
 import './review.css'
 import './backlog.css'
@@ -38,6 +39,7 @@ export default function App() {
         <Route path="sprints" element={<SprintsPage />} />
         <Route path="sprints/:id/tablero" element={<SprintBoardPage />} />
         <Route path="sprints/:id/cierre" element={<SprintClosePage />} />
+        <Route path="comparacion" element={<ComparisonPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>

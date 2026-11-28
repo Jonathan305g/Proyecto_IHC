@@ -9,9 +9,10 @@ import { ApiErrorFilter } from './api-error.filter'
 import { AnalisisModule } from './analisis-ia/analisis.module'
 import { BacklogModule } from './backlog/backlog.module'
 import { ScrumModule } from './scrum/scrum.module'
+import { ComparisonModule } from './comparison/comparison.module'
 
 @Module({
-  imports: [PlansModule, TasksModule, SessionsModule, EvidencesModule, AnalisisModule, BacklogModule, ScrumModule],
+  imports: [PlansModule, TasksModule, SessionsModule, EvidencesModule, AnalisisModule, BacklogModule, ScrumModule, ComparisonModule],
   providers: [AuthGuard, { provide: APP_FILTER, useClass: ApiErrorFilter }, { provide: APP_GUARD, useExisting: AuthGuard }],
 })
 export class AppModule {}
