@@ -19,6 +19,7 @@
     "@nestjs/platform-express": "^11.0.0",
     "@supabase/supabase-js": "2.118.0",
     "ajv": "8.20.0",
+    "pdfkit": "0.21.0",
     "pg": "^8.0.0",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.0"

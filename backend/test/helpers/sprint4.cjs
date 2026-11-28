@@ -18,7 +18,8 @@ async function fixture() {
   await pg.exec(`INSERT INTO public.planes(id,nombre,objetivo) OVERRIDING SYSTEM VALUE VALUES(101,'Producto A','Mejorar'),(202,'Producto B','Comparar');
    INSERT INTO public.historias(id,plan_id,titulo,descripcion,criterio_aceptacion,puntos,orden) OVERRIDING SYSTEM VALUE
    VALUES(1,101,'Confirmar','Confirmacion persistente','Se muestra al guardar',3,1),(2,101,'Volver','Volver al listado','Conserva filtros',5,2),
-    (3,101,'Sin estimar','Estimar despues','Por definir',NULL,3),(4,202,'Otro plan','No mezclar','Aislar',2,1);`)
+    (3,101,'Sin estimar','Estimar despues','Por definir',NULL,3),(4,202,'Otro plan','No mezclar','Aislar',2,1);
+   SELECT setval(pg_get_serial_sequence('public.historias','id'),(SELECT max(id) FROM public.historias));`)
   app = await createApplication(false)
   let email = 'equipo@example.com'
   app.get(AuthGuard).client = { auth: { getUser: async token => token === 'valid' ? { data: { user: { email, email_confirmed_at: '2026-01-01' } } } : { data: {}, error: Error('expired') } } }

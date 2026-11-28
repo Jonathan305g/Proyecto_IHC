@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router'
 import PageHeader from '../components/PageHeader.jsx'
 import ComparisonResults from '../components/ComparisonResults.jsx'
 import { ErrorState, LoadingState } from '../components/UiState.jsx'
@@ -31,5 +32,6 @@ export default function ComparisonPage() {
    {current && <div className="scrum-table-wrap"><table><caption>Equivalencias explícitas uno a uno</caption><thead><tr><th scope="col">Tarea en A</th><th scope="col">Tarea equivalente en B</th></tr></thead><tbody>{current.ta.map(t => <tr key={t.id}><th scope="row">#{t.id} · {t.titulo}</th><td><select aria-label={`Equivalente para tarea #${t.id}`} value={mapping[t.id] || ''} onChange={e => { setMapping(m => ({ ...m, [t.id]: e.target.value })); setReport(null) }}><option value="">Sin equivalencia</option>{current.tb.map(u => <option key={u.id} value={String(u.id)} disabled={Object.entries(mapping).some(([id, v]) => id !== String(t.id) && v === String(u.id))}>#{u.id} · {u.titulo}</option>)}</select></td></tr>)}</tbody></table></div>}
    <button className="button button-primary" disabled={!current || loading}>Comparar evaluaciones</button>
   </fieldset></form><ComparisonResults report={report} />
+  {report?.agregado && <p><Link className="button button-primary" to={`/informes?plan_id=${a}`} state={{ comparison: { a: scope(a, da), b: scope(b, db), equivalencias: Object.entries(mapping).filter(([, v]) => v).map(([tarea_a, tarea_b]) => ({ tarea_a, tarea_b })) } }}>Usar esta comparación en informe</Link></p>}
  </div>
 }
