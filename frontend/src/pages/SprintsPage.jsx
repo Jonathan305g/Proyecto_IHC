@@ -49,7 +49,7 @@ export default function SprintsPage() {
    {form && <SprintPlanningForm key={form.id || 'new'} sprint={form.id ? form : null} members={current.members} stories={current.stories} busy={busy} onSave={save} onCancel={() => setForm(null)} />}
    <section className="form-panel"><div className="scrum-inline"><h2>Sprints guardados</h2><button className="button button-primary" disabled={busy || Boolean(form)} onClick={() => { setForm({}); setMessage(''); setError('') }}>Nuevo sprint</button><button className="button button-outline" disabled={busy || Boolean(form)} onClick={() => setTick(n => n + 1)}>Actualizar sprints</button></div>
     {!current.sprints.length && <p>No hay sprints para este plan.</p>}
-    <ul className="scrum-list">{current.sprints.map(s => <li key={s.id}><h3>#{s.id} · {s.nombre}</h3><p>{s.objetivo}</p><p>{s.fecha_inicio} — {s.fecha_fin} · Capacidad: {s.capacidad} puntos · {s.estado}</p><button className="button button-outline" disabled={busy || Boolean(form) || s.estado !== 'planificado'} onClick={() => edit(s)}>Editar sprint #{s.id}</button></li>)}</ul>
+    <ul className="scrum-list">{current.sprints.map(s => <li key={s.id}><h3>#{s.id} · {s.nombre}</h3><p>{s.objetivo}</p><p>{s.fecha_inicio} — {s.fecha_fin} · Capacidad: {s.capacidad} puntos · {s.estado}</p><div className="form-actions"><button className="button button-outline" disabled={busy || Boolean(form) || s.estado !== 'planificado'} onClick={() => edit(s)}>Editar sprint #{s.id}</button><Link className="button button-primary" to={`/sprints/${s.id}/tablero?plan_id=${p}`}>Abrir tablero #{s.id}</Link></div></li>)}</ul>
     <p><Link to={`/backlog?plan_id=${p}`}>Abrir backlog y estimar historias</Link></p>
    </section>
   </>}
