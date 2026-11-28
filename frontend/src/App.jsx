@@ -12,6 +12,8 @@ import SessionRunPage from './pages/SessionRunPage.jsx'
 import ReviewPage from './pages/ReviewPage.jsx'
 import StoryDetailPage from './pages/StoryDetailPage.jsx'
 import BacklogPage from './pages/BacklogPage.jsx'
+import SprintsPage from './pages/SprintsPage.jsx'
+import './scrum.css'
 import './review.css'
 import './backlog.css'
 
@@ -31,6 +33,7 @@ export default function App() {
         <Route path="revision" element={<ReviewPage />} />
         <Route path="historias/:id" element={<StoryDetailPage />} />
         <Route path="backlog" element={<BacklogPage />} />
+        <Route path="sprints" element={<SprintsPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
