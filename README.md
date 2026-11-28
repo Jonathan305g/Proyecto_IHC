@@ -13,7 +13,27 @@ Proyecto de Interacción Humano–Computador: preparación de pruebas, participa
 - Sprint 3 / S3-10: [backlog de mejoras](docs/sprint3/S3-10_BACKLOG_MEJORAS.md) en `/backlog`, creacion manual, origen, edicion, filtros y orden persistente. [Verificacion integrada](docs/sprint3/S3-10_VERIFICACION.md).
 - Integración y activación de esta rama: [PREPARACION_SPRINT_3.md](docs/PREPARACION_SPRINT_3.md).
 
-## Requisitos e instalación
+## Sprint 4 - Version evaluable (S4-01 a S4-08)
+
+| Tarea | Funcionalidad y documentacion |
+|---|---|
+| S4-01 | [Planificacion de sprints](docs/sprint4/S4-01_PLANIFICACION.md), capacidad y seleccion de historias |
+| S4-02 | [API y persistencia Scrum](docs/sprint4/S4-02_SERVICIOS_SCRUM.md), responsables y estados |
+| S4-03 | [Tablero accesible](docs/sprint4/S4-03_TABLERO.md), tareas y avance |
+| S4-04 | [Review, retrospectiva y cierre](docs/sprint4/S4-04_CIERRE_PERSISTENTE.md) con historial |
+| S4-05 | [Vistas de cierre](docs/sprint4/S4-05_VISTAS_CIERRE.md) y acuerdos |
+| S4-06 | [Comparacion de evaluaciones](docs/sprint4/S4-06_COMPARACION.md) por tareas equivalentes |
+| S4-07 | [Exportacion Markdown y PDF](docs/sprint4/S4-07_EXPORTACION.md) de datos aprobados |
+| S4-08 | [Instalacion e integracion](docs/sprint4/S4-08_INTEGRACION.md), verificacion y candidata evaluable |
+
+Rutas nuevas: `/sprints`, `/comparacion`, `/informes`. Las tablas `producto_*`
+gestionan sprints del producto y se mantienen separadas de las tareas academicas.
+Aplicar las migraciones S4 tras S3-08 usando `migrate-sprint4.cjs` como indica la
+guia de instalacion. `npm run verify:sprint4` comprueba la version integrada.
+Las sesiones con participantes y los ajustes derivados corresponden a S4-09/S4-10,
+que quedan fuera de esta entrega por decision del equipo.
+
+## Instalacion local
 
 Node.js **22.12 o superior**, npm y un proyecto Supabase. Desde la raíz:
 

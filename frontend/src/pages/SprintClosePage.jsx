@@ -6,6 +6,7 @@ import { ErrorState, LoadingState } from '../components/UiState.jsx'
 import useProductSprint from '../hooks/useProductSprint.js'
 import { scrum } from '../services/scrum.js'
 import { ESTADOS_TAREA } from '../domain/scrum.js'
+import UnsavedChangesGuard from '../components/UnsavedChangesGuard.jsx'
 
 function ReviewForm({ s, members, busy, onSave, onClose }) {
  const saved = s.revision?.guardado_en, r = s.revision || {}, closed = s.estado === 'cerrado'
@@ -17,6 +18,7 @@ function ReviewForm({ s, members, busy, onSave, onClose }) {
  const agreement = (id, k, v) => update('acuerdos', draft.acuerdos.map(a => a.id === id ? { ...a, [k]: v } : a))
  const canClose = s.estado === 'activo' && !dirty && saved && ['entregas', 'pendientes', 'observaciones', 'aspectos_positivos', 'dificultades'].every(k => draft[k].trim()) && draft.acuerdos.length > 0 && (!s.avance.puntos_pendientes || reason.trim())
  return <section className="form-panel"><h2>Review y retrospectiva</h2>
+  <UnsavedChangesGuard dirty={dirty && !closed} busy={busy} />
   {closed && <p role="status" className="notice">Sprint cerrado. La revisión conserva una instantánea del cierre.</p>}
   {dirty && <p role="status">Hay cambios sin guardar. Guarda el borrador antes de cerrar el sprint.</p>}
   <form onSubmit={e => { e.preventDefault(); onSave({ version: s.version, ...draft, acuerdos: draft.acuerdos.map(({ id, accion, responsable_id, fecha_compromiso, completado }) => ({ id, accion, responsable_id, fecha_compromiso, completado })) }) }}>
@@ -25,7 +27,7 @@ function ReviewForm({ s, members, busy, onSave, onClose }) {
     <h3>Acuerdos de mejora</h3>
     {draft.acuerdos.map((a, i) => <fieldset className="scrum-fieldset scrum-card" key={a.id}><legend>Acuerdo {i + 1}</legend>
      <label>Acción del acuerdo {i + 1}<textarea aria-label={`Acción del acuerdo ${i + 1}`} required maxLength={2000} value={a.accion} onChange={e => agreement(a.id, 'accion', e.target.value)} /></label>
-     <label>Responsable del acuerdo {i + 1}<select aria-label={`Responsable del acuerdo ${i + 1}`} required value={a.responsable_id} onChange={e => agreement(a.id, 'responsable_id', e.target.value)}><option value="">Selecciona responsable</option>{members.filter(m => m.activo || m.id === a.responsable_id).map(m => <option key={m.id} value={m.id}>{m.alias}</option>)}</select></label>
+     <label>Responsable del acuerdo {i + 1}<select aria-label={`Responsable del acuerdo ${i + 1}`} required value={a.responsable_id} onChange={e => agreement(a.id, 'responsable_id', e.target.value)}><option value="">Selecciona responsable</option>{members.filter(m => m.activo || m.id === a.responsable_id).map(m => <option key={m.id} value={m.id}>{closed && m.id === a.responsable_id ? a.responsable || m.alias : m.alias}</option>)}</select></label>
      <label>Fecha del acuerdo {i + 1}<input type="date" required min={s.fecha_inicio} value={a.fecha_compromiso} onChange={e => agreement(a.id, 'fecha_compromiso', e.target.value)} /></label>
      <label><input type="checkbox" checked={a.completado} onChange={e => agreement(a.id, 'completado', e.target.checked)} />Acuerdo {i + 1} completado</label>
      <button type="button" className="button button-outline" onClick={() => update('acuerdos', draft.acuerdos.filter(v => v.id !== a.id))}>Quitar acuerdo {i + 1}</button>

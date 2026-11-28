@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useParams, useSearchParams } from 'react-router'
 import PageHeader from '../components/PageHeader.jsx'
 import ConfirmModal from '../components/ConfirmModal.jsx'
@@ -12,7 +12,7 @@ function TaskCard({ task, story, members, disabled, active, onEdit, onMove, onRe
  const allowed = { pendiente: ['en_progreso'], en_progreso: ['pendiente', 'en_revision'], en_revision: ['en_progreso', 'terminada'], terminada: ['en_revision'] }
  return <article className="scrum-card" aria-label={`Tarea #${task.id}`}>
   <h3>#{task.id} · {task.titulo}</h3><p>Historia #{task.historia_id}: {story?.titulo} · {story?.puntos} puntos</p><p>Responsable: {task.responsable}</p>
-  <label>Cambiar estado de tarea #{task.id}<select aria-label={`Cambiar estado de tarea #${task.id}`} value={task.estado} disabled={disabled || !active} onChange={e => onMove(task, e.target.value)}>
+  <label>Cambiar estado de tarea #{task.id}<select id={`sprint-task-state-${task.id}`} aria-label={`Cambiar estado de tarea #${task.id}`} value={task.estado} disabled={disabled || !active} onChange={e => onMove(task, e.target.value)}>
    {Object.entries(ESTADOS_TAREA).map(([value, label]) => <option key={value} value={value} disabled={value !== task.estado && !allowed[task.estado].includes(value)}>{label}</option>)}</select></label>
   <button className="button button-outline" disabled={disabled} onClick={() => { setEditing(v => !v); setTitle(task.titulo); setMember(task.responsable_id) }}>Editar tarea #{task.id}</button>
   {!active && <button className="button button-outline" disabled={disabled} onClick={() => onRemove(task)}>Retirar tarea #{task.id}</button>}
@@ -26,6 +26,8 @@ function TaskCard({ task, story, members, disabled, active, onEdit, onMove, onRe
 export default function SprintBoardPage() {
  const { id } = useParams(), [params] = useSearchParams(), p = params.get('plan_id') || ''
  const vm = useProductSprint(p, id), s = vm.data, [title, setTitle] = useState(''), [history, setHistory] = useState(''), [member, setMember] = useState(''), [confirm, setConfirm] = useState(null), key = useRef(crypto.randomUUID())
+ const [focusTask, setFocusTask] = useState(null)
+ useEffect(() => { if (focusTask && !vm.busy) { document.getElementById(`sprint-task-state-${focusTask}`)?.focus(); setFocusTask(null) } }, [focusTask, vm.busy, s?.version])
  const historyId = history || s?.historias[0]?.id || '', memberId = member || vm.members.find(m => m.activo)?.id || ''
  async function add(e) {
   e.preventDefault()
@@ -51,7 +53,7 @@ export default function SprintBoardPage() {
    <section className="scrum-board" aria-label="Columnas del tablero">{Object.entries(ESTADOS_TAREA).map(([state, label]) => <section className="scrum-column" key={state} aria-label={`Columna ${label}`}><h2>{label}</h2>
     {s.tareas.filter(t => t.estado === state).map(t => <TaskCard key={`${t.id}-${t.titulo}-${t.responsable_id}`} task={t} story={s.historias.find(h => h.id === t.historia_id)} members={vm.members} disabled={vm.busy || s.estado === 'cerrado'} active={s.estado !== 'planificado'}
      onEdit={(task, b) => vm.mutate(s => scrum.editarTarea(p, id, task.id, { version: s.version, ...b }), 'Tarea editada.')}
-     onMove={(task, state) => vm.mutate(s => scrum.moverTarea(p, id, task.id, { version: s.version, estado: state }), 'Estado guardado.')}
+     onMove={(task, state) => { setFocusTask(task.id); return vm.mutate(s => scrum.moverTarea(p, id, task.id, { version: s.version, estado: state }), 'Estado guardado.') }}
      onRemove={task => setConfirm({ type: 'remove', task })} />)}
     {!s.tareas.some(t => t.estado === state) && <p>No hay tareas en esta columna.</p>}
    </section>)}</section>

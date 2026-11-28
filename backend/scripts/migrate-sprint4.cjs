@@ -20,7 +20,8 @@ async function main() {
   if (process.argv[2] === '--check') {
    const { rows } = await db.query("SELECT c.relname,c.relrowsecurity FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace WHERE n.nspname='public' AND c.relname LIKE 'producto_%' AND c.relkind='r' ORDER BY c.relname")
    rows.forEach(r => console.log(`${r.relrowsecurity ? 'OK' : 'PENDIENTE'} | ${r.relname} | RLS=${r.relrowsecurity}`))
-   if (rows.length < 5 || rows.some(r => !r.relrowsecurity)) throw Object.assign(Error(), { code: 'ESQUEMA_INCOMPLETO' })
+   const expected = ['producto_responsables','producto_sprints','producto_sprint_historias','producto_sprint_tareas','producto_sprint_eventos',...(files.some(n => n.includes('_s4_04_')) ? ['producto_cierres','producto_acuerdos'] : [])]
+   if (expected.some(name => !rows.some(r => r.relname === name && r.relrowsecurity))) throw Object.assign(Error(), { code: 'ESQUEMA_INCOMPLETO' })
    console.log('APROBADO | Esquema Scrum instalado y protegido.')
   } else {
    for (const file of files) { etapa = file; await db.query(await fs.readFile(path.join(directory, file), 'utf8')); console.log('OK | ' + file) }

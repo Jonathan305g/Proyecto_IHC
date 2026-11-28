@@ -38,10 +38,10 @@ export function parseComparison(value: unknown) {
 @Injectable()
 export class ComparisonService {
  constructor(private readonly db: DatabaseService, private readonly metrics: IndicatorsService) {}
- async comparar(value: unknown) {
+ async comparar(value: unknown, transaction?: Pick<DatabaseService, 'query'>) {
   const { a, b, pairs } = parseComparison(value)
-  return this.db.transaction(async db => {
-   await db.query('SET TRANSACTION ISOLATION LEVEL REPEATABLE READ READ ONLY')
+  const operation = async (db: Pick<DatabaseService, 'query'>) => {
+   if (!transaction) await db.query('SET TRANSACTION ISOLATION LEVEL REPEATABLE READ READ ONLY')
    const query = (s: typeof a) => ({ ...(s.desde ? { desde: s.desde } : {}), ...(s.hasta ? { hasta: s.hasta } : {}) })
    const ra = await this.metrics.report(a.plan_id, query(a), db), rb = await this.metrics.report(b.plan_id, query(b), db)
    const scopeKey = (s: typeof ra) => JSON.stringify([s.filtros.plan_id, s.filtros.desde, s.filtros.hasta])
@@ -61,6 +61,7 @@ export class ComparisonService {
     fuente_a: { filtros: ra.filtros, sesiones: ra.sesiones_incluidas }, fuente_b: { filtros: rb.filtros, sesiones: rb.sesiones_incluidas }, pares,
     excluidas: { a: ra.por_tarea.filter(t => !pairs.some(m => m.tarea_a === t.tarea_id)), b: rb.por_tarea.filter(t => !pairs.some(m => m.tarea_b === t.tarea_id)) },
     agregado: validos.length ? { a: aa, b: ab, variacion: diferencias(aa, ab) } : null, avisos }
-  })
+  }
+  return transaction ? operation(transaction) : this.db.transaction(operation)
  }
 }
