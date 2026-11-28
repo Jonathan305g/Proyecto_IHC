@@ -33,7 +33,7 @@ export default function SprintBoardPage() {
  }
  return <div className="scrum-workspace">
   <PageHeader eyebrow="HU-09 / S4-03" title="Tablero del sprint" description="Gestiona tareas por teclado. Los estados y el avance se confirman en el servidor." />
-  <p><Link to={`/sprints?plan_id=${p}`}>Volver a planificación</Link></p>
+  <p><Link to={`/sprints?plan_id=${p}`}>Volver a planificación</Link> · <Link to={`/sprints/${id}/cierre?plan_id=${p}`}>Review y retrospectiva</Link></p>
   {vm.loading && <LoadingState label="Cargando tablero…" />}{vm.error && <ErrorState message={vm.error} onRetry={!vm.busy ? vm.reload : undefined} />}{vm.message && <p role="status" className="notice">{vm.message}</p>}
   {s && <>
    <section className="form-panel"><h2>{s.nombre} · {s.estado}</h2><p>{s.objetivo}</p>
