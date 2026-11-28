@@ -46,7 +46,7 @@ export class ScrumService {
     const total = historias.reduce((n, h) => n + h.puntos, 0), entregados = historias.filter(h => h.estado === 'terminada').reduce((n, h) => n + h.puntos, 0)
     const terminadas = tareas.filter(t => t.estado === 'terminada').length
     const eventos = (await db.query('SELECT id::text,accion,detalle,registrado_en FROM public.producto_sprint_eventos WHERE sprint_id=$1 ORDER BY id DESC LIMIT 300', [s])).rows
-    return { ...sprint, historias, tareas, eventos, avance: { puntos_seleccionados: total, capacidad_restante: sprint.capacidad - total,
+    return { ...sprint, id: s, plan_id: p, estado: sprint.estado, version: sprint.version, historias, tareas, eventos, avance: { puntos_seleccionados: total, capacidad_restante: sprint.capacidad - total,
       puntos_entregados: entregados, puntos_pendientes: total - entregados, porcentaje_puntos: total ? Math.round(entregados / total * 10000) / 100 : null,
       tareas: tareas.length, tareas_terminadas: terminadas, porcentaje_tareas: tareas.length ? Math.round(terminadas / tareas.length * 10000) / 100 : null } }
   }
