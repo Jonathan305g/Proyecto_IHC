@@ -1,0 +1,25 @@
+.scrum-workspace { display:grid; gap:1.25rem; max-width:1400px; margin:auto; }
+.scrum-workspace label { display:grid; gap:.4rem; font-weight:600; }
+.scrum-workspace input:not([type=checkbox]), .scrum-workspace select, .scrum-workspace textarea { width:100%; min-width:0; padding:.65rem; border:1px solid #94a3b8; border-radius:.4rem; background:#fff; color:#14253d; font:inherit; }
+.scrum-workspace textarea { min-height:90px; }
+.scrum-workspace input[type=checkbox] { width:1.2rem; height:1.2rem; }
+.scrum-fieldset { border:0; padding:0; display:grid; gap:1rem; min-width:0; }
+.scrum-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:1rem; }
+.scrum-inline { display:flex; gap:1rem; align-items:end; flex-wrap:wrap; }
+.scrum-inline label { flex:1; min-width:180px; }
+.scrum-table-wrap { overflow:auto; }
+.scrum-workspace table { width:100%; border-collapse:collapse; text-align:left; }
+.scrum-workspace th,.scrum-workspace td { padding:.7rem; border-bottom:1px solid #cbd5e1; vertical-align:top; }
+.scrum-workspace caption { text-align:left; font-weight:700; padding:.7rem 0; }
+.scrum-help { display:block; font-weight:400; margin-top:.3rem; }
+.scrum-board { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:1rem; align-items:start; }
+.scrum-column { background:#eaf0f7; padding:1rem; border-radius:.6rem; min-width:0; }
+.scrum-column>h2 { font-size:1.05rem; }
+.scrum-card { background:white; padding:1rem; border:1px solid #a6b5c8; border-radius:.4rem; display:grid; gap:.7rem; margin-top:1rem; overflow-wrap:anywhere; }
+.scrum-card h3,.scrum-card p { margin:0; }
+@media(max-width:1100px) { .scrum-board { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media(max-width:700px) { .scrum-board { grid-template-columns:1fr; } }
+.scrum-list { list-style:none; padding:0; display:grid; gap:1rem; }
+.scrum-list>li { border:1px solid #cbd5e1; padding:1rem; border-radius:.5rem; overflow-wrap:anywhere; }
+.scrum-workspace :focus-visible { outline:3px solid #1d4ed8; outline-offset:3px; }
+@media(max-width:700px) { .scrum-workspace .form-panel { padding:1rem; } .scrum-grid { grid-template-columns:1fr; } }

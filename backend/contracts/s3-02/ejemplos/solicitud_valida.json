@@ -1,0 +1,26 @@
+{
+  "version": "1.0",
+  "plan_id": "101",
+  "observaciones": [
+    {
+      "id": "resultado:1",
+      "tarea": {
+        "id": "1001",
+        "titulo": "Guardar cambios",
+        "criterio_exito": "Reconocer que los cambios se guardaron"
+      },
+      "resultado": "con_ayuda",
+      "texto": "No reconoció si el cambio se había guardado y repitió la acción."
+    },
+    {
+      "id": "resultado:2",
+      "tarea": {
+        "id": "1002",
+        "titulo": "Volver al inicio",
+        "criterio_exito": null
+      },
+      "resultado": "sin_ayuda",
+      "texto": "Volvió al inicio y completó el recorrido sin dificultades."
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "name": "proyecto-ihc",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "npm run dev --prefix frontend",
+    "dev:frontend": "npm run dev --prefix frontend",
+    "dev:backend": "npm run dev --prefix backend",
+    "build": "npm run build --prefix backend && npm run build --prefix frontend",
+    "test": "npm test --prefix backend && npm test --prefix frontend",
+    "test:e2e": "npm run test:e2e --prefix frontend",
+    "verify:environment": "npm run verify:environment --prefix backend",
+    "verify:live": "npm run verify:live --prefix backend --",
+    "verify:sprint4": "node scripts/verify-sprint4.cjs"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}

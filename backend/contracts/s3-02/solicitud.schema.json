@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ihc:grupo6:s3-02:solicitud:1.0",
+  "title": "Contrato IA 1.0 - solicitud",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "plan_id",
+    "observaciones"
+  ],
+  "properties": {
+    "version": {
+      "const": "1.0"
+    },
+    "plan_id": {
+      "type": "string",
+      "pattern": "^[1-9][0-9]{0,18}$",
+      "maxLength": 19
+    },
+    "observaciones": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 50,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "tarea",
+          "resultado",
+          "texto"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^resultado:[1-9][0-9]{0,18}$",
+            "maxLength": 29
+          },
+          "tarea": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "titulo",
+              "criterio_exito"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[1-9][0-9]{0,18}$",
+                "maxLength": 19
+              },
+              "titulo": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 150,
+                "pattern": "\\S"
+              },
+              "criterio_exito": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 500,
+                    "pattern": "\\S"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          },
+          "resultado": {
+            "enum": [
+              "sin_ayuda",
+              "con_ayuda",
+              "no_completado"
+            ]
+          },
+          "texto": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000,
+            "pattern": "\\S"
+          }
+        }
+      }
+    }
+  }
+}

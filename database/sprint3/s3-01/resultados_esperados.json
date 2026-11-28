@@ -1,0 +1,698 @@
+{
+  "version": "1.0",
+  "casos": [
+    {
+      "nombre": "referencia completa: seis evaluados y tres pendientes",
+      "parametros": [
+        "101",
+        "2026-10-20T00:00:00Z",
+        "2026-10-22T00:00:00Z",
+        null
+      ],
+      "esperado": {
+        "filtro_valido": true,
+        "error_filtro": null,
+        "sesiones_incluidas": 3,
+        "tareas_seleccionadas": 3,
+        "general": {
+          "esperados": 9,
+          "evaluados": 6,
+          "pendientes": 3,
+          "cobertura_porcentaje": 66.67,
+          "por_resultado": {
+            "sin_ayuda": {
+              "cantidad": 3,
+              "porcentaje": 50,
+              "tiempo": {
+                "n": 2,
+                "total_segundos": 30,
+                "promedio_segundos": 15
+              },
+              "errores": {
+                "n": 3,
+                "total": 0,
+                "promedio": 0
+              }
+            },
+            "con_ayuda": {
+              "cantidad": 2,
+              "porcentaje": 33.33,
+              "tiempo": {
+                "n": 2,
+                "total_segundos": 110,
+                "promedio_segundos": 55
+              },
+              "errores": {
+                "n": 2,
+                "total": 3,
+                "promedio": 1.5
+              }
+            },
+            "no_completado": {
+              "cantidad": 1,
+              "porcentaje": 16.67,
+              "tiempo": {
+                "n": 1,
+                "total_segundos": 90,
+                "promedio_segundos": 90
+              },
+              "errores": {
+                "n": 1,
+                "total": 3,
+                "promedio": 3
+              }
+            }
+          }
+        },
+        "por_tarea": [
+          {
+            "esperados": 3,
+            "evaluados": 3,
+            "pendientes": 0,
+            "cobertura_porcentaje": 100,
+            "por_resultado": {
+              "sin_ayuda": {
+                "cantidad": 1,
+                "porcentaje": 33.33,
+                "tiempo": {
+                  "n": 1,
+                  "total_segundos": 30,
+                  "promedio_segundos": 30
+                },
+                "errores": {
+                  "n": 1,
+                  "total": 0,
+                  "promedio": 0
+                }
+              },
+              "con_ayuda": {
+                "cantidad": 1,
+                "porcentaje": 33.33,
+                "tiempo": {
+                  "n": 1,
+                  "total_segundos": 50,
+                  "promedio_segundos": 50
+                },
+                "errores": {
+                  "n": 1,
+                  "total": 1,
+                  "promedio": 1
+                }
+              },
+              "no_completado": {
+                "cantidad": 1,
+                "porcentaje": 33.33,
+                "tiempo": {
+                  "n": 1,
+                  "total_segundos": 90,
+                  "promedio_segundos": 90
+                },
+                "errores": {
+                  "n": 1,
+                  "total": 3,
+                  "promedio": 3
+                }
+              }
+            },
+            "tarea_id": "1001",
+            "codigo": "T1",
+            "titulo": "Buscar"
+          },
+          {
+            "esperados": 3,
+            "evaluados": 3,
+            "pendientes": 0,
+            "cobertura_porcentaje": 100,
+            "por_resultado": {
+              "sin_ayuda": {
+                "cantidad": 2,
+                "porcentaje": 66.67,
+                "tiempo": {
+                  "n": 1,
+                  "total_segundos": 0,
+                  "promedio_segundos": 0
+                },
+                "errores": {
+                  "n": 2,
+                  "total": 0,
+                  "promedio": 0
+                }
+              },
+              "con_ayuda": {
+                "cantidad": 1,
+                "porcentaje": 33.33,
+                "tiempo": {
+                  "n": 1,
+                  "total_segundos": 60,
+                  "promedio_segundos": 60
+                },
+                "errores": {
+                  "n": 1,
+                  "total": 2,
+                  "promedio": 2
+                }
+              },
+              "no_completado": {
+                "cantidad": 0,
+                "porcentaje": 0,
+                "tiempo": {
+                  "n": 0,
+                  "total_segundos": null,
+                  "promedio_segundos": null
+                },
+                "errores": {
+                  "n": 0,
+                  "total": null,
+                  "promedio": null
+                }
+              }
+            },
+            "tarea_id": "1002",
+            "codigo": "T2",
+            "titulo": "Guardar"
+          },
+          {
+            "esperados": 3,
+            "evaluados": 0,
+            "pendientes": 3,
+            "cobertura_porcentaje": 0,
+            "por_resultado": {
+              "sin_ayuda": {
+                "cantidad": 0,
+                "porcentaje": null,
+                "tiempo": {
+                  "n": 0,
+                  "total_segundos": null,
+                  "promedio_segundos": null
+                },
+                "errores": {
+                  "n": 0,
+                  "total": null,
+                  "promedio": null
+                }
+              },
+              "con_ayuda": {
+                "cantidad": 0,
+                "porcentaje": null,
+                "tiempo": {
+                  "n": 0,
+                  "total_segundos": null,
+                  "promedio_segundos": null
+                },
+                "errores": {
+                  "n": 0,
+                  "total": null,
+                  "promedio": null
+                }
+              },
+              "no_completado": {
+                "cantidad": 0,
+                "porcentaje": null,
+                "tiempo": {
+                  "n": 0,
+                  "total_segundos": null,
+                  "promedio_segundos": null
+                },
+                "errores": {
+                  "n": 0,
+                  "total": null,
+                  "promedio": null
+                }
+              }
+            },
+            "tarea_id": "1003",
+            "codigo": "T3",
+            "titulo": "Salir"
+          }
+        ]
+      }
+    },
+    {
+      "nombre": "una tarea: NULL de tiempo no se convierte en cero",
+      "parametros": [
+        "101",
+        "2026-10-20T00:00:00Z",
+        "2026-10-22T00:00:00Z",
+        [
+          "1002"
+        ]
+      ],
+      "esperado": {
+        "general": {
+          "esperados": 3,
+          "evaluados": 3,
+          "pendientes": 0,
+          "cobertura_porcentaje": 100,
+          "por_resultado": {
+            "sin_ayuda": {
+              "cantidad": 2,
+              "porcentaje": 66.67,
+              "tiempo": {
+                "n": 1,
+                "total_segundos": 0,
+                "promedio_segundos": 0
+              },
+              "errores": {
+                "n": 2,
+                "total": 0,
+                "promedio": 0
+              }
+            },
+            "con_ayuda": {
+              "cantidad": 1,
+              "porcentaje": 33.33,
+              "tiempo": {
+                "n": 1,
+                "total_segundos": 60,
+                "promedio_segundos": 60
+              },
+              "errores": {
+                "n": 1,
+                "total": 2,
+                "promedio": 2
+              }
+            },
+            "no_completado": {
+              "cantidad": 0,
+              "porcentaje": 0,
+              "tiempo": {
+                "n": 0,
+                "total_segundos": null,
+                "promedio_segundos": null
+              },
+              "errores": {
+                "n": 0,
+                "total": null,
+                "promedio": null
+              }
+            }
+          }
+        },
+        "tareas_seleccionadas": 1
+      }
+    },
+    {
+      "nombre": "tarea solo pendiente: tasas NULL y cobertura cero",
+      "parametros": [
+        "101",
+        "2026-10-20T00:00:00Z",
+        "2026-10-22T00:00:00Z",
+        [
+          "1003"
+        ]
+      ],
+      "esperado": {
+        "general": {
+          "esperados": 3,
+          "evaluados": 0,
+          "pendientes": 3,
+          "cobertura_porcentaje": 0,
+          "por_resultado": {
+            "sin_ayuda": {
+              "cantidad": 0,
+              "porcentaje": null,
+              "tiempo": {
+                "n": 0,
+                "total_segundos": null,
+                "promedio_segundos": null
+              },
+              "errores": {
+                "n": 0,
+                "total": null,
+                "promedio": null
+              }
+            },
+            "con_ayuda": {
+              "cantidad": 0,
+              "porcentaje": null,
+              "tiempo": {
+                "n": 0,
+                "total_segundos": null,
+                "promedio_segundos": null
+              },
+              "errores": {
+                "n": 0,
+                "total": null,
+                "promedio": null
+              }
+            },
+            "no_completado": {
+              "cantidad": 0,
+              "porcentaje": null,
+              "tiempo": {
+                "n": 0,
+                "total_segundos": null,
+                "promedio_segundos": null
+              },
+              "errores": {
+                "n": 0,
+                "total": null,
+                "promedio": null
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "nombre": "periodo sin sesiones: conteos cero y medidas NULL",
+      "parametros": [
+        "101",
+        "2027-01-01T00:00:00Z",
+        "2027-01-02T00:00:00Z",
+        null
+      ],
+      "esperado": {
+        "sesiones_incluidas": 0,
+        "general": {
+          "esperados": 0,
+          "evaluados": 0,
+          "pendientes": 0,
+          "cobertura_porcentaje": null,
+          "por_resultado": {
+            "sin_ayuda": {
+              "cantidad": 0,
+              "porcentaje": null,
+              "tiempo": {
+                "n": 0,
+                "total_segundos": null,
+                "promedio_segundos": null
+              },
+              "errores": {
+                "n": 0,
+                "total": null,
+                "promedio": null
+              }
+            },
+            "con_ayuda": {
+              "cantidad": 0,
+              "porcentaje": null,
+              "tiempo": {
+                "n": 0,
+                "total_segundos": null,
+                "promedio_segundos": null
+              },
+              "errores": {
+                "n": 0,
+                "total": null,
+                "promedio": null
+              }
+            },
+            "no_completado": {
+              "cantidad": 0,
+              "porcentaje": null,
+              "tiempo": {
+                "n": 0,
+                "total_segundos": null,
+                "promedio_segundos": null
+              },
+              "errores": {
+                "n": 0,
+                "total": null,
+                "promedio": null
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "nombre": "otro plan y ceros reales: fracaso con tiempo y errores cero",
+      "parametros": [
+        "202",
+        "2026-10-20T00:00:00Z",
+        "2026-10-22T00:00:00Z",
+        null
+      ],
+      "esperado": {
+        "sesiones_incluidas": 1,
+        "general": {
+          "esperados": 1,
+          "evaluados": 1,
+          "pendientes": 0,
+          "cobertura_porcentaje": 100,
+          "por_resultado": {
+            "sin_ayuda": {
+              "cantidad": 0,
+              "porcentaje": 0,
+              "tiempo": {
+                "n": 0,
+                "total_segundos": null,
+                "promedio_segundos": null
+              },
+              "errores": {
+                "n": 0,
+                "total": null,
+                "promedio": null
+              }
+            },
+            "con_ayuda": {
+              "cantidad": 0,
+              "porcentaje": 0,
+              "tiempo": {
+                "n": 0,
+                "total_segundos": null,
+                "promedio_segundos": null
+              },
+              "errores": {
+                "n": 0,
+                "total": null,
+                "promedio": null
+              }
+            },
+            "no_completado": {
+              "cantidad": 1,
+              "porcentaje": 100,
+              "tiempo": {
+                "n": 1,
+                "total_segundos": 0,
+                "promedio_segundos": 0
+              },
+              "errores": {
+                "n": 1,
+                "total": 0,
+                "promedio": 0
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "nombre": "plan sin tareas",
+      "parametros": [
+        "303",
+        "2026-10-20T00:00:00Z",
+        "2026-10-22T00:00:00Z",
+        null
+      ],
+      "esperado": {
+        "tareas_seleccionadas": 0,
+        "por_tarea": [],
+        "general": {
+          "esperados": 0,
+          "evaluados": 0,
+          "pendientes": 0,
+          "cobertura_porcentaje": null,
+          "por_resultado": {
+            "sin_ayuda": {
+              "cantidad": 0,
+              "porcentaje": null,
+              "tiempo": {
+                "n": 0,
+                "total_segundos": null,
+                "promedio_segundos": null
+              },
+              "errores": {
+                "n": 0,
+                "total": null,
+                "promedio": null
+              }
+            },
+            "con_ayuda": {
+              "cantidad": 0,
+              "porcentaje": null,
+              "tiempo": {
+                "n": 0,
+                "total_segundos": null,
+                "promedio_segundos": null
+              },
+              "errores": {
+                "n": 0,
+                "total": null,
+                "promedio": null
+              }
+            },
+            "no_completado": {
+              "cantidad": 0,
+              "porcentaje": null,
+              "tiempo": {
+                "n": 0,
+                "total_segundos": null,
+                "promedio_segundos": null
+              },
+              "errores": {
+                "n": 0,
+                "total": null,
+                "promedio": null
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "nombre": "plan inexistente",
+      "parametros": [
+        "999",
+        "2026-10-20T00:00:00Z",
+        "2026-10-22T00:00:00Z",
+        null
+      ],
+      "esperado": {
+        "filtro_valido": false,
+        "error_filtro": "PLAN_INEXISTENTE",
+        "sesiones_incluidas": null,
+        "general": null,
+        "por_tarea": []
+      }
+    },
+    {
+      "nombre": "plan nulo",
+      "parametros": [
+        null,
+        "2026-10-20T00:00:00Z",
+        "2026-10-22T00:00:00Z",
+        null
+      ],
+      "esperado": {
+        "filtro_valido": false,
+        "error_filtro": "PLAN_INVALIDO",
+        "sesiones_incluidas": null,
+        "general": null,
+        "por_tarea": []
+      }
+    },
+    {
+      "nombre": "periodo invertido",
+      "parametros": [
+        "101",
+        "2026-10-22T00:00:00Z",
+        "2026-10-20T00:00:00Z",
+        null
+      ],
+      "esperado": {
+        "filtro_valido": false,
+        "error_filtro": "PERIODO_INVALIDO",
+        "sesiones_incluidas": null,
+        "general": null,
+        "por_tarea": []
+      }
+    },
+    {
+      "nombre": "periodo de longitud cero",
+      "parametros": [
+        "101",
+        "2026-10-20T00:00:00Z",
+        "2026-10-20T00:00:00Z",
+        null
+      ],
+      "esperado": {
+        "filtro_valido": false,
+        "error_filtro": "PERIODO_INVALIDO",
+        "sesiones_incluidas": null,
+        "general": null,
+        "por_tarea": []
+      }
+    },
+    {
+      "nombre": "tarea de otro plan",
+      "parametros": [
+        "101",
+        "2026-10-20T00:00:00Z",
+        "2026-10-22T00:00:00Z",
+        [
+          "2001"
+        ]
+      ],
+      "esperado": {
+        "filtro_valido": false,
+        "error_filtro": "TAREA_INVALIDA",
+        "sesiones_incluidas": null,
+        "general": null,
+        "por_tarea": []
+      }
+    },
+    {
+      "nombre": "tarea inexistente",
+      "parametros": [
+        "101",
+        "2026-10-20T00:00:00Z",
+        "2026-10-22T00:00:00Z",
+        [
+          "9999"
+        ]
+      ],
+      "esperado": {
+        "filtro_valido": false,
+        "error_filtro": "TAREA_INVALIDA",
+        "sesiones_incluidas": null,
+        "general": null,
+        "por_tarea": []
+      }
+    },
+    {
+      "nombre": "seleccion vacia",
+      "parametros": [
+        "101",
+        "2026-10-20T00:00:00Z",
+        "2026-10-22T00:00:00Z",
+        []
+      ],
+      "esperado": {
+        "filtro_valido": false,
+        "error_filtro": "TAREAS_VACIAS",
+        "sesiones_incluidas": null,
+        "general": null,
+        "por_tarea": []
+      }
+    },
+    {
+      "nombre": "tarea repetida",
+      "parametros": [
+        "101",
+        "2026-10-20T00:00:00Z",
+        "2026-10-22T00:00:00Z",
+        [
+          "1001",
+          "1001"
+        ]
+      ],
+      "esperado": {
+        "filtro_valido": false,
+        "error_filtro": "TAREA_INVALIDA",
+        "sesiones_incluidas": null,
+        "general": null,
+        "por_tarea": []
+      }
+    },
+    {
+      "nombre": "elemento nulo",
+      "parametros": [
+        "101",
+        "2026-10-20T00:00:00Z",
+        "2026-10-22T00:00:00Z",
+        [
+          null
+        ]
+      ],
+      "esperado": {
+        "filtro_valido": false,
+        "error_filtro": "TAREA_INVALIDA",
+        "sesiones_incluidas": null,
+        "general": null,
+        "por_tarea": []
+      }
+    }
+  ]
+}

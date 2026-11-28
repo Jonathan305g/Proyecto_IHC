@@ -1,0 +1,23 @@
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.env.local
+frontend/.env.*.local
+backend/node_modules/
+backend/dist/
+backend/.env
+*.log
+
+# Archivos locales, credenciales, certificados y resultados de pruebas
+**/.env
+**/.env.*
+!**/.env.example
+backend/uploads/
+*.pem
+*.crt
+frontend/playwright-report/
+frontend/test-results/
+
+# Resultados locales de la validación real
+verification-results/
+supabase/.temp/

@@ -1,0 +1,39 @@
+{
+  "name": "ihc-usability-dashboard-backend",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "npm run build && node --test test/*.test.cjs",
+    "start": "node dist/main.js",
+    "dev": "npm run build && node --env-file=.env dist/main.js",
+    "storage:cleanup": "npm run build && node --env-file=.env scripts/storage-maintenance.cjs --cleanup",
+    "storage:migrate": "npm run build && node --env-file=.env scripts/storage-maintenance.cjs",
+    "verify:environment": "npm run build && node --env-file-if-exists=.env scripts/check-environment.cjs",
+    "verify:live": "npm run build && node --env-file-if-exists=.env scripts/verify-live.cjs",
+    "verify:ai": "npm run build && node --env-file-if-exists=.env scripts/verify-ai.cjs"
+  },
+  "dependencies": {
+    "@nestjs/common": "^11.0.0",
+    "@nestjs/core": "^11.0.0",
+    "@nestjs/platform-express": "^11.0.0",
+    "@supabase/supabase-js": "2.118.0",
+    "ajv": "8.20.0",
+    "pdfkit": "0.21.0",
+    "pg": "^8.0.0",
+    "reflect-metadata": "^0.2.0",
+    "rxjs": "^7.8.0"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "0.5.14",
+    "@types/node": "^24.0.0",
+    "@types/pg": "^8.0.0",
+    "typescript": "^5.9.0"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "overrides": {
+    "multer": "2.5.0"
+  }
+}
