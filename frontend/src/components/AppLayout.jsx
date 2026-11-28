@@ -9,6 +9,7 @@ const navigation = [
   { to: '/revision', label: 'Revisión de IA', icon: '✓' },
   { to: '/backlog', label: 'Backlog', icon: '≡' },
   { to: '/sprints', label: 'Sprints del producto', icon: '▦' },
+  { to: '/comparacion', label: 'Comparar evaluaciones', icon: '↔' },
 ]
 
 export default function AppLayout() {
