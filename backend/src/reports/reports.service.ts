@@ -42,7 +42,8 @@ export class ReportsService {
    const stories = sections.includes('historias') ? (await db.query(`SELECT id::text,hallazgo_id::text,titulo,descripcion,criterio_aceptacion,prioridad,puntos,estado FROM public.historias
       WHERE plan_id=$1 AND hallazgo_id=ANY($2::bigint[]) ORDER BY orden LIMIT 201`, [f.plan_id, findings.map(h => h.id)])).rows : []
    if (stories.length > 200) throw new PayloadTooLargeException('Reduce el periodo: hay mas de 200 historias.')
-   return { plan, metrics, findings, stories }
+   const comparison = sections.includes('comparacion') ? await this.comparison.comparar(b.comparacion, db) : null
+   return { plan, metrics, findings, stories, comparison }
   })
   result.plan.nombre = clean(result.plan.nombre); result.plan.objetivo = clean(result.plan.objetivo)
   result.metrics.por_tarea.forEach(t => { t.titulo = clean(t.titulo) })
@@ -51,7 +52,7 @@ export class ReportsService {
   let comparison: any = null
   const avisos = ['Incluye solo registros elegibles y hallazgos aprobados. No contiene identidades de participantes, credenciales ni textos originales de observaciones.', 'Revisa el contenido aprobado antes de compartir: la redaccion automatica de identificadores directos no sustituye la revision humana.']
   if (sections.includes('comparacion')) {
-   comparison = await this.comparison.comparar(b.comparacion)
+   comparison = result.comparison
    const key = (s: any) => JSON.stringify([s.plan_id, s.desde, s.hasta])
    if (key(comparison.fuente_a.filtros) !== key(result.metrics.filtros)) throw new BadRequestException('La evaluacion A de la comparacion debe coincidir con el plan y periodo del informe.')
    if (!comparison.agregado) { comparison = null; avisos.push('Comparacion solicitada sin datos comparables: se omite esa seccion.') }
@@ -63,7 +64,7 @@ export class ReportsService {
   avisos.forEach(paragraph)
   if (sections.includes('resultados')) {
    title('Resultados de evaluacion')
-   paragraph(`Sesiones incluidas: ${result.metrics.sesiones_incluidas}. Evaluados: ${result.metrics.general.evaluados}/${result.metrics.general.esperados}. Cobertura: ${val(result.metrics.general.cobertura_porcentaje)}%. Pendientes: ${result.metrics.general.pendientes}.`)
+   paragraph(`Sesiones incluidas: ${result.metrics.sesiones_incluidas}. Evaluados: ${result.metrics.general.evaluados}/${result.metrics.general.esperados}. Cobertura: ${result.metrics.general.cobertura_porcentaje == null ? 'Sin datos' : result.metrics.general.cobertura_porcentaje + '%'}. Pendientes: ${result.metrics.general.pendientes}.`)
    for (const m of [{ ...result.metrics.general, titulo: 'General' }, ...result.metrics.por_tarea]) {
     title(m.titulo); table(['Resultado', 'Cantidad', 'Tasa (%)', 'Tiempo medio (s)', 'n tiempo', 'Errores medios', 'n errores'], Object.entries(labels).map(([k, label]) => { const c = m.por_resultado[k as keyof typeof labels]; return [label, c.cantidad, val(c.porcentaje), val(c.tiempo.promedio_segundos), c.tiempo.n, val(c.errores.promedio), c.errores.n] }))
    }

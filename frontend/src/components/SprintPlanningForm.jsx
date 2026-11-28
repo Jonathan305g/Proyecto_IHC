@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import ConfirmModal from './ConfirmModal.jsx'
 import { planningDraft, planningPayload, selectedPoints } from '../domain/scrum.js'
+import UnsavedChangesGuard from './UnsavedChangesGuard.jsx'
 
 export default function SprintPlanningForm({ sprint, stories, members, busy, onSave, onCancel }) {
  const [draft, setDraft] = useState(() => planningDraft(sprint)), [dirty, setDirty] = useState(false), [confirm, setConfirm] = useState(false)
@@ -8,6 +9,7 @@ export default function SprintPlanningForm({ sprint, stories, members, busy, onS
  const update = (k, v) => { setDraft(d => ({ ...d, [k]: v })); setDirty(true) }
  const toggle = id => update('historias', draft.historias.some(h => h.historia_id === id) ? draft.historias.filter(h => h.historia_id !== id) : [...draft.historias, { historia_id: id, responsable_id: null }])
  return <section className="form-panel" aria-label="Formulario de planificación">
+  <UnsavedChangesGuard dirty={dirty} busy={busy} />
   <h2>{sprint ? `Editar sprint #${sprint.id}` : 'Nuevo sprint del producto'}</h2>
   <form onSubmit={e => { e.preventDefault(); onSave(planningPayload(draft, sprint ? { version: sprint.version } : { solicitud_id: key.current })) }}>
    <fieldset disabled={busy} className="scrum-fieldset">
