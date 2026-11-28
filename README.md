@@ -1,5 +1,17 @@
 # Usability Test Dashboard · Grupo 6
 
+## Resumen del proyecto
+Este proyecto constituye la entrega final de la materia **Interacción Humano‑Computador** de la carrera de **Software** de la Universidad Técnica de Ambato. Incluye la planificación, ejecución y documentación de pruebas de usabilidad, así como la implementación de mejoras basadas en los hallazgos del sprint 4 (S4‑09). 
+
+**Participantes:**
+- Emilio Abril
+- Manuel Cusme
+- Jonathan Gamboa
+- Pablo Lozada
+- William Martinez
+
+---
+
 Proyecto de Interacción Humano–Computador: preparación de pruebas, participantes anónimos, ejecución de tareas, resultados y evidencias. React + Vite consume la API NestJS; el backend utiliza PostgreSQL y un bucket privado de Supabase Storage.
 
 ## Estado
@@ -48,7 +60,7 @@ Completa ambos `.env` con los datos de tu proyecto. Las claves secretas y la URI
 
 1. Crea o actualiza la BD siguiendo [database/README.md](database/README.md).
 2. Crea el bucket privado ejecutando `database/03_storage_supabase.sql` en Supabase.
-3. Prepara las cuentas de aplicación en **Supabase → Authentication → Users** (correo/contraseña y correo confirmado). Incluye los correos permitidos en `AUTH_ALLOWED_EMAILS` del backend. Estas cuentas son independientes de las invitaciones al Dashboard de Supabase. El frontend no ofrece registro público.
+3. Prepara las cuentas de aplicación en **Supabase → Authentication → Users** (correo/contraseña y correo confirmado). Incluye los correos permitidos en `AUTH_ALLOWED_EMAILS` del backend. Estas cuentas son independientes de las invitaciones al Dashboard de Supabase.
 4. Configura `SUPABASE_URL`, clave pública y clave secreta en backend; solo URL y clave pública en frontend. El bucket predeterminado es `evidencias`.
 5. Si ya existen archivos locales, sigue la migración de evidencias en la guía de preparación.
 
