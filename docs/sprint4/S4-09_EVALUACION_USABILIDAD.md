@@ -32,7 +32,8 @@ Los resultados, métricas cuantitativas y problemas observados se consolidan en 
 - **Compromiso y versión:** `develop` en commit `0c6db0e5de60a6921bda538f9518efb87fb1ff24` (`0.4.0-rc.1`).
 - **Verificación previa:** Pruebas técnicas S4-08 aprobadas (104 backend + 29 frontend = 133 pruebas pasadas), migraciones S4 aplicadas y ensayo integrado de base de datos verificado.
 - **Moderador:** Jonathan Gamboa.
-- **Archivo de registro estructurado:** [`docs/sprint4/S4-09_REGISTRO_EVALUACION.csv`](S4-09_REGISTRO_EVALUACION.csv).
+- **Libro Excel de registro (plantilla oficial Grupo 6 con formato y fórmulas):** [`docs/sprint4/S4-09_Registro_Pruebas_Usabilidad_Grupo6.xlsx`](S4-09_Registro_Pruebas_Usabilidad_Grupo6.xlsx).
+- **Archivo de registro complementario:** [`docs/sprint4/S4-09_REGISTRO_EVALUACION.csv`](S4-09_REGISTRO_EVALUACION.csv).
 
 ---
 

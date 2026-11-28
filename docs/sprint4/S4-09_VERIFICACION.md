@@ -40,6 +40,7 @@ Se confirmó que el sistema cuenta con todas las migraciones aplicadas, suite de
 
 ## 4. Archivos creados y versionados
 
-- `docs/sprint4/S4-09_REGISTRO_EVALUACION.csv`: Hoja de cálculo en formato CSV completada con los registros reales de preparación, resumen, sesiones, tareas, observaciones, hallazgos y guion.
+- `docs/sprint4/S4-09_Registro_Pruebas_Usabilidad_Grupo6.xlsx`: Libro de Excel completado sobre la plantilla oficial entregada por el Grupo 6, preservando todas las hojas (`Resumen`, `Preparacion`, `Hallazgos`, `Sesiones`, `Resultados`, `Observaciones`, `Guion`), formatos condicionales, estilos y fórmulas automatizadas.
+- `docs/sprint4/S4-09_REGISTRO_EVALUACION.csv`: Hoja de cálculo complementaria en formato CSV con los registros reales de preparación, resumen, sesiones, tareas, observaciones, hallazgos y guion.
 - `docs/sprint4/S4-09_EVALUACION_USABILIDAD.md`: Informe técnico de la evaluación de usabilidad, métricas agregadas y plan de traspaso hacia S4-10.
 - `docs/sprint4/S4-09_VERIFICACION.md`: Este informe de comprobación de la tarea.
