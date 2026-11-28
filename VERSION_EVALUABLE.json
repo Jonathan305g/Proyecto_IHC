@@ -1,0 +1,8 @@
+{
+  "version": "0.4.0-rc.1",
+  "base_desarrollo": "922a934ec953e6cbc821e02ad87695e47afd86b5",
+  "alcance": "Sprints de producto, cierre, comparacion y exportacion",
+  "identificacion_exacta": "git rev-parse HEAD; npm run verify:sprint4 registra commit y arbol",
+  "evaluacion_con_participantes": "Preparacion en S4-09; registros reales por completar",
+  "cierre_final": "Repetir integracion despues de incorporar resultados de S4-09 y ajustes de S4-10"
+}
