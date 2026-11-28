@@ -33,6 +33,17 @@ export async function setupProduct(page, options = {}) {
    const s = full(body, String(state.sprints.length + 1), 1); state.sprints.push(s); state.requests.set(body.solicitud_id, s); return reply(s, 201)
   }
   const action = suffix.match(/^sprints-producto\/(\d+)\/(activar|tareas(?:\/(\d+)(?:\/(estado|retirar))?)?)$/)
+  const closure = suffix.match(/^sprints-producto\/(\d+)\/(cierre|cerrar)$/)
+  if (closure) {
+   const s = state.sprints.find(s => s.id === closure[1])
+   s.revision ||= { entregas: '', pendientes: '', observaciones: '', aspectos_positivos: '', dificultades: '', acuerdos: [], guardado_en: null }
+   if (method === 'GET') return reply(s)
+   if (state.failSave) { state.failSave = false; return reply({ message: 'No se guardó la review' }, 503) }
+   if (body.version !== s.version) return reply({ message: 'El sprint cambió. Recarga.' }, 409)
+   if (closure[2] === 'cerrar') { s.estado = 'cerrado'; s.cierre_snapshot = { avance: { ...s.avance }, revision: structuredClone(s.revision) } }
+   else s.revision = { ...body, guardado_en: new Date().toISOString() }
+   s.version++; return reply(s)
+  }
   if (action) {
    const s = state.sprints.find(s => s.id === action[1]), taskId = action[3], sub = action[4]
    if (!s) return reply({ message: 'Sprint inexistente' }, 404)
