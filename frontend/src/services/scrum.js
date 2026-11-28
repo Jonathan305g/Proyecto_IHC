@@ -14,4 +14,7 @@ export const scrum = {
  editarTarea: (p, s, t, b) => request(`${root(p)}/sprints-producto/${encodeURIComponent(s)}/tareas/${encodeURIComponent(t)}`, json('PATCH', b)),
  retirarTarea: (p, s, t, b) => request(`${root(p)}/sprints-producto/${encodeURIComponent(s)}/tareas/${encodeURIComponent(t)}/retirar`, json('POST', b)),
  moverTarea: (p, s, t, b) => request(`${root(p)}/sprints-producto/${encodeURIComponent(s)}/tareas/${encodeURIComponent(t)}/estado`, json('POST', b)),
+ cierre: (p, s) => request(`${root(p)}/sprints-producto/${encodeURIComponent(s)}/cierre`),
+ guardarCierre: (p, s, b) => request(`${root(p)}/sprints-producto/${encodeURIComponent(s)}/cierre`, json('PUT', b)),
+ cerrar: (p, s, b) => request(`${root(p)}/sprints-producto/${encodeURIComponent(s)}/cerrar`, json('POST', b)),
 }
