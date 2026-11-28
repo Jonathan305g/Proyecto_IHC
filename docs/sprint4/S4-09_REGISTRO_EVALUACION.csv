@@ -1,0 +1,274 @@
+S4-09. Resumen de la evaluacion,,,,,,,,,,,,,
+,,,,,,,,,,,,,
+Los resultados se calculan desde los registros reales. Las filas vacias no cuentan como sesiones ni como tareas evaluadas.,,,,,,,,,,,,,
+,,,,,,,,,,,,,
+Participantes y sesiones,,,,,,,Preparacion y calidad de registros,,,,,,
+Meta de participantes,,5,Version de referencia,,0.4.0-rc.1,,Pruebas S4-08,,,Aprobadas,,,
+Participantes incluidos,,5,Registros de tareas evaluadas,,50,,Ensayo real BD/Auth/Gemini,,,Completado,,,
+Sesiones realizadas,,5,Tareas no ejecutadas,,0,,Sesiones por revisar,,,0,,,
+Sesiones incluidas,,5,Hallazgos completos,,6,,Resultados por revisar,,,0,,,
+Satisfaccion media (1-5),,4.20,Observaciones incluidas,,18,,Observaciones por revisar,,,0,,,
+Respuestas de satisfaccion,,5,Avance hacia la meta,,100%,,Hallazgos por revisar,,,0,,,
+,,,,,,,,,,,,,
+Resultados por tarea,,,,,,,,,,,,,
+Tasas sobre tareas evaluadas. Promedios sobre sus mediciones disponibles en todos los resultados. Consulte n para cada medida.,,,,,,,,,,,,,
+,,,,,,,,,,,,,
+Tarea,Recorrido,Evaluadas (n),Autonomas (n),Asistidas (n),No completadas (n),Exito autonomo (%),Completadas (%),Tiempos medidos (n),Tiempo medio (s),Errores medidos (n),Errores medios (n),Facilidad medida (n),Facilidad media (1-5)
+T01,Crear un plan,5,5,0,0,100%,100%,5,143.0,5,0.4,5,4.6
+T02,Registrar una sesion,5,4,1,0,80%,100%,5,195.0,5,0.6,5,4.2
+T03,Consultar resultados,5,5,0,0,100%,100%,5,85.0,5,0.2,5,4.6
+T04,Analizar y revisar hallazgos,5,4,1,0,80%,100%,5,212.0,5,0.8,5,4.0
+T05,Priorizar el backlog,5,5,0,0,100%,100%,5,122.0,5,0.2,5,4.8
+T06,Planificar un sprint,5,4,1,0,80%,100%,5,180.0,5,0.6,5,4.2
+T07,Gestionar el tablero,5,5,0,0,100%,100%,5,158.0,5,0.4,5,4.4
+T08,Cerrar y recuperar acuerdos,5,4,1,0,80%,100%,5,176.0,5,0.8,5,4.0
+T09,Comparar evaluaciones,5,3,2,0,60%,100%,5,140.0,5,1.2,5,3.6
+T10,Descargar un informe,5,5,0,0,100%,100%,5,108.0,5,0.4,5,4.4
+,,,,,,,,,,,,,
+,,,,,,,,,,,,,
+Hallazgos con mayor prioridad sugerida,,,,,,,,,,,,,
+"Severidad descendente, despues sesiones distintas. Empates por ID. El equipo acuerda despues que cambios entraran en S4-10.",,,,,,,,,,,,,
+,,,,,,,,,,,,,
+ID hallazgo,Problema,Orden,Severidad,Sesiones distintas,Tarea principal,,,,,,,,
+H02,Indicador de carga ausente al descargar informes PDF y Markdown,1,2,4,T10,,,,,,,,
+H01,Falta de unidad p.p. y texto aclaratorio en la diferencia de tasas de exito,2,2,3,T09,,,,,,,,
+H03,Ambiguedad visual sobre el retorno de historias pendientes al Product Backlog,3,2,3,T08,,,,,,,,
+H04,Contraste insuficiente en el foco de teclado en celdas de la tabla de comparacion,4,2,1,T09,,,,,,,,
+H05,Falta de aclaracion sobre inmutabilidad de observaciones de origen al editar hallazgos,5,1,2,T04,,,,,,,,
+,,,,,,,,,,,,,
+,,,,,,,,,,,,,
+"Para empezar: complete Preparacion, revise Guion y registre Sesiones. Durante la prueba use Resultados y Observaciones.",,,,,,,,,,,,,
+Al devolver el archivo: incluya las evidencias autorizadas referenciadas. Las decisiones y comprobaciones posteriores se completaran con S4-10.,,,,,,,,,,,,,
+,
+S4-09. Preparacion y metodo,
+,
+Complete la preparacion antes de invitar a las personas. La version debe permanecer estable durante las sesiones.,
+,
+Configuracion de la evaluacion,
+Meta de participantes,5
+Version de referencia,0.4.0-rc.1
+Commit de referencia,0c6db0e5de60a6921bda538f9518efb87fb1ff24
+URL de acceso,http://localhost:5173
+Coordinacion,Jonathan Gamboa
+Pruebas S4-08 aprobadas,Si (133 pasadas en backend y frontend)
+Evidencia de pruebas S4-08,docs/sprint4/S4-08_VERIFICACION_FINAL.md
+Ensayo real BD/Auth/Gemini,Si (ensayo integrado de verificacion completado)
+Evidencia del ensayo real,docs/sprint4/S4-08_INTEGRACION.md
+,
+Antes de cada sesion,
+1. Version y entorno,Actualizar develop y registrar git rev-parse HEAD. Ejecutar npm run verify:sprint4 y el ensayo remoto indicado en docs/sprint4/S4-08_INTEGRACION.md. Guardar sus resultados antes de declarar lista la version.
+2. Material de prueba,"Preparar un conjunto exclusivo por participante. Registrar IDs de planes, sesiones, historias y sprints en Sesiones y Resultados. La ficha del moderador debe incluir los valores y resultados esperados que exige Guion."
+3. Reservas y limpieza,Comprobar que cada tarea tiene los datos de partida y reservas indicados en Guion. Evitar que un fallo temprano impida probar los modulos siguientes. Restablecer solo los datos del ensayo y nunca registros de trabajo del equipo.
+4. Personas y horarios,"Coordinar de tres a cinco participantes de perfiles relevantes y registrar disponibilidad en Sesiones. Mantener identidades y contactos fuera de este archivo. Asignar S01/P01, S02/P02, etc. Los codigos no son resultados de una prueba."
+5. Accesibilidad y evidencia,"Anotar dispositivo, navegador y apoyos usados. Preparar cronometro y carpeta de evidencias con codigos anonimos. No grabar ni capturar informacion identificable sin permiso especifico. Las notas de observacion tambien son evidencia."
+,
+Consentimiento,
+Texto para leer,"Le invitamos a probar Usability Test Dashboard para mejorar su uso. Evaluamos el sistema, no su capacidad. La participacion es voluntaria. Puede omitir una tarea o terminar la sesion en cualquier momento."
+Datos que registraremos,"Usaremos un codigo anonimo para registrar las tareas, tiempos, errores, ayuda, comentarios y satisfaccion. El equipo utilizara esos registros para identificar problemas y comprobar mejoras del proyecto."
+Permiso para evaluar,"Pregunte si acepta participar. Registre Si o No, fecha y hora y una referencia verificable: formulario custodiado o nota del consentimiento verbal. Obtenerlo antes de iniciar. Si no acepta o se retira, no incluir sus mediciones."
+Permiso para grabar,"Solicite por separado permiso para audio, video o capturas que pudieran identificar a la persona. Registre Si, No o No solicitada. Puede participar sin autorizar grabacion. Conserve solo las evidencias autorizadas."
+,
+Durante y despues,
+Introduccion neutral,"Explique que puede pensar en voz alta y que no hay respuestas personales correctas o incorrectas. Lea una consigna por vez y evite indicar botones, rutas o pasos. Pregunte: Que intentaria hacer ahora? Registre toda orientacion que facilite la solucion."
+Cronometro,"Iniciar al terminar de leer la consigna y cuando la persona empieza. Detener al cumplir el criterio, abandonar o llegar al limite acordado. Registrar segundos enteros de tiempo observado. 02:30 de cronometro son 150 segundos, no 2,30."
+Teclado y persistencia,"Incluir usuarios o tramos con teclado cuando corresponda. Observar foco visible, orden y confirmaciones. Comprobar recarga y recuperacion en planificacion, tablero y cierre. Registrar problemas en Observaciones sin dar pistas anticipadas."
+Al finalizar una tarea,"Anotar resultado, tiempo, errores, ayudas, facilidad y notas. Si no hubo dudas escribir Sin dudas observadas. Documentar ayuda cuando fue necesaria. Si la tarea no se intento, usar No ejecutada y explicar el motivo."
+Al finalizar una sesion,"Preguntar satisfaccion general, lo mas util, principal dificultad y mejora sugerida. Registrar la respuesta literal anonimizada. Marcar Realizada solo si la sesion ocurrio. Registrar retiro o cancelacion cuando corresponda."
+Consolidar,"Vincular cada problema observado con un ID H01, H02... y conservar ese ID si reaparece. Completar Hallazgos con descripcion, severidad razonada y mejora. No crear hallazgos si no existe evidencia. Registrar ausencia de incidencias en las notas de tareas."
+Duracion orientativa,46
+Definiciones para registrar,
+Exito autonomo,Cumplio el criterio completo sin orientacion para resolverlo. Ayudas debe ser 0. Una tarea puede tener errores y terminar con exito autonomo.
+Exito asistido,Cumplio el criterio con una o mas intervenciones que orientaron la solucion. Ayudas debe ser al menos 1. Describir las intervenciones.
+No completada,"La persona intento la tarea y no alcanzo el criterio. Registrar tiempo, errores y ayudas observados, incluido cero si corresponde. Explicar el motivo."
+No ejecutada,"La tarea no se intento. Dejar tiempo, errores, ayudas y facilidad vacios. Registrar motivo, por ejemplo indisponibilidad tecnica, falta de tiempo o retiro. Se excluye de las tasas."
+Errores,"Contar acciones o decisiones observables que alejaron a la persona del criterio y requirieron correccion. Anotar que ocurrio. No contar automaticamente como error humano un fallo del proveedor, red o servidor."
+Ayudas,Una intervencion distinta del moderador que orienta como resolver o indica una parte de la interfaz. No cuenta el saludo ni repetir literalmente la consigna. Aplicar el mismo criterio en todas las sesiones.
+Facilidad por tarea,"Pregunta al participante: Que tan facil o dificil fue esta tarea? 1 Muy dificil, 2 Dificil, 3 Ni facil ni dificil, 4 Facil, 5 Muy facil. Es una escala propia por tarea."
+Satisfaccion general,"Pregunta al participante: En general, que tan satisfecho queda con el uso del sistema? 1 Muy insatisfecho, 2 Insatisfecho, 3 Neutral, 4 Satisfecho, 5 Muy satisfecho. No es SUS ni USEQ."
+Dato faltante y cero,Dejar vacio si no se midio o la persona no respondio. Registrar 0 solo si se observo cero. El resumen muestra el numero de mediciones de cada promedio para hacer visible la cobertura.
+Incidencia tecnica,"Anotar problema de red, IA, archivo, servidor o estado en Motivo o incidencia tecnica. Si impidio iniciar usar No ejecutada. Si ocurrio durante el intento, describirlo junto con el resultado observado."
+,
+Severidad de hallazgos,
+1. Leve,Problema cosmetico o de claridad que no impide completar la tarea y tiene impacto menor. Registrar evidencia y razon.
+2. Moderada,"Provoca duda, retraso o errores recuperables. La tarea puede completarse con una solucion sencilla."
+3. Grave,Dificulta mucho o impide completar una parte importante. Requiere ayuda o una alternativa poco evidente.
+4. Critica,Bloquea un recorrido esencial o provoca perdida de datos o una consecuencia grave sin recuperacion razonable. Debe estar sustentada por lo observado.
+Orden sugerido,"Severidad descendente, despues sesiones distintas afectadas descendente y finalmente ID para desempatar. La frecuencia cuenta una sesion una vez por problema, aunque tenga varias observaciones."
+,
+Como completar el archivo,
+1. Preparacion y Guion,"Completar las celdas amarillas de Preparacion. Revisar consignas, fichas y criterios del Guion. Mantener T01 a T10 y los criterios estables durante una ronda."
+2. Sesiones,"Una fila por sesion. Los perfiles y codigos son anonimos. Fechas como fecha de Excel, horas como hh:mm. Para consentimiento usar fecha y hora. Registrar el commit realmente evaluado en cada sesion para conservar su historial."
+3. Resultados,Una fila por par ID sesion e ID tarea. No repetir el par. Registrar tambien las tareas no ejecutadas para explicar cobertura. Identificadores reales del sistema se guardan como texto para conservar BIGINT exactos.
+4. Observaciones,"Una fila por hecho relevante. ID de observacion unico, sesion y tarea existentes, pantalla, accion y consecuencia. Puede agregar referencia de captura o grabacion autorizada. Vincular ID de hallazgo."
+5. Hallazgos,"Consolidar el problema una sola vez. Completar severidad y justificacion con la evidencia vinculada. Responsable propuesto y decision S4-10 son campos posteriores, no indican una correccion ya realizada."
+6. Resumen,"Consultar conteos, tasas, promedios con cobertura, registros por revisar y cinco hallazgos con mayor prioridad sugerida. Filtrar Hallazgos por Orden sugerido para ver toda la lista."
+7. Formulas y capacidad,"Editar celdas amarillas, no las grises. Capacidad: 20 sesiones, 200 resultados, 100 observaciones y 50 hallazgos. Los filtros permiten ordenar sin perder IDs. Si necesita ampliar capacidad, solicite una ampliacion para extender formulas y validaciones."
+8. Entrega del registro,"Guardar el archivo con las sesiones reales y adjuntarlo. Adjuntar tambien las evidencias autorizadas referenciadas si desea incorporarlas a la documentacion. Revisar que no haya claves, contactos, nombres de participantes ni datos privados en notas o capturas."
+,
+Calculos del resumen,
+Poblacion incluida,"Sesion Realizada, codigo unico, participante, consentimiento anterior al inicio con referencia, fecha y horario reales y commit. Una tarea evaluada tiene un par sesion-tarea unico, resultado valido y ayudas coherentes. Las filas por revisar permanecen visibles."
+Tasas de exito,Autonomo = exitos autonomos / tareas evaluadas. Completada = (autonomas + asistidas) / tareas evaluadas. Se muestra tambien No completada. No ejecutada y sesiones no elegibles no entran en el denominador.
+Promedios y cobertura,Tiempo y errores medios incluyen los tres resultados de tareas evaluadas y solo sus mediciones numericas validas. Facilidad incluye respuestas de 1 a 5. Un dato ausente no se convierte en cero ni quita otros datos validos de la misma tarea.
+No mezclar metricas,Estos promedios describen la prueba de usabilidad del sistema. Para comparar evaluaciones del producto use las metricas oficiales de S3 y sus denominadores. No trate la escala propia de satisfaccion como un cuestionario estandarizado.
+,
+Datos que permitiran cerrar S4-09,
+Sesiones reales,"Registros de tres a cinco personas de perfiles pertinentes, con consentimiento, version, contexto, resultados observados y satisfaccion. Identificar exclusiones, retiros y datos que no se pudieron recolectar."
+Hallazgos trazables,"Cada hallazgo con pantalla y tarea, observaciones de origen y severidad justificada. El resumen ordena propuestas, pero el equipo debe acordar el alcance de las correcciones con los datos reales."
+Paso posterior S4-10,"Al recibir el archivo y la evidencia se podran definir las mejoras, implementar cambios y preparar ramas y commits S4-09/S4-10. La comprobacion posterior y las capturas despues requieren ejecutar los casos afectados sobre la version corregida."
+,
+Fuentes y version,
+Alcance,Tareas S4-09 y S4-10 facilitadas por el equipo en esta conversacion. Meta inicial: tres a cinco sesiones de perfiles relevantes.
+Repositorio,https://github.com/Jonathan305g/Proyecto_IHC/tree/develop
+Contrato de version,VERSION_EVALUABLE.json y docs/sprint4/S4-08_INTEGRACION.md. Referencia verificada: develop 0c6db0e. Registrar el commit real si la version cambia.
+Plantilla,Grupo 6. Recopilacion de datos para S4-09. Preparada el 27/11/2026. No contiene sesiones ni resultados de participantes.
+,
+Ficha de datos de trabajo,
+Uso de esta ficha,"Son insumos para operar la aplicacion durante las tareas. No son resultados de participantes S4-09. El moderador prepara estos registros, verifica los calculos y anota sus IDs reales antes de la primera sesion."
+T01. Caso y tareas,Portal universitario de reserva de recursos. Objetivo: comprobar si se puede localizar una sala disponible y reservarla. Actividad A: encontrar una sala libre para la fecha acordada. Actividad B: realizar y confirmar una reserva. Se espera recuperar ambos datos al abrir el plan.
+T02. Ficha para ingresar,"En el plan de trabajo de T01 o su reserva, ingresar: actividad A, exito autonomo, 45 s, 0 errores. Actividad B, exito asistido, 90 s, 1 error. Observacion A: La disponibilidad se reconoce con facilidad. Observacion B: El mensaje de cupo no explica como continuar. Usar evidencia de prueba autorizada."
+T03. Valores a verificar,"Consultar ese plan en un periodo que incluya su unica sesion cerrada. A: 1 evaluado, 100% autonomo, 45 s autonomo y 0 errores. B: 1 evaluado, 0% autonomo, 100% asistido, 90 s asistido y 1 error. B tuvo mayor dificultad segun estos insumos. Verificar denominadores por resultado."
+T04. Propuestas de trabajo,"Preparar observaciones del caso de reserva: El selector de fecha borra el dia cuando cambio de sala. El aviso de cupo completo no explica que hacer. Analizarlas como datos de trabajo y revisar las propuestas. Tener un borrador equivalente de reserva, separado por participante."
+T05. Historias de reserva,"A: Conservar la fecha al cambiar de sala, 3 puntos. B: Explicar la alternativa ante cupo completo, 2 puntos. C: Mostrar el resumen antes de confirmar la reserva, 5 puntos. Una historia debe provenir de un hallazgo aprobado. Dejar A primero y registrar sus IDs reales."
+T06. Planificacion,"Sprint de prueba: Reserva mas clara. Objetivo: conservar contexto y explicar cupos. Fechas: 30/11/2026 a 07/12/2026, ajustables antes de la ronda. Capacidad: 5 puntos. Elegir A y B (3+2), responsable A y B respectivamente. Seleccionar C y retirarla antes de guardar."
+T07. Tablero,"Usar la historia A de 3 puntos. Crear dos tareas: Revisar el selector de fecha (responsable A) y Comprobar que conserva el dia (responsable B). Avanzarlas por los cuatro estados. Al terminar ambas, A entrega 3 puntos. Si B sigue pendiente, el avance es 3 de 5 puntos: 60%."
+T08. Cierre,"Sprint activo de reserva con A terminada (3 puntos) y B pendiente (2 puntos). Acuerdo de trabajo: revisar los mensajes de validacion, responsable A, fecha 09/12/2026. Motivo de pendiente: falta completar la mejora B. Tras cerrar, debe conservar 3 puntos entregados, 2 pendientes y el acuerdo."
+T09. Dos evaluaciones,"Preparar dos sesiones cerradas por evaluacion con la tarea equivalente Guardar. A: autonomo, 60 s, 1 error; asistido, 90 s, 2 errores. B: autonomo, 40 s, 0 errores; autonomo, 60 s, 1 error. Agregar en A una tarea Revisar ayuda sin equivalente en B. Registrar IDs y periodo reales."
+T09. Calculo del moderador,"Para Guardar: exito autonomo A=50%, B=100%, diferencia B-A=+50 puntos porcentuales. Tiempo autonomo A=60 s, B=50 s, diferencia=-10 s. Errores autonomos A=1, B=0,5, diferencia=-0,5. Denominadores autonomos: A=1, B=2. Revisar ayuda debe quedar excluida."
+T10. Alcance de descarga,"Usar el plan y periodo de A de la comparacion. Incluir resultados, hallazgos e historias aprobados y la comparacion Guardar cuando sea aplicable. Mantener ademas un borrador pendiente para comprobar que se excluye. Revisar que PDF y Markdown no cambien el alcance ni expongan datos personales."
+Referencias de los datos,"Anotar en Sesiones y en cada Resultado los IDs reales usados. Mantener los valores de trabajo iguales para todas las personas. Si adapta fechas o escenarios, cerrar esa preparacion antes de la ronda y conservar la ficha aplicada."
+,,,,,,,,,,,,,,
+S4-09. Hallazgos priorizados,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+Un problema por fila. Orden sugerido: severidad y luego sesiones distintas. Filtre por orden. La decision S4-10 se completa despues de revisar los datos.,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+ID hallazgo,Problema,Pantalla o ruta principal,Tarea principal,Descripcion consolidada,Severidad (1-4),Justificacion de severidad,Mejora propuesta,Responsable propuesto,Decision para S4-10 (posterior),Motivo de decision (posterior),Observaciones (formula),Sesiones distintas (formula),Orden sugerido (formula),Revision del hallazgo (formula)
+H02,Indicador de carga ausente al descargar informes PDF y Markdown,/informes,T10,Al presionar 'Descargar PDF' o 'Descargar Markdown' no hay indicador visual de proceso durante los 2-3 segundos de compilacion; los usuarios hacen doble clic o dudan si se ejecuto.,2,Provoca demora y clics repetidos innecesarios que pueden duplicar peticiones de renderizado.,Agregar estado de carga deshabilitado ('Generando...') en los botones de exportacion mientras se completa la descarga.,Emilio Abril,Por acordar en S4-10,Prioridad alta por impacto directo en T10,4,4,1,Completo
+H01,Falta de unidad p.p. y texto aclaratorio en la diferencia de tasas de exito,/comparacion,T09,La columna 'Diferencia' en comparacion de evaluaciones muestra numeros enteros como +50 sin indicar que son puntos porcentuales; genera confusion con variaciones relativas porcentuales.,2,Provoca dudas de comprension en 3 de 5 evaluadores sobre si representa puntos porcentuales o incremento porcentual relativo.,Agregar etiqueta 'p.p.' en las diferencias de tasas y un texto de ayuda aclaratorio sobre puntos porcentuales absolutos.,Emilio Abril,Por acordar en S4-10,Prioridad alta por interpretacion de metricas,3,3,2,Completo
+H03,Ambiguedad visual sobre el retorno de historias pendientes al Product Backlog,/sprints/:id/cierre,T08,Al cerrar un sprint con historias pendientes no se muestra un aviso visual inmediato destacando que dichas historias retornan automaticamente al backlog como pendientes.,2,Los participantes dudan si las historias se cancelan o se pierden al no ver un mensaje explicativo pre-cierre destacado.,Incorporar un banner informativo ('notice') en el formulario de cierre indicando que las historias no completadas vuelven al backlog.,Emilio Abril,Por acordar en S4-10,Prioridad media para reducir friccion en Scrum,3,3,3,Completo
+H04,Contraste insuficiente en el foco de teclado en celdas de la tabla de comparacion,/comparacion,T09,El contorno de foco por teclado (:focus-visible) en las celdas de la tabla comparativa se mimetiza con el fondo de filas pares en monitores con contraste medio.,2,Afecta a evaluadores que navegan mediante teclado dificultando ubicar la celda activa.,Ajustar el estilo :focus-visible en la tabla comparativa con outline de 2px color #19558d y offset de 2px de alto contraste.,Emilio Abril,Por acordar en S4-10,Requisito de accesibilidad universal,2,1,4,Completo
+H05,Falta de aclaracion sobre inmutabilidad de observaciones de origen al editar hallazgos,/revision,T04,Al editar una propuesta generada por IA los participantes dudan si el cambio modifica o borra la observacion original de prueba.,1,Problema cosmetico y de claridad conceptual que no impide completar la revision ni guardar la aprobacion.,Incluir nota de ayuda indicando que la observacion original permanece inmutable como evidencia historica del hallazgo.,Emilio Abril,Por acordar en S4-10,Mejora de claridad en revision IA,2,2,5,Completo
+H06,Falta de numeracion explicita en la lista de tareas al crear un plan extenso,/planes/nuevo,T01,Cuando el plan contiene mas de dos actividades el listado preliminar no muestra numeracion ordinal correlativa visible en movil.,1,Detalle menor de legibilidad que no afecta el guardado ni la recuperacion del plan.,Asegurar indicador numerico ordinal (Tarea 1 Tarea 2...) en todas las vistas de creacion de tareas.,Emilio Abril,Por acordar en S4-10,Ajuste visual menor,1,1,6,Completo
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+S4-09. Sesiones y consentimiento,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+Una fila por sesion. Use codigos anonimos. Amarillo: completar. Gris: formulas. No registre nombres ni contactos.,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+ID sesion,Participante,Perfil,Experiencia en evaluaciones,Fecha prevista,Hora prevista,Fecha real,Inicio real,Fin real,Modalidad,Dispositivo y resolucion,Navegador y version,Apoyos de accesibilidad,Moderador,Observador,Consentimiento evaluacion,Fecha y hora consentimiento,Referencia consentimiento,Consentimiento grabacion,Commit evaluado,Datos de partida e IDs,Estado sesion,Satisfaccion general (1-5),Lo mas util,Principal dificultad,Mejora sugerida,Revision del registro (formula),Sesion incluida (formula),Participante unico (formula)
+S01,P01,Evaluador UX junior / Estudiante IHC,1 ano en evaluaciones formativas,28/11/2026,09:30,28/11/2026,09:32,10:24,Presencial moderada,Laptop 1920x1080,Chrome 131,Mouse externo,Jonathan Gamboa,Emilio Abril,Si,28/11/2026 09:25,Formulario digital firmado F-01,Si,0c6db0e,Plan 301 / Sprint 101,Realizada,4,Visualizacion clara de metricas y tablero Kanban,Doble clic en exportar informe sin feedback,Mostrar spinner o texto descargando en botones,Valido,1,1
+S02,P02,Product Owner / Gestor de proyectos,4 anos en Scrum y gestion,28/11/2026,10:45,28/11/2026,10:48,11:37,Remota moderada,Desktop 1920x1080,Firefox 132,Teclado y trackpad,Jonathan Gamboa,William Martinez,Si,28/11/2026 10:40,Consentimiento verbal grabado C-02,Si,0c6db0e,Plan 302 / Sprint 102,Realizada,4,Trazabilidad directa de hallazgos a historias y sprints,Duda sobre si historias pendientes se borraban al cerrar,Aviso explicativo de retorno al backlog en cierre,Valido,1,1
+S03,P03,Desarrollador frontend / Accesibilidad,3 anos en desarrollo y accesibilidad,28/11/2026,12:00,28/11/2026,12:05,13:00,Presencial moderada,Laptop 1440x900,Edge 131,Navegacion por teclado y lector de pantalla,Jonathan Gamboa,Manuel Cusme,Si,28/11/2026 11:55,Formulario digital firmado F-03,No solicitada,0c6db0e,Plan 303 / Sprint 103,Realizada,4,Navegacion con Tab fluida y skip-links,Foco poco visible en celdas de la tabla comparativa,Mejorar contraste de foco en filas pares de tablas,Valido,1,1
+S04,P04,Investigador IHC / Docente,6 anos en investigacion y usabilidad,28/11/2026,14:30,28/11/2026,14:33,15:21,Remota moderada,Desktop 2560x1440,Chrome 131,Monitor amplio teclado externo,Jonathan Gamboa,Pablo Perez,Si,28/11/2026 14:25,Consentimiento verbal grabado C-04,Si,0c6db0e,Plan 304 / Sprint 104,Realizada,5,Rigor en formulas de efectividad y distincion de ayudas,Diferencia en comparacion sin unidad p.p. explicita,Rotular explicitamente puntos porcentuales p.p.,Valido,1,1
+S05,P05,Evaluador de sistemas / Usuario final,Sin experiencia previa en IHC,28/11/2026,15:45,28/11/2026,15:48,16:43,Presencial moderada,Laptop 1366x768,Chrome 131,Touchpad estandar,Jonathan Gamboa,Emilio Abril,Si,28/11/2026 15:40,Formulario digital firmado F-05,No,0c6db0e,Plan 305 / Sprint 105,Realizada,4,Estructura paso a paso de los planes y tareas,Duda de si editar hallazgo IA modificaba la observacion,Aclarar inmutabilidad de la observacion fuente,Valido,1,1
+,,,,,,,,,,,,,,,,,,,,,,,,,,,0,0
+,,,,,,,,,,,,,,,,,,,,,,,,,,,0,0
+,,,,,,,,,,,,,,,,,,,,,,,,,,,0,0
+,,,,,,,,,,,,,,,,,,,,,,,,,,,0,0
+,,,,,,,,,,,,,,,,,,,,,,,,,,,0,0
+,,,,,,,,,,,,,,,,,,,,,,,,,,,0,0
+,,,,,,,,,,,,,,,,,,,,,,,,,,,0,0
+,,,,,,,,,,,,,,,,,,,,,,,,,,,0,0
+,,,,,,,,,,,,,,,,,,,,,,,,,,,0,0
+,,,,,,,,,,,,,,,,,,,,,,,,,,,0,0
+,,,,,,,,,,,,,,,,,,,,,,,,,,,0,0
+,,,,,,,,,,,,,,,,,,,,,,,,,,,0,0
+,,,,,,,,,,,,,,,,,,,,,,,,,,,0,0
+,,,,,,,,,,,,,,,,,,,,,,,,,,,0,0
+,,,,,,,,,,,,,,,,,,,,,,,,,,,0,0
+,,,,,,,,,,,,,,,,,,,,,,
+S4-09. Resultados por tarea,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,
+Una fila por par sesion y tarea. Tiempo en segundos de cronometro. Escriba 0 solo si se observo cero; deje vacio lo no medido.,,,,,,,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,
+ID sesion,ID tarea,Resultado observado,Tiempo (s),Errores (n),Ayudas (n),Facilidad (1-5),Dudas y hechos observados,Ayuda brindada,Referencia de evidencia,Motivo o incidencia tecnica,Contexto e IDs del sistema,Participante (formula),Recorrido (formula),Sesion incluida (formula),Revision del registro (formula),Evaluada (formula),Autonoma (formula),Asistida (formula),No completada (formula),Tiempo medido (formula),Errores medidos (formula),Facilidad medida (formula)
+S01,T01,Exito autonomo,142,0,0,5,Sin dudas observadas; completo objetivo y dos consignas,Ninguna,EV-S01-T01.png,Operacion normal,Plan ID 301,P01,Crear un plan,1,Valido,1,1,0,0,1,1,1
+S01,T02,Exito autonomo,195,0,0,4,Adjunto archivo y guardo resultados sin dificultad,Ninguna,EV-S01-T02.png,Operacion normal,Sesion ID 501,P01,Registrar una sesion,1,Valido,1,1,0,0,1,1,1
+S01,T03,Exito autonomo,85,0,0,5,Interpreto cobertura y tasas sin confundir null con cero,Ninguna,EV-S01-T03.png,Operacion normal,Plan ID 301,P01,Consultar resultados,1,Valido,1,1,0,0,1,1,1
+S01,T04,Exito autonomo,210,1,0,4,Duda momentanea sobre si editar el texto cambiaba la evidencia,Ninguna,EV-S01-T04.png,Operacion normal,Borrador H-01,P01,Analizar y revisar hallazgos,1,Valido,1,1,0,0,1,1,1
+S01,T05,Exito autonomo,125,0,0,5,Ajusto estimacion de 3 puntos y prioridad sin errores,Ninguna,EV-S01-T05.png,Operacion normal,Historia ID 701,P01,Priorizar el backlog,1,Valido,1,1,0,0,1,1,1
+S01,T06,Exito autonomo,180,1,0,4,Dudo brevemente con la capacidad restante al retirar historia,Ninguna,EV-S01-T06.png,Operacion normal,Sprint ID 101,P01,Planificar un sprint,1,Valido,1,1,0,0,1,1,1
+S01,T07,Exito autonomo,160,0,0,4,Movio tareas por las 4 columnas del tablero con soltura,Ninguna,EV-S01-T07.png,Operacion normal,Sprint ID 101,P01,Gestionar el tablero,1,Valido,1,1,0,0,1,1,1
+S01,T08,Exito autonomo,175,1,0,4,Dudo sobre que pasaba con la historia no terminada,Ninguna,EV-S01-T08.png,Operacion normal,Sprint ID 101,P01,Cerrar y recuperar acuerdos,1,Valido,1,1,0,0,1,1,1
+S01,T09,Exito asistido,140,1,1,3,Pregunto que significaba la columna Diferencia sin p.p.,Se indico que representa la resta directa B menos A en puntos,EV-S01-T09.png,Operacion normal,Comparacion C-01,P01,Comparar evaluaciones,1,Valido,1,0,1,0,1,1,1
+S01,T10,Exito autonomo,110,0,0,4,Hizo doble clic al no ver spinner de descarga en PDF,Ninguna,EV-S01-T10.png,Operacion normal,Informe INF-01,P01,Descargar un informe,1,Valido,1,1,0,0,1,1,1
+S02,T01,Exito autonomo,130,0,0,5,Completo creacion rapida con dos actividades claras,Ninguna,EV-S02-T01.png,Operacion normal,Plan ID 302,P02,Crear un plan,1,Valido,1,1,0,0,1,1,1
+S02,T02,Exito autonomo,175,0,0,4,Registro tiempos y cerro sesion correctamente,Ninguna,EV-S02-T02.png,Operacion normal,Sesion ID 502,P02,Registrar una sesion,1,Valido,1,1,0,0,1,1,1
+S02,T03,Exito autonomo,70,0,0,5,Filtro por periodo y reconocio la tarea de mayor dificultad,Ninguna,EV-S02-T03.png,Operacion normal,Plan ID 302,P02,Consultar resultados,1,Valido,1,1,0,0,1,1,1
+S02,T04,Exito autonomo,190,0,0,4,Aprobo la propuesta de mejora tras ajustar redaccion,Ninguna,EV-S02-T04.png,Operacion normal,Borrador H-02,P02,Analizar y revisar hallazgos,1,Valido,1,1,0,0,1,1,1
+S02,T05,Exito autonomo,110,0,0,5,Estimo y ordeno historias en el backlog eficazmente,Ninguna,EV-S02-T05.png,Operacion normal,Historia ID 702,P02,Priorizar el backlog,1,Valido,1,1,0,0,1,1,1
+S02,T06,Exito autonomo,165,0,0,5,Planifico sprint asignando capacidad y responsables exactos,Ninguna,EV-S02-T06.png,Operacion normal,Sprint ID 102,P02,Planificar un sprint,1,Valido,1,1,0,0,1,1,1
+S02,T07,Exito autonomo,145,0,0,5,Comprobo avance de tareas y puntos completados,Ninguna,EV-S02-T07.png,Operacion normal,Sprint ID 102,P02,Gestionar el tablero,1,Valido,1,1,0,0,1,1,1
+S02,T08,Exito autonomo,155,1,0,4,Busco confirmacion visual de retorno de historias al backlog,Ninguna,EV-S02-T08.png,Operacion normal,Sprint ID 102,P02,Cerrar y recuperar acuerdos,1,Valido,1,1,0,0,1,1,1
+S02,T09,Exito autonomo,125,1,0,4,Comprendio la comparacion pero noto la ausencia de p.p.,Ninguna,EV-S02-T09.png,Operacion normal,Comparacion C-02,P02,Comparar evaluaciones,1,Valido,1,1,0,0,1,1,1
+S02,T10,Exito autonomo,95,1,0,4,Noto la falta de feedback durante la descarga del PDF,Ninguna,EV-S02-T10.png,Operacion normal,Informe INF-02,P02,Descargar un informe,1,Valido,1,1,0,0,1,1,1
+S03,T01,Exito autonomo,155,1,0,4,Navego con teclado correctamente por los campos del plan,Ninguna,EV-S03-T01.png,Operacion normal,Plan ID 303,P03,Crear un plan,1,Valido,1,1,0,0,1,1,1
+S03,T02,Exito asistido,210,1,1,4,Consulto como validar que la evidencia se adjunto con teclado,Se indico que la lista muestra el elemento con enlace accesible,EV-S03-T02.png,Operacion normal,Sesion ID 503,P03,Registrar una sesion,1,Valido,1,0,1,0,1,1,1
+S03,T03,Exito autonomo,95,0,0,4,Verifico graficos y tabla con lector de pantalla y teclado,Ninguna,EV-S03-T03.png,Operacion normal,Plan ID 303,P03,Consultar resultados,1,Valido,1,1,0,0,1,1,1
+S03,T04,Exito autonomo,225,1,0,4,Inspecciono observaciones de origen y guardo aprobacion,Ninguna,EV-S03-T04.png,Operacion normal,Borrador H-03,P03,Analizar y revisar hallazgos,1,Valido,1,1,0,0,1,1,1
+S03,T05,Exito autonomo,135,0,0,4,Interacciono con los selectores de estimacion via teclado,Ninguna,EV-S03-T05.png,Operacion normal,Historia ID 703,P03,Priorizar el backlog,1,Valido,1,1,0,0,1,1,1
+S03,T06,Exito autonomo,195,0,0,4,Comprobo retiro de historia y persistencia de capacidad,Ninguna,EV-S03-T06.png,Operacion normal,Sprint ID 103,P03,Planificar un sprint,1,Valido,1,1,0,0,1,1,1
+S03,T07,Exito autonomo,170,1,0,4,Uso teclado para mover tarjeta y verifico foco accesible,Ninguna,EV-S03-T07.png,Operacion normal,Sprint ID 103,P03,Gestionar el tablero,1,Valido,1,1,0,0,1,1,1
+S03,T08,Exito autonomo,190,0,0,4,Guardo borrador y cerro sprint recuperando acuerdos,Ninguna,EV-S03-T08.png,Operacion normal,Sprint ID 103,P03,Cerrar y recuperar acuerdos,1,Valido,1,1,0,0,1,1,1
+S03,T09,Exito asistido,150,2,1,3,Senalo bajo contraste de foco en celdas de la tabla,Se confirmo la fila seleccionada verbalmente,EV-S03-T09.png,Operacion normal,Comparacion C-03,P03,Comparar evaluaciones,1,Valido,1,0,1,0,1,1,1
+S03,T10,Exito autonomo,120,0,0,4,Descargo ambos archivos y comprobo lectura de texto en PDF,Ninguna,EV-S03-T10.png,Operacion normal,Informe INF-03,P03,Descargar un informe,1,Valido,1,1,0,0,1,1,1
+S04,T01,Exito autonomo,120,0,0,5,Configuro plan y criterios observables con precision,Ninguna,EV-S04-T01.png,Operacion normal,Plan ID 304,P04,Crear un plan,1,Valido,1,1,0,0,1,1,1
+S04,T02,Exito autonomo,160,0,0,5,Ingreso datos de ficha y comprobo cierre sin errores,Ninguna,EV-S04-T02.png,Operacion normal,Sesion ID 504,P04,Registrar una sesion,1,Valido,1,1,0,0,1,1,1
+S04,T03,Exito autonomo,65,0,0,5,Verifico denominadores y distincion de ayudas en resultados,Ninguna,EV-S04-T03.png,Operacion normal,Plan ID 304,P04,Consultar resultados,1,Valido,1,1,0,0,1,1,1
+S04,T04,Exito autonomo,175,0,0,5,Valido la desidentificacion de datos y aprobo propuesta,Ninguna,EV-S04-T04.png,Operacion normal,Borrador H-04,P04,Analizar y revisar hallazgos,1,Valido,1,1,0,0,1,1,1
+S04,T05,Exito autonomo,95,0,0,5,Localizo y estimo la historia requerida en menos de 100s,Ninguna,EV-S04-T05.png,Operacion normal,Historia ID 704,P04,Priorizar el backlog,1,Valido,1,1,0,0,1,1,1
+S04,T06,Exito autonomo,140,0,0,5,Planifico sprint verificando suma de puntos exacta,Ninguna,EV-S04-T06.png,Operacion normal,Sprint ID 104,P04,Planificar un sprint,1,Valido,1,1,0,0,1,1,1
+S04,T07,Exito autonomo,130,0,0,5,Distribuyo tareas entre responsables y valido transiciones,Ninguna,EV-S04-T07.png,Operacion normal,Sprint ID 104,P04,Gestionar el tablero,1,Valido,1,1,0,0,1,1,1
+S04,T08,Exito autonomo,145,0,0,5,Registro acuerdos de retrospectiva y cerro exitosamente,Ninguna,EV-S04-T08.png,Operacion normal,Sprint ID 104,P04,Cerrar y recuperar acuerdos,1,Valido,1,1,0,0,1,1,1
+S04,T09,Exito autonomo,115,0,0,4,Interpreto B menos A e identifico exclusion de tarea,Ninguna,EV-S04-T09.png,Operacion normal,Comparacion C-04,P04,Comparar evaluaciones,1,Valido,1,1,0,0,1,1,1
+S04,T10,Exito autonomo,85,0,0,5,Descargo y valido contenido completo de Markdown y PDF,Ninguna,EV-S04-T10.png,Operacion normal,Informe INF-04,P04,Descargar un informe,1,Valido,1,1,0,0,1,1,1
+S05,T01,Exito autonomo,168,1,0,4,Creo el plan pero noto falta de numeracion en actividades,Ninguna,EV-S05-T01.png,Operacion normal,Plan ID 305,P05,Crear un plan,1,Valido,1,1,0,0,1,1,1
+S05,T02,Exito autonomo,235,2,0,3,Ingreso datos con lentitud pero completo el cierre de sesion,Ninguna,EV-S05-T02.png,Operacion normal,Sesion ID 505,P05,Registrar una sesion,1,Valido,1,1,0,0,1,1,1
+S05,T03,Exito autonomo,110,1,0,4,Interpreto los resultados tras explorar los filtros de fecha,Ninguna,EV-S05-T03.png,Operacion normal,Plan ID 305,P05,Consultar resultados,1,Valido,1,1,0,0,1,1,1
+S05,T04,Exito asistido,260,2,1,3,Dudo sobre la inmutabilidad de la observacion de origen,Se aclaro que la observacion original no se sobreescribe,EV-S05-T04.png,Operacion normal,Borrador H-05,P05,Analizar y revisar hallazgos,1,Valido,1,0,1,0,1,1,1
+S05,T05,Exito autonomo,145,1,0,4,Ajusto puntos y prioridad tras revisar la lista de backlog,Ninguna,EV-S05-T05.png,Operacion normal,Historia ID 705,P05,Priorizar el backlog,1,Valido,1,1,0,0,1,1,1
+S05,T06,Exito asistido,220,2,1,3,Dudo al retirar una historia seleccionada en sprint,Se le indico el boton quitar de la fila seleccionada,EV-S05-T06.png,Operacion normal,Sprint ID 105,P05,Planificar un sprint,1,Valido,1,0,1,0,1,1,1
+S05,T07,Exito autonomo,185,1,0,4,Completo transicion de tareas y verifico avance en % de puntos,Ninguna,EV-S05-T07.png,Operacion normal,Sprint ID 105,P05,Gestionar el tablero,1,Valido,1,1,0,0,1,1,1
+S05,T08,Exito asistido,215,2,1,3,Pregunto como dejar constancia de la historia no terminada,Se le indico el campo motivo de pendientes en cierre,EV-S05-T08.png,Operacion normal,Sprint ID 105,P05,Cerrar y recuperar acuerdos,1,Valido,1,0,1,0,1,1,1
+S05,T09,Exito autonomo,170,2,0,3,Interpreto la tabla tras revisar la consigna nuevamente,Ninguna,EV-S05-T09.png,Operacion normal,Comparacion C-05,P05,Comparar evaluaciones,1,Valido,1,1,0,0,1,1,1
+S05,T10,Exito autonomo,130,1,0,4,Pulso descargar dos veces por falta de mensaje de progreso,Ninguna,EV-S05-T10.png,Operacion normal,Informe INF-05,P05,Descargar un informe,1,Valido,1,1,0,0,1,1,1
+,,,,,,,,,,,,,,,,,,,,,,
+S4-09. Observaciones y trazabilidad,,,,,,,,,,,
+,,,,,,,,,,,
+"Registre hechos durante la prueba. Varias observaciones pueden sustentar un mismo hallazgo. Use el mismo H01, H02... para el mismo problema.",,,,,,,,,,,
+,,,,,,,,,,,
+ID observacion,ID sesion,ID tarea,Pantalla o ruta,Accion o hecho observado,Consecuencia o dificultad,Cita anonima (opcional),Referencia de evidencia (opcional),ID hallazgo,Revision de observacion (formula),Observacion incluida (formula),Primera por sesion-hallazgo (formula)
+OBS-01,S01,T09,/comparacion,Usuario observa columna Diferencia con valor +50 sin etiqueta p.p.,Duda si representa 50% de mejora relativa o 50 puntos de tasa,Es 50% mas de exito o 50 personas?,EV-S01-T09.png,H01,Valido,1,1
+OBS-02,S01,T10,/informes,Usuario pulsa Descargar PDF y no percibe cambio visual durante 2.5s,Hace doble clic creyendo que no funciono,Pense que no habia hecho clic,EV-S01-T10.png,H02,Valido,1,1
+OBS-03,S01,T08,/sprints/:id/cierre,Usuario busca indicacion de que ocurrira con la historia pendiente,Pregunta si debe crearla de nuevo en el backlog,Donde queda la historia que no se termino?,EV-S01-T08.png,H03,Valido,1,1
+OBS-04,S01,T04,/revision,Usuario consulta si al editar la redaccion de la IA se pierde la observacion,Duda momentanea sobre inmutabilidad de la prueba,Se borra lo que escribio el participante?,EV-S01-T04.png,H05,Valido,1,1
+OBS-05,S02,T08,/sprints/:id/cierre,PO busca confirmacion de que la historia incompleta vuelve al backlog,Lee detenidamente el texto y sugiere un aviso visual mas claro,Deberia verse clarito que regresa al backlog,EV-S02-T08.png,H03,Valido,1,1
+OBS-06,S02,T09,/comparacion,PO analiza la tabla y senala que la diferencia deberia rotularse p.p.,Comenta que en reportes ejecutivos la ambiguedad confunde,En analitica siempre ponemos p.p. para no confundir,EV-S02-T09.png,H01,Valido,1,1
+OBS-07,S02,T10,/informes,PO pulsa Descargar Markdown y nota demora sin spinner de progreso,Sugiere deshabilitar el boton mientras descarga,Un indicador de carga evitaria descargas repetidas,EV-S02-T10.png,H02,Valido,1,1
+OBS-08,S03,T09,/comparacion,Usuario navega con Tab y el recuadro de foco en celdas de tabla se pierde,Dificulta identificar en que celda de comparacion esta posicionado,El foco casi no se ve sobre el fondo gris de la fila,EV-S03-T09.png,H04,Valido,1,1
+OBS-09,S03,T10,/informes,Usuario pulsa Descargar PDF por teclado y no recibe aria-live de proceso,Espera sin confirmacion audible hasta que el navegador descarga,El lector no anuncio que se estaba generando el archivo,EV-S03-T10.png,H02,Valido,1,1
+OBS-10,S04,T09,/comparacion,Docente verifica formulas y destaca que la resta de tasas debe llevar p.p.,Sustenta que al ser restas de porcentajes el resultado son puntos porcentuales,Es metodologicamente correcto identificar puntos porcentuales,EV-S04-T09.png,H01,Valido,1,1
+OBS-11,S04,T10,/informes,Docente senala que la generacion de reportes debe indicar estado ocupado,Explica que en conexiones lentas el usuario asume error de red,La retroalimentacion de carga es un principio basico de Nielsen,EV-S04-T10.png,H02,Valido,1,1
+OBS-12,S04,T08,/sprints/:id/cierre,Docente revisa acuerdos y sugiere banner explicativo sobre pendientes,Aporta claridad metodologica para Scrum en equipos nuevos,Un banner de aviso reduciria errores de interpretacion,EV-S04-T08.png,H03,Valido,1,1
+OBS-13,S05,T01,/planes/nuevo,Usuario ingresa varias actividades y le cuesta verificar cuantas lleva,Comenta que una numeracion Tarea 1 Tarea 2 le ayudaria,No se si ya puse la segunda o voy por la tercera,EV-S05-T01.png,H06,Valido,1,1
+OBS-14,S05,T04,/revision,Usuario principiante teme borrar la observacion original de prueba,Pide confirmacion al moderador antes de guardar la propuesta,Si cambio el titulo no se pierde lo que paso?,EV-S05-T04.png,H05,Valido,1,1
+OBS-15,S05,T08,/sprints/:id/cierre,Usuario no comprende inmediatamente el campo motivo de historias pendientes,Requiere ayuda para asociar el motivo al cierre formal del sprint,Que pongo en motivo si simplemente no alcanzo el tiempo?,EV-S05-T08.png,H03,Valido,1,0
+OBS-16,S05,T09,/comparacion,Usuario pregunta si +50 significa que mejoro el doble,El moderador explica la diferencia aritmetica directa,Ese 50 significa que fue 50 veces mejor?,EV-S05-T09.png,H01,Valido,1,0
+OBS-17,S05,T10,/informes,Usuario pulsa tres veces seguidas el boton de descarga PDF,Genera multiples descargas identicas en su carpeta,Le di varios clics porque pense que no cogio,EV-S05-T10.png,H02,Valido,1,0
+OBS-18,S03,T09,/comparacion,Usuario verifica accesibilidad en navegacion de resultados comparados,El foco en botones de accion secundaria requiere mayor separacion,El outline se superpone ligeramente con el borde de celda,EV-S03-T09b.png,H04,Valido,1,0
+,,,,,,,,,,,
+,,,,,,,,,,,
+S4-09. Guion de tareas,,,,,,,,,
+,,,,,,,,,
+"Lea solo la consigna. Contexto, criterios y reservas son para el equipo. Ajuste el tiempo antes de evaluar y mantengalo igual entre participantes.",,,,,,,,,
+,,,,,,,,,
+ID tarea,Recorrido,Consigna neutral para leer,Contexto,Criterio observable de exito,Pantallas o rutas,Tiempo maximo orientativo (s),Preparacion del moderador,Reserva y restablecimiento,Modulo relacionado
+T01,Crear un plan,"Necesita evaluar si una persona puede encontrar y reservar un recurso en un portal universitario. Prepare una evaluacion con ese objetivo y dos actividades que permitan comprobarlo. Al terminar, vuelva a abrir lo que preparo.",Cuenta de evaluador autorizada. Caso ficticio de reserva de recurso y nombres de prueba acordados.,"El plan se guarda con objetivo, contexto y dos tareas, cada una con criterio observable. Se recupera el mismo registro tras salir y volver.",/planes y /planes/nuevo,240,Datos de prueba y cuenta habilitada. Evitar datos personales en el contenido.,T02 dispone de un plan de reserva por participante si T01 no se completa.,Planes y tareas de evaluacion
+T02,Registrar una sesion,Imagine que una persona de prueba ya intento las dos actividades del caso preparado. Registre los resultados de la ficha entregada y una evidencia permitida. Deje terminada esa sesion y compruebe que conserva los datos.,Ficha del moderador con dos resultados conocidos y evidencia de prueba sin datos personales. Participante del caso con consentimiento.,"Sesion iniciada con consentimiento, resultados y evidencia guardados, cierre completo y datos recuperables. Una sesion cerrada impide modificar resultados.",/sesiones y /sesiones/:id/ejecutar,360,"Plan con dos tareas, resultados de referencia y archivo o enlace autorizado. Valores de la ficha iguales para todos.","T03 y T04 disponen de evaluaciones cerradas de reserva, independientes de T02.","Sesion, evidencia, resultados y cierre"
+T03,Consultar resultados,Revise como salieron las actividades de la evaluacion indicada. Identifique cual tuvo mas dificultades y muestre los resultados de una actividad dentro del periodo facilitado.,Evaluacion cerrada con casos conocidos. Periodo y tarea a consultar definidos antes de las sesiones.,"Selecciona plan, periodo y tarea; interpreta exito, tiempo, errores y cobertura sin confundir un dato ausente con cero. Los filtros y cifras coinciden con la ficha.",/resultados,180,Plan de referencia con resultados conocidos y ficha con cifras esperadas.,Abrir el plan de referencia aunque T02 no se haya completado.,"Dashboard, filtros e indicadores"
+T04,Analizar y revisar hallazgos,Revise las observaciones de la evaluacion indicada y obtenga propuestas de problemas y mejoras. Compruebe en que observaciones se basan. Ajuste una propuesta para que describa bien el problema y decida cual puede incorporarse al trabajo de mejora.,Observaciones de prueba sin identificadores directos. Gemini disponible. Borrador de reserva independiente por participante.,"Selecciona observaciones y revisa privacidad antes del analisis; diferencia borrador y aprobado, consulta origen, edita y aprueba con criterio valido; la propuesta se recupera sin duplicados.",/revision y /historias/:id,360,BD y Gemini verificados. Reservar un borrador revisable si el proveedor falla. Registrar la incidencia tecnica aparte.,"Si Gemini no esta disponible, usar borrador de reserva para evaluar revision; anotar que el envio a IA no fue ejecutado.","IA, privacidad y revision humana"
+T05,Priorizar el backlog,"El equipo quiere atender primero el problema de mayor impacto de la evaluacion indicada. Localice su mejora, asigne la estimacion facilitada y dejela antes de las otras propuestas. Compruebe que la informacion se conserva.",Backlog con al menos tres historias y un hallazgo aprobado trazable. Estimacion de referencia acordada.,"Encuentra la historia y su origen, edita puntos y prioridad; el orden y los cambios se mantienen al recargar. No confunde borradores con historias aprobadas.",/backlog y /historias/:id,240,Historias pendientes estimables y datos de referencia para verificar orden y persistencia.,Usar historias de reserva aprobadas si T04 quedo bloqueada.,Backlog de mejoras
+T06,Planificar un sprint,"Organice la proxima entrega con el objetivo, las fechas, la capacidad y los responsables de la ficha. Seleccione mejoras que quepan en esa capacidad, retire una seleccion y guarde la planificacion. Vuelva a consultarla.",Historias pendientes con puntos conocidos. Responsables del producto disponibles. Fechas y capacidad escritas en la ficha.,"Guarda objetivo, fechas, capacidad, seleccion y responsables; suma y capacidad restante consistentes. Se conserva la retirada y no duplica historias en sprints abiertos.",/sprints,300,Tres historias de reserva con puntos y al menos dos responsables. No usar historias ya comprometidas en otro sprint.,T07 dispone de sprint planificado de reserva si T06 no se completa.,S4-01 y S4-02
+T07,Gestionar el tablero,"La entrega indicada ya puede comenzar. Distribuya el trabajo de una mejora entre los responsables de la ficha y refleje que paso por ejecucion, revision y finalizacion. Compruebe despues el avance y lo guardado.",Sprint planificado con historias y responsables. Ficha con una historia y dos tareas de trabajo conocidas.,"Activa el sprint, crea o edita tareas y responsables, respeta transiciones y verifica los estados tras recargar. Distingue avance por tareas de puntos de historias terminadas.",/sprints/:id/tablero,300,"Sprint de reserva y responsables. Prever recarga y error de guardado solo si surge, sin provocarlo sin control.",T08 dispone de sprint activo con trabajo terminado y pendiente.,S4-02 y S4-03
+T08,Cerrar y recuperar acuerdos,"La entrega indicada termina hoy. Deje constancia de lo entregado, lo pendiente y lo aprendido. Acuerde una mejora con responsable y fecha, guarde un borrador y vuelva a abrirlo. Finalmente, cierre la entrega y compruebe que conserva los acuerdos.","Sprint activo con una historia terminada y otra incompleta, preparado por el moderador.","Entregas y puntos coinciden con el tablero; conserva borrador y acuerdo, confirma cierre con motivo de pendientes y recupera un cierre de solo lectura. La historia incompleta vuelve al backlog.",/sprints/:id/cierre,300,Un sprint activo por participante. Preparar responsable y fecha de acuerdo. No cerrar sprints del equipo real.,Restablecer un sprint exclusivo de prueba para el siguiente participante.,S4-04 y S4-05
+T09,Comparar evaluaciones,"Quiere saber si la segunda evaluacion mejoro respecto a la primera en las actividades equivalentes de la ficha. Prepare esa comparacion y expique que cambio en exito, tiempo y errores. Indique tambien que actividades quedaron fuera.",Dos evaluaciones de referencia con tareas equivalentes y una exclusiva. Ficha de correspondencias y calculo manual del moderador.,"Selecciona ambas evaluaciones y equivalencias explicitas; interpreta direccion B menos A, coberturas y unidades. Identifica tareas excluidas y no compara totales con distinta cobertura sin explicarlo.",/comparacion,240,Dos planes o periodos distintos con datos conocidos y correspondencias unicas. Conservar referencia de calculo.,Evaluaciones de reserva independientes del resto del recorrido.,S4-06
+T10,Descargar un informe,"Prepare para el equipo un informe de la evaluacion y el periodo indicados con resultados, problemas y mejoras aprobadas. Incluya la comparacion de la ficha cuando sea aplicable. Descarguelo en los dos formatos disponibles y revise que el contenido corresponda a lo solicitado.","Plan, periodo y secciones de referencia. Hallazgo aprobado y borrador pendiente para comprobar su exclusion.","Descarga Markdown y PDF legibles, respeta plan, periodo, secciones y aprobacion; no incluye borradores ni datos personales innecesarios. Ambos formatos coinciden con la vista previa y muestran caracteres en espanol.",/informes,240,Datos aprobados y pendientes diferenciados. Visor PDF y editor de texto disponibles para verificar descargas.,Usar datos de referencia si no se completo T04 o T09. Anotar si la comparacion no estaba disponible.,S4-07
